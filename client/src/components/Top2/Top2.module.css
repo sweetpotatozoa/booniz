@@ -1,0 +1,60 @@
+.container {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  background-color: #f8fafc;
+  min-width: 1420px;
+  height: 732px;
+  overflow-x: auto;
+  flex-direction: column;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 97px;
+  padding: 0 20px;
+  background-color: #0f7c41;
+  font-size: 18px;
+  color: #ffffff;
+  letter-spacing: 0.52em;
+  justify-content: center;
+  position: relative;
+}
+
+.navs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  right: 32px;
+}
+
+.nav {
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+}
+
+.nav2 {
+  cursor: pointer;
+  width: 20px;
+  height: 32px;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 635px;
+  padding: 0 20px;
+  background-image: url('/public/images/background.png');
+}
+.navs1 {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  width: 24px;
+  left: 32px; /* info 아이콘과 같은 위치로 배치합니다 */
+}
