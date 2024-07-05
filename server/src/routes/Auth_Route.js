@@ -5,6 +5,6 @@ const AuthController = require('../controllers/Auth_Controller')
 
 //로그인
 router.post('/login', wrapAsync(AuthController.login))
-router.post('/signUp', wrapAsync(AuthController.signUp))
+router.post('/register', wrapAsync(AuthController.register))
 
 module.exports = router
