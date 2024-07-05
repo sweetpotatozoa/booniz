@@ -40,14 +40,22 @@ class AuthController {
 
   // 회원가입
   async register(req, res) {
-    const { userName, password, nickName, age, realName, inflowChannel } =
-      req.body
+    const {
+      userName,
+      password,
+      realName,
+      phoneNumber,
+      age,
+      nickName,
+      inflowChannel,
+    } = req.body
 
     if (
       !userName ||
       !password ||
       !nickName ||
       !age ||
+      !phoneNumber ||
       !realName ||
       !inflowChannel
     ) {
@@ -71,9 +79,10 @@ class AuthController {
       await AuthService.register(
         userName,
         password,
-        nickName,
-        age,
         realName,
+        phoneNumber,
+        age,
+        nickName,
         inflowChannel,
       )
       res

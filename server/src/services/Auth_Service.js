@@ -42,7 +42,15 @@ class AuthService {
   }
 
   //회원가입 하기
-  async register(userName, password, nickName, age, realName, inflowChannel) {
+  async register(
+    userName,
+    password,
+    realName,
+    phoneNumber,
+    age,
+    nickName,
+    inflowChannel,
+  ) {
     const user = await UsersRepo.getUserInfo(userName)
     const doesNickNameExist = await UsersRepo.getNickName(nickName)
 
@@ -55,6 +63,7 @@ class AuthService {
     const uesrData = {
       userName: userName,
       password: hash,
+      phoneNumber: phoneNumber,
       age: age,
       realName: realName,
       inflowChannel: inflowChannel,
@@ -62,6 +71,7 @@ class AuthService {
     }
     try {
       const result = await UsersRepo.createUser(uesrData)
+      // 특정 예외 처리: 특정 예외를 포착하고 처리
       if (!result.acknowledged) {
         throw new Error('User registration failed')
       }
