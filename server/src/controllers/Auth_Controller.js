@@ -21,7 +21,7 @@ class AuthController {
   async login(req, res) {
     const { userName, password } = req.body
     if (!userName || !password) {
-      res.status(400).json({ message: 'Invalid user id or password' })
+      res.status(400).json({ message: '잘못된 이메일 혹은 비밀번호 입니다.' })
       return
     }
     try {
@@ -29,9 +29,9 @@ class AuthController {
       res.status(200).json(result)
     } catch (err) {
       const { status, message } = errorHandler(err, 'login', {
-        'Invalid password': (err) => ({
+        'Invalid password': () => ({
           status: 403,
-          message: 'Invalid password',
+          message: '잘못된 이메일 혹은 비밀번호 입니다.',
         }),
       })
       res.status(status).json({ message })
