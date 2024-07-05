@@ -27,37 +27,17 @@ class UsersRepo {
     return user
   }
 
+  // 닉네임 중복 검사
+  async getNickName(nickName) {
+    const user = await this.collection.findOne({ nickName: nickName })
+    return user !== null
+  }
+
+  // 실제함수
+
   // 유저 생성
   async createUser(user) {
     const result = await this.collection.insertOne(user)
-    return result
-  }
-
-  // //실제 함수
-  // 읽는데까지 남은 시간 가져오기
-  async getNoteTime(userId) {
-    const user = await this.collection.findOne(
-      { _id: new mongoose.Types.ObjectId(userId) },
-      { projection: { lastRead: 1, _id: 0 } }, // 마지막 읽은 시간 필드만 가져오기
-    )
-    return user.lastRead
-  }
-
-  // 유저 정보 가져오기
-  async getWriterInfo(userId) {
-    const userInfo = await this.collection.findOne(
-      { _id: new mongoose.Types.ObjectId(userId) },
-      { projection: { job: 1, career: 1, _id: 0 } },
-    )
-    return userInfo
-  }
-
-  // 읽은 시간 업데이트
-  async updateLastRead(userId) {
-    const result = await this.collection.updateOne(
-      { _id: new mongoose.Types.ObjectId(userId) },
-      { $set: { lastRead: new Date() } },
-    )
     return result
   }
 }
