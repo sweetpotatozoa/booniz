@@ -22,7 +22,7 @@ class UsersRepo {
   async getUserInfo(userName) {
     const user = await this.collection.findOne(
       { userName: userName },
-      { projection: { password: 1, _id: 1 } }, // 비밀번호 필드만 가져오기
+      { projection: { password: 1, _id: 1 } }, // 비밀번호, _id만 가져오기
     )
     return user
   }

@@ -10,7 +10,7 @@ class AuthService {
   async getUserInfo(userName) {
     const user = await UsersRepo.getUserInfo(userName)
     if (!user) {
-      throw new Error('No user found')
+      throw new Error('No user found - login')
     }
     return user
   }
