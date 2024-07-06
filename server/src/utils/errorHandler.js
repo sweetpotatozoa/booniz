@@ -16,6 +16,8 @@ const errorHandler = (
       return { status: 400, message: '해당 이메일은 이미 가입되었습니다.' }
     case 'NickName already exists':
       return { status: 400, message: '해당 닉네임은 이미 가입되었습니다.' }
+    case 'No user found':
+      return { status: 403, message: '유효하지 않은 아이디 입니다.' }
     default:
       console.error(`Error in ${functionName}`, err)
       return { status: 500, message: 'Internal server error' }
