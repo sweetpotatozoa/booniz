@@ -19,6 +19,12 @@ class ReviewsRepo {
       .toArray()
     return reviews
   }
+
+  //리뷰 생성
+  async createReview(review) {
+    const result = await this.collection.insertOne(review)
+    return result
+  }
 }
 
 module.exports = new ReviewsRepo()

@@ -61,6 +61,32 @@ class ReviewService {
 
     return result
   }
+
+  // 리뷰 생성
+  async createReview(userId, title, content, startPage, endPage) {
+    const user = await this.checkUserIdExist(userId)
+    if (!user) {
+      throw new Error('No user found')
+    }
+
+    if (startPage > endPage) {
+      throw new Error('Invalid page range')
+    }
+
+    const reviewData = {
+      userId: userId,
+      title: title,
+      content: content,
+      startPage: startPage,
+      endPage: endPage,
+      createdAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
+      updatedAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
+      likedBy: [],
+    }
+
+    const result = await ReviewsRepo.createReview(reviewData)
+    return result
+  }
 }
 
 module.exports = new ReviewService()
