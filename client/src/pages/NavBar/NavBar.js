@@ -15,10 +15,10 @@ const NavBar = () => {
           <Link to='/myProfile'>내 독서일지</Link>
         </li>
         <li>
-          <Link to='/community'>커뮤니티</Link>
+          <Link to='/community'>게시판</Link>
         </li>
         <li>
-          <Link to='/write'>독서일지 쓰기</Link>
+          <Link to='/write'>일지 쓰기</Link>
         </li>
       </ul>
     </nav>
