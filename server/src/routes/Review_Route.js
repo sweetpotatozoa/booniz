@@ -11,5 +11,10 @@ const fakeAuth = (req, res, next) => {
 //메인화면 정보 가져오기
 router.get('/getMainInfo', fakeAuth, wrapAsync(ReviewController.getMainInfo))
 router.post('/createReview', fakeAuth, wrapAsync(ReviewController.createReview))
+router.get(
+  '/getMyReview/:reviewId',
+  fakeAuth,
+  wrapAsync(ReviewController.getMyReview),
+)
 
 module.exports = router

@@ -1,6 +1,7 @@
 const ReviewsRepo = require('../repositories/Reviews_Repo')
 const UsersRepo = require('../repositories/Users_Repo')
 const moment = require('moment-timezone')
+const { ObjectId } = require('bson')
 
 class ReviewService {
   // 헬퍼 함수
@@ -8,6 +9,18 @@ class ReviewService {
   async checkUserIdExist(userId) {
     const user = await UsersRepo.checkUserIdExist(userId)
     return user
+  }
+
+  //리뷰 아이디 존재 검사
+  async checkReviewIdExist(reviewId) {
+    const review = await ReviewsRepo.checkReviewIdExist(reviewId)
+    return review
+  }
+
+  //리뷰 소유권 확인
+  async checkReviewOwnership(userId, reviewId) {
+    const ownership = await ReviewsRepo.checkReviewOwnership(userId, reviewId)
+    return ownership
   }
 
   // 날짜 배열 생성
@@ -74,7 +87,7 @@ class ReviewService {
     }
 
     const reviewData = {
-      userId: userId,
+      userId: new ObjectId(userId),
       title: title,
       content: content,
       startPage: startPage,
@@ -85,6 +98,29 @@ class ReviewService {
     }
 
     const result = await ReviewsRepo.createReview(reviewData)
+    return result
+  }
+
+  // 내 리뷰 가져오기
+  async getMyReview(userId, reviewId) {
+    const user = await this.checkUserIdExist(userId)
+    const review = await this.checkReviewIdExist(reviewId)
+    const ownership = await this.checkReviewOwnership(userId, reviewId)
+
+    if (!user) {
+      throw new Error('No user found')
+    }
+
+    if (!review) {
+      throw new Error('No review found')
+    }
+
+    if (!ownership) {
+      throw new Error('Not your review')
+    }
+    console.log('reviewId:', reviewId)
+
+    const result = await ReviewsRepo.getMyReview(reviewId)
     return result
   }
 }

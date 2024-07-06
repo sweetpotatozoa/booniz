@@ -78,6 +78,26 @@ class AuthController {
       res.status(status).json({ message })
     }
   }
+  // 내가 쓴 리뷰 가져오기
+  async getMyReview(req, res) {
+    const userId = req.user.id
+    const reviewId = req.params.reviewId
+    if (!userId || !isObjectId(userId)) {
+      res.status(400).json({ message: '유효하지 않은 아이디 입니다.' })
+      return
+    }
+    if (reviewId && !isObjectId(reviewId)) {
+      res.status(400).json({ message: '유효하지 않은 리뷰 아이디 입니다.' })
+      return
+    }
+    try {
+      const result = await ReviewService.getMyReview(userId, reviewId)
+      res.status(200).json(result)
+    } catch (err) {
+      const { status, message } = errorHandler(err, 'getMyReview')
+      res.status(status).json({ message })
+    }
+  }
 }
 
 module.exports = new AuthController()
