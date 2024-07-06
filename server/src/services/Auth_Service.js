@@ -63,11 +63,14 @@ class AuthService {
     const uesrData = {
       userName: userName,
       password: hash,
+      nickName: nickName,
       phoneNumber: phoneNumber,
       age: age,
       realName: realName,
       inflowChannel: inflowChannel,
       createdAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
+      allPages: 100, // 임시로 100페이지로 설정
+      readPages: 0,
     }
     try {
       const result = await UsersRepo.createUser(uesrData)
