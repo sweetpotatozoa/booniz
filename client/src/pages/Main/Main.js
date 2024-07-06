@@ -9,7 +9,7 @@ const Main = () => {
   const [readingProgress, setReadingProgress] = useState(0.5) // 50%
   const [readPages, setReadPages] = useState(50)
   const [totalPages, setTotalPages] = useState(100)
-  const [attendance, setAttendance] = useState([1, 1, 0, 1, 1, 0, 1, 1, 1, 0])
+  const [attendance, setAttendance] = useState([1, 1, 0, 1, 1, 0, 1, 1, 1])
   const [diaryEntries, setDiaryEntries] = useState([
     {
       id: 1,
