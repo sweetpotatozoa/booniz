@@ -1,64 +1,58 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import BackendApis from '../../utils/backendApis'
 
 const Register = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [name, setName] = useState('')
-  const [phone, setPhone] = useState('')
-  const [birthdate, setBirthdate] = useState('')
-  const [nickname, setNickname] = useState('')
-  const [referral, setReferral] = useState('')
+  const [formData, setFormData] = useState({
+    userName: '',
+    password: '',
+    realName: '',
+    phoneNumber: '',
+    age: '',
+    nickName: '',
+    inflowChannel: '',
+  })
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
-  const handleMainRedirect = () => {
-    navigate('/')
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
   }
 
-  const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault()
     setError('')
 
-    const response = await fetch('/api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        password,
-        name,
-        phone,
-        birthdate,
-        nickname,
-        referral,
-      }),
-    })
+    try {
+      const result = await BackendApis.register('POST', formData)
 
-    if (response.ok) {
-      // 회원가입 성공 시 처리
-      const data = await response.json()
-      console.log('회원가입 성공:', data)
-    } else {
-      // 회원가입 실패 시 처리
-      setError('회원가입에 실패했습니다.')
+      if (!result || result.error) {
+        throw new Error(result.message || '회원가입에 실패했습니다.')
+      }
+
+      navigate('/login')
+    } catch (error) {
+      console.error('Error:', error)
+      setError(error.message)
     }
   }
 
   return (
     <div className='register-container'>
-      <form onSubmit={handleSubmit} className='register-form'>
+      <form onSubmit={handleRegister} className='register-form'>
         <h2>회원가입</h2>
         <div className='input-group'>
-          <label htmlFor='email'>이메일</label>
+          <label htmlFor='userName'>이메일</label>
           <input
             type='email'
-            id='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            id='userName'
+            name='userName'
+            value={formData.userName}
+            onChange={handleChange}
             required
             placeholder='이메일을 입력해주세요'
+            className='input'
           />
         </div>
         <div className='input-group'>
@@ -66,70 +60,82 @@ const Register = () => {
           <input
             type='password'
             id='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name='password'
+            value={formData.password}
+            onChange={handleChange}
             required
             placeholder='비밀번호를 입력해주세요'
+            className='input'
           />
-          <small>영어+숫자 8자 이상</small>
+          <small>영어와 숫자로 조합된 8자리 이상의 비밀번호</small>
         </div>
         <div className='input-group'>
-          <label htmlFor='name'>이름</label>
+          <label htmlFor='realName'>이름</label>
           <input
             type='text'
-            id='name'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            id='realName'
+            name='realName'
+            value={formData.realName}
+            onChange={handleChange}
             required
             placeholder='이름을 입력해주세요'
+            className='input'
           />
         </div>
         <div className='input-group'>
-          <label htmlFor='phone'>전화번호</label>
+          <label htmlFor='phoneNumber'>전화번호</label>
           <input
-            type='tel'
-            id='phone'
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            type='text'
+            id='phoneNumber'
+            name='phoneNumber'
+            value={formData.phoneNumber}
+            onChange={handleChange}
             required
             placeholder='전화번호를 입력해주세요'
+            className='input'
           />
         </div>
         <div className='input-group'>
-          <label htmlFor='birthdate'>생년월일</label>
+          <label htmlFor='age'>나이</label>
           <input
-            type='date'
-            id='birthdate'
-            value={birthdate}
-            onChange={(e) => setBirthdate(e.target.value)}
+            type='number'
+            id='age'
+            name='age'
+            value={formData.age}
+            onChange={handleChange}
             required
-            placeholder='2000.00.00'
+            placeholder='나이를 입력해주세요'
+            className='input'
           />
         </div>
         <div className='input-group'>
-          <label htmlFor='nickname'>닉네임</label>
+          <label htmlFor='nickName'>닉네임</label>
           <input
             type='text'
-            id='nickname'
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
+            id='nickName'
+            name='nickName'
+            value={formData.nickName}
+            onChange={handleChange}
             required
             placeholder='닉네임을 입력해주세요'
+            className='input'
           />
         </div>
         <div className='input-group'>
-          <label htmlFor='referral'>가입 경로</label>
+          <label htmlFor='inflowChannel'>가입 경로</label>
           <input
             type='text'
-            id='referral'
-            value={referral}
-            onChange={(e) => setReferral(e.target.value)}
+            id='inflowChannel'
+            name='inflowChannel'
+            value={formData.inflowChannel}
+            onChange={handleChange}
             required
             placeholder='가입 경로를 입력해주세요'
+            className='input'
           />
         </div>
         {error && <p className='error'>{error}</p>}
-        <button type='submit' className='button' onClick={handleMainRedirect}>
+        <button type='submit' className='button'>
           회원가입 하기
         </button>
       </form>

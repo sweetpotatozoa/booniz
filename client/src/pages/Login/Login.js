@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import BackendApis from '../../utils/backendApis'
 
 const Login = () => {
-  const [email, setEmail] = useState('')
+  const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const navigate = useNavigate()
@@ -11,20 +12,17 @@ const Login = () => {
     e.preventDefault()
     setError('')
 
-    const response = await fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    })
+    try {
+      const result = await BackendApis.login('POST', { userName, password })
 
-    if (response.ok) {
-      const data = await response.json()
-      console.log('로그인 성공:', data)
-      // 로그인 성공 시 처리
-    } else {
-      setError('로그인에 실패했습니다.')
+      if (!result || !result.token) {
+        throw new Error(result.message || 'Invalid email or password')
+      }
+
+      navigate('/')
+    } catch (error) {
+      console.error('Error:', error)
+      setError('잘못된 이메일 혹은 비밀번호 입니다.')
     }
   }
 
@@ -37,12 +35,12 @@ const Login = () => {
       <form onSubmit={handleLogin} className='login-form'>
         <h2>로그인</h2>
         <div className='input-group'>
-          <label htmlFor='email'>이메일</label>
+          <label htmlFor='userName'>이메일</label>
           <input
             type='email'
-            id='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            id='userName'
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
             required
             placeholder='이메일을 입력해주세요'
             className='input'

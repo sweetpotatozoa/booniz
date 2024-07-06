@@ -1,0 +1,28 @@
+/* 상태 진행 바 */
+.progress-bar {
+  background-color: #ddd;
+  overflow: hidden;
+  height: 20px;
+}
+
+.progress {
+  background-color: gray;
+  height: 100%;
+}
+
+/* 출석 확인 스탬프 */
+.attendance-dots {
+  display: flex;
+  gap: 5px;
+}
+
+.dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #ddd;
+}
+
+.dot.active {
+  background-color: gray;
+}
