@@ -1,6 +1,5 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import NavBar from './pages/NavBar/NavBar'
 import Login from './pages/Login/Login'
 import Main from './pages/Main/Main'
 import Write from './pages/Write/Write'
@@ -14,7 +13,6 @@ import './App.css'
 function App() {
   return (
     <>
-      <NavBar />
       <Routes>
         <Route path='/' element={<Main />} />
         <Route path='/login' element={<Login />} />

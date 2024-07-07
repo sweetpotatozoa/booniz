@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import truncateContent from '../../utils/truncateContent'
 import getConsecutiveDays from '../../utils/getConsecutiveDays'
 import { useNavigate } from 'react-router'
+import NavBar from '../../components/NavBar/NavBar'
 
 const MyProfile = () => {
   //예시 데이터들
@@ -63,64 +64,67 @@ const MyProfile = () => {
 
   //JSX
   return (
-    <div className='myProfile-container'>
-      <div className='profile-header'>
-        <h1>{nickname}님의 프로필이에요</h1>
-        <div className='profile-info'>
-          <div>연속 기록: {consecutiveDays}일차</div>
-          <div>완독률: {readingProgress * 100}%</div>
-          <div>읽은 쪽수: {readPages}쪽</div>
-          {/* 타인이 좋아요한 글을 보는 기능은 없음 */}
+    <>
+      <NavBar />
+      <div className='myProfile-container'>
+        <div className='profile-header'>
+          <h1>{nickname}님의 프로필이에요</h1>
+          <div className='profile-info'>
+            <div>연속 기록: {consecutiveDays}일차</div>
+            <div>완독률: {readingProgress * 100}%</div>
+            <div>읽은 쪽수: {readPages}쪽</div>
+            {/* 타인이 좋아요한 글을 보는 기능은 없음 */}
+          </div>
+        </div>
+        <div className='diary-container'>
+          {diaryEntries.map((entry) => (
+            <div key={entry.id} className='diary-entry'>
+              <div onClick={() => handleEntryClick(entry.id)}>
+                <h3>{entry.title}</h3>
+                <small>{entry.date}</small>
+                <p>
+                  {expandedEntryId === entry.id
+                    ? entry.content
+                    : truncateContent(entry.content, 150)}
+                </p>
+                <div>❤ {entry.likes}개</div>
+                <div>□(댓글수) {entry.comments.length}개</div>
+              </div>
+              {expandedEntryId === entry.id && (
+                <div className='comments-section'>
+                  {entry.comments.map((comment, index) => (
+                    <p key={index}>{comment}</p>
+                  ))}
+                  <input
+                    type='text'
+                    placeholder='댓글을 입력하세요'
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && e.target.value) {
+                        handleCommentSubmit(entry.id, e.target.value)
+                        e.target.value = ''
+                      }
+                    }}
+                  />
+                  <button
+                    onClick={() => {
+                      const commentInput = document.querySelector(
+                        `input[placeholder="댓글을 입력하세요"]`,
+                      )
+                      if (commentInput.value) {
+                        handleCommentSubmit(entry.id, commentInput.value)
+                        commentInput.value = ''
+                      }
+                    }}
+                  >
+                    댓글 작성하기
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
-      <div className='diary-container'>
-        {diaryEntries.map((entry) => (
-          <div key={entry.id} className='diary-entry'>
-            <div onClick={() => handleEntryClick(entry.id)}>
-              <h3>{entry.title}</h3>
-              <small>{entry.date}</small>
-              <p>
-                {expandedEntryId === entry.id
-                  ? entry.content
-                  : truncateContent(entry.content, 150)}
-              </p>
-              <div>❤ {entry.likes}개</div>
-              <div>□(댓글수) {entry.comments.length}개</div>
-            </div>
-            {expandedEntryId === entry.id && (
-              <div className='comments-section'>
-                {entry.comments.map((comment, index) => (
-                  <p key={index}>{comment}</p>
-                ))}
-                <input
-                  type='text'
-                  placeholder='댓글을 입력하세요'
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && e.target.value) {
-                      handleCommentSubmit(entry.id, e.target.value)
-                      e.target.value = ''
-                    }
-                  }}
-                />
-                <button
-                  onClick={() => {
-                    const commentInput = document.querySelector(
-                      `input[placeholder="댓글을 입력하세요"]`,
-                    )
-                    if (commentInput.value) {
-                      handleCommentSubmit(entry.id, commentInput.value)
-                      commentInput.value = ''
-                    }
-                  }}
-                >
-                  댓글 작성하기
-                </button>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
+    </>
   )
 }
 

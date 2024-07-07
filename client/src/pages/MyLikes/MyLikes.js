@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import truncateContent from '../../utils/truncateContent'
+import NavBar from '../../components/NavBar/NavBar'
 
 const MyLikes = () => {
   const [nickname, setNickname] = useState('홍길동')
@@ -34,29 +35,32 @@ const MyLikes = () => {
   }
 
   return (
-    <div className='myLikes-container'>
-      <div className='profile-header'>
-        <h1>{nickname}님이 좋아요를 누른 독서일지예요!</h1>
-      </div>
-      <div className='likes-container'>
-        {likedEntries.map((entry) => (
-          <div
-            key={entry.id}
-            className='like-entry'
-            onClick={() => handleEntryClick(entry.nickname)}
-          >
-            <div>
-              <h3>{entry.nickname}</h3>
-              <h4>{entry.title}</h4>
-              <p>{truncateContent(entry.content, 150)}</p>
-              <div>❤ {entry.likes}개</div>
-              <div>□ {entry.comments}개</div>
-              <small>{entry.date}</small>
+    <>
+      <NavBar />
+      <div className='myLikes-container'>
+        <div className='profile-header'>
+          <h1>{nickname}님이 좋아요를 누른 독서일지예요!</h1>
+        </div>
+        <div className='likes-container'>
+          {likedEntries.map((entry) => (
+            <div
+              key={entry.id}
+              className='like-entry'
+              onClick={() => handleEntryClick(entry.nickname)}
+            >
+              <div>
+                <h3>{entry.nickname}</h3>
+                <h4>{entry.title}</h4>
+                <p>{truncateContent(entry.content, 150)}</p>
+                <div>❤ {entry.likes}개</div>
+                <div>□ {entry.comments}개</div>
+                <small>{entry.date}</small>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
