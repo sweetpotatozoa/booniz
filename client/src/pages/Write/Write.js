@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import BackendApis from '../../utils/backendApis'
 
 const Write = () => {
+  const { reviewId } = useParams()
   const [startPage, setStartPage] = useState('')
   const [endPage, setEndPage] = useState('')
   const [title, setTitle] = useState('')
@@ -9,36 +11,51 @@ const Write = () => {
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
+  useEffect(() => {
+    const fetchReview = async () => {
+      if (reviewId) {
+        const result = await BackendApis.getMyReview(reviewId)
+        if (result) {
+          setStartPage(result.startPage)
+          setEndPage(result.endPage)
+          setTitle(result.title)
+          setContent(result.content)
+        }
+      }
+    }
+    fetchReview()
+  }, [reviewId])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
 
-    const response = await fetch('/api/write', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        startPage,
-        endPage,
-        title,
-        content,
-      }),
-    })
+    try {
+      const response = reviewId
+        ? await BackendApis.updateReview(reviewId, {
+            startPage,
+            endPage,
+            title,
+            content,
+          })
+        : await BackendApis.createReview('POST', {
+            startPage,
+            endPage,
+            title,
+            content,
+          })
 
-    if (response.ok) {
-      // 글 작성 성공 시 처리
-      const data = await response.json()
-      console.log('글 작성 성공:', data)
-      navigate('/') // 메인 페이지로 리다이렉트
-    } else {
-      // 글 작성 실패 시 처리
+      if (response.ok) {
+        navigate('/')
+      } else {
+        setError('글 작성에 실패했습니다.')
+      }
+    } catch (error) {
       setError('글 작성에 실패했습니다.')
     }
   }
 
   const handleSave = () => {
-    // 수정하기 버튼을 클릭했을 때 처리할 내용
     navigate('/')
   }
 
