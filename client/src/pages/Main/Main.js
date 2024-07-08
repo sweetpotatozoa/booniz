@@ -15,11 +15,9 @@ const Main = () => {
     reviews: [],
   })
 
+  const readingProgress = (userData.readPages / userData.allPages) * 100
   const navigate = useNavigate()
   const remainingPages = userData.allPages - userData.readPages
-  const readingProgress = userData.allPages
-    ? (userData.readPages / userData.allPages) * 100
-    : 0
 
   const handleEntryClick = () => {
     navigate('/myProfile')
@@ -34,7 +32,10 @@ const Main = () => {
             nickName: result.userData.nickName,
             readPages: result.userData.readPages,
             allPages: result.userData.allPages,
-            dailyStatus: result.dailyStatus,
+            dailyStatus: result.dailyStatus.map((status, idx) => ({
+              id: `status-${idx}-${Math.random()}`,
+              status,
+            })),
             reviews: result.reviews,
           })
         }
@@ -64,35 +65,43 @@ const Main = () => {
               style={{ width: `${readingProgress}%` }}
             ></div>
           </div>
-          <div
-            className={styles.pages}
-          >{`읽은 쪽수: ${userData.readPages}, 남은 쪽수: ${remainingPages}`}</div>
+          <div className={styles.pages}>
+            {`읽은 쪽수: ${userData.readPages}, 남은 쪽수: ${remainingPages}`}
+          </div>
         </div>
         <div className={styles.attendanceContainer}>
           <div>10일 챌린지 미션 진행중</div>
           <div>매일 독서일지를 쓰면, 선물을 받을 수 있어요!</div>
           <div className={styles.attendanceDots}>
-            {userData.dailyStatus.map((day, index) => (
+            {userData.dailyStatus.map((day) => (
               <div
-                key={index}
-                className={`${styles.dot} ${day ? styles.active : ''}`}
+                key={day.id}
+                className={`${styles.dot} ${day.status ? styles.active : ''}`}
               ></div>
             ))}
           </div>
         </div>
-        <div className={styles.diaryContainer}>
+        <div className={styles.reviewContainer}>
           <h2>내가 쓴 독서일지</h2>
-          <div className={styles.diary}>
-            {userData.reviews.map((entry) => (
-              <React.Fragment key={entry._id}>
-                <div>{entry._id}일차 독서일지</div>
-                <div className={styles.diaryEntry} onClick={handleEntryClick}>
-                  <h3>{entry.title}</h3>
-                  <p>{truncateContent(entry.content, 150)}</p>
-                  <small>{entry.createdAt.split('T')[0]}</small>
-                </div>
-              </React.Fragment>
-            ))}
+          <div className={styles.review}>
+            {userData.reviews.map(
+              (
+                entry,
+                index, //일차 표현을 위해 reviews 배열의 index를 사용했는데, 이러면 사용자가 하루 빼먹고 글을 입력 안하면 일차 계산할 때 문제가 생길듯.
+              ) => (
+                <React.Fragment key={entry._id}>
+                  <div>{index + 1}일차 독서일지</div>
+                  <div
+                    className={styles.reviewEntry}
+                    onClick={handleEntryClick}
+                  >
+                    <h3>{entry.title}</h3>
+                    <p>{truncateContent(entry.content, 150)}</p>
+                    <small>{entry.createdAt.split('T')[0]}</small>
+                  </div>
+                </React.Fragment>
+              ),
+            )}
           </div>
         </div>
       </div>
