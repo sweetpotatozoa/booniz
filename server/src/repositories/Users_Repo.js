@@ -40,6 +40,17 @@ class UsersRepo {
     const result = await this.collection.insertOne(user)
     return result
   }
+
+  // 유저 정보 가져오기
+  async getUserData(userId) {
+    const user = await this.collection.findOne(
+      { _id: new ObjectId(userId) },
+      {
+        projection: { _id: 0, nickName: 1, allPages: 1, readPages: 1 },
+      },
+    )
+    return user
+  }
 }
 
 module.exports = new UsersRepo()
