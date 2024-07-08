@@ -10,36 +10,17 @@ class CommentsRepo {
 
   // //헬퍼 함수
 
-  // 유저 아이디 존재 검사
-  async checkUserIdExist(userId) {
-    const user = await this.collection.findOne({
-      _id: new mongoose.Types.ObjectId(userId),
-    })
-    return user !== null
-  }
-
-  // 유저 비밀번호 가져오기
-  async getUserInfo(userName) {
-    const user = await this.collection.findOne(
-      { userName: userName },
-      { projection: { password: 1, _id: 1 } }, // 비밀번호, _id만 가져오기
-    )
-    return user
-  }
-
-  // 닉네임 중복 검사
-  async getNickName(nickName) {
-    const user = await this.collection.findOne({ nickName: nickName })
-    return user !== null
-  }
-
-  // 실제함수
-
-  // 유저 생성
-  async createUser(user) {
-    const result = await this.collection.insertOne(user)
-    return result
+  // 리뷰 별로 달린 댓글 불러오기
+  async getCommentsbyReviewIds(reviewIds) {
+    try {
+      const result = await this.collection
+        .find({ $in: reviewIds })
+        .sort({ createdAt: -1 })
+      return result
+    } catch (error) {
+      console.error('댓글 불러오기 실패', error)
+      throw error
+    }
   }
 }
-
 module.exports = new CommentsRepo()

@@ -30,16 +30,6 @@ class ReviewController {
   //   }
   // }
 
-  async deleteMyReview(req, res) {
-    const { reviewId } = req.params
-    try {
-      const result = await ReviewService.deleteMyReview(reviewId)
-      res.status(200).json({ message: '기록이 성공적으로 삭제되었습니다.' })
-    } catch (error) {
-      res.status(500).json({ error: '기록 삭제 중 오류가 발생했습니다.' })
-    }
-  }
-
   //추가적인 예외처리를 넣고 싶다면 아래와 같이 입력하세요.
   // } catch (err) {
   //   const { status, message } = errorHandler(err, 'anotherFunction', {
@@ -127,6 +117,35 @@ class ReviewController {
     } catch (err) {
       const { status, message } = errorHandler(err, 'getMyReview')
       res.status(status).json({ message })
+    }
+  }
+
+  async deleteMyReview(req, res) {
+    const reviewId = req.params.reviewId
+    if (reviewId && !isObjectId(reviewId)) {
+      res.status(400).json({ message: '유효하지 않은 리뷰 아이디 입니다.' })
+      return
+    }
+    try {
+      const result = await ReviewService.deleteMyReview(reviewId)
+      res.status(200).json(result)
+    } catch (error) {
+      res.status(400).json({ error: '기록 삭제 중 오류가 발생했습니다.' })
+    }
+  }
+
+  // async getUserProfile(req, res) {
+
+  // }
+
+  async getReviewsByDate(req, res) {
+    const date = req.params.date
+    try {
+      const result = await ReviewService.getReviewsByDate(date)
+      res.status(200).json(result)
+    } catch (error) {
+      console.error('커뮤니티 조회 중 오류:', error)
+      res.status(400).json({ message: '커뮤니티 조회 중 오류가 발생했습니다.' })
     }
   }
 }

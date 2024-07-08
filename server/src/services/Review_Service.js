@@ -1,10 +1,9 @@
 const UsersRepo = require('../repositories/Users_Repo')
 const ReviewsRepo = require('../repositories/Reviews_Repo')
+const CommentsRepo = require('../repositories/Comments_Repo')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const configs = require('../utils/configs')
-const moment = require('moment-timezone')
-const { deleteReview } = require('../controllers/Review_Controller')
 const moment = require('moment-timezone')
 const { ObjectId } = require('bson')
 
@@ -45,17 +44,6 @@ class ReviewService {
   //   }
   // }
 
-  async deleteMyReview(reviewId) {
-    try {
-      const result = await ReviewsRepo.deleteMyReview(reviewId)
-      if (!result) {
-        throw new Error('해당 기록을 찾을 수 없습니다.')
-      }
-      return result
-    } catch (error) {
-      throw error
-    }
-  }
   // 헬퍼 함수
   // 유저 아이디 존재 검사
   async checkUserIdExist(userId) {
@@ -173,6 +161,42 @@ class ReviewService {
     console.log('reviewId:', reviewId)
 
     const result = await ReviewsRepo.getMyReview(reviewId)
+    return result
+  }
+
+  // 내 리뷰 삭제하기
+  async deleteMyReview(reviewId) {
+    const review = await this.checkReviewIdExist(reviewId)
+
+    if (!review) {
+      throw new Error('No review found')
+    }
+    try {
+      const result = await ReviewsRepo.deleteMyReview(reviewId)
+      if (!result) {
+        throw new Error('해당 기록을 찾을 수 없습니다.')
+      }
+      return result
+    } catch (error) {
+      throw error
+    }
+  }
+
+  // 커뮤니티 날짜별 조회
+  async getReviewsByDate(date) {
+    const reviews = await ReviewsRepo.getReviewsByDate(date)
+    const reviewIds = reviews.map((review) => review._id)
+    const comments = await CommentsRepo(reviewIds)
+    const result = reviews.map((review) => {
+      const reviewComments = comments.filter(
+        (comment) => comment.reviewId.toString() === review._id.toString(),
+      )
+      return {
+        ...review.toObject(),
+        comments: reviewComments,
+      }
+    })
+
     return result
   }
 }
