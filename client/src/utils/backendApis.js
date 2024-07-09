@@ -47,41 +47,8 @@ class BackendApis {
     return result
   }
 
-  async createReview(params = {}) {
-    const result = await fetcher(
-      '/api/review/createReview',
-      this.token,
-      'POST',
-      params,
-    )
-    return result
-  }
-
-  async getMyReview(reviewId) {
-    const result = await fetcher(
-      `/api/review/getMyReview/${reviewId}`,
-      this.token,
-      'GET',
-    )
-    return result
-  }
-
-  async updateReview(reviewId, params = {}) {
-    const result = await fetcher(
-      `/api/review/updateReview/${reviewId}`,
-      this.token,
-      'PUT',
-      params,
-    )
-    return result
-  }
-
-  async deleteReview(reviewId) {
-    const result = await fetcher(
-      `/api/review/deleteReview/${reviewId}`,
-      this.token,
-      'DELETE',
-    )
+  async getMyProfile() {
+    const result = await fetcher('/api/review/myProfile', this.token, 'GET')
     return result
   }
 }

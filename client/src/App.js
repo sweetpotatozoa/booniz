@@ -8,6 +8,7 @@ import MyProfile from './pages/MyProfile/MyProfile'
 import Community from './pages/Community/Community'
 import MyLikes from './pages/MyLikes/MyLikes'
 import UserProfile from './pages/UserProfile/UserProfile'
+import Edit from './pages/Edit/Edit'
 import './App.css'
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path='/community' element={<Community />} />
         <Route path='/myLikes' element={<MyLikes />} />
         <Route path='/userProfile/:nickname' element={<UserProfile />} />
+        <Route path='/edit/:userNickname/:reviewId' element='<Edit />' />
       </Routes>
     </>
   )

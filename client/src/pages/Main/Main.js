@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router'
 import truncateContent from '../../utils/truncateContent'
 import BackendApis from '../../utils/backendApis'
 import NavBar from '../../components/NavBar/NavBar'
-
 import styles from './Main.module.css'
+import moment from 'moment'
 
 const Main = () => {
   const [userData, setUserData] = useState({
@@ -47,6 +47,8 @@ const Main = () => {
     fetchMainInfo()
   }, [])
 
+  const challengeStartDate = moment('2024-07-07')
+
   return (
     <>
       <NavBar />
@@ -84,13 +86,14 @@ const Main = () => {
         <div className={styles.reviewContainer}>
           <h2>내가 쓴 독서일지</h2>
           <div className={styles.review}>
-            {userData.reviews.map(
-              (
-                entry,
-                index, //일차 표현을 위해 reviews 배열의 index를 사용했는데, 이러면 사용자가 하루 빼먹고 글을 입력 안하면 일차 계산할 때 문제가 생길듯.
-              ) => (
+            {userData.reviews.map((entry) => {
+              const reviewDate = moment(entry.createdAt)
+              const dayDifference =
+                reviewDate.diff(challengeStartDate, 'days') + 1
+              return (
                 <React.Fragment key={entry._id}>
-                  <div>{index + 1}일차 독서일지</div>
+                  <div>{dayDifference}일차 독서일지</div>
+                  {/* challengeStartDate를 기준으로 각 리뷰의 작성 날짜와의 차이를 계산하여 일차를 구했습니다. 이를 통해 사용자가 일차를 빼먹더라도 정확한 일차 계산이 가능 */}
                   <div
                     className={styles.reviewEntry}
                     onClick={handleEntryClick}
@@ -100,8 +103,8 @@ const Main = () => {
                     <small>{entry.createdAt.split('T')[0]}</small>
                   </div>
                 </React.Fragment>
-              ),
-            )}
+              )
+            })}
           </div>
         </div>
       </div>

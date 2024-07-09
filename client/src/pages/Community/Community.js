@@ -79,14 +79,17 @@ const Community = () => {
     console.log(reviews)
   }
 
+  //왼쪽 화살표 아이콘 클릭시 날짜가 어제로 설정되도록 하는 함수
   const handlePreviousDay = () => {
     setSelectedDate(new Date(selectedDate.setDate(selectedDate.getDate() - 1)))
   }
 
+  //왼쪽 화살표 아이콘 클릭시 날짜가 내일로 설정되도록 하는 함수
   const handleNextDay = () => {
     setSelectedDate(new Date(selectedDate.setDate(selectedDate.getDate() + 1)))
   }
 
+  //유저 닉네임 클릭 시 해당 유저의 프로파일로 이동하도록 하는 함수
   const handleNicknameClick = (nickname, e) => {
     e.stopPropagation()
     navigate(`/userProfile/${nickname}`)
