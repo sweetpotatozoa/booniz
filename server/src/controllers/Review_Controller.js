@@ -120,6 +120,7 @@ class ReviewController {
     }
   }
 
+  //내 리뷰 삭제하기
   async deleteMyReview(req, res) {
     const reviewId = req.params.reviewId
     if (reviewId && !isObjectId(reviewId)) {
@@ -134,10 +135,35 @@ class ReviewController {
     }
   }
 
-  // async getUserProfile(req, res) {
+  //유저 프로필 조회하기
+  async getUserProfile(req, res) {
+    const userId = req.params.userId
+    if (userId && !isObjectId(userId)) {
+      res.status(400).json({ message: '유효하지 않은 유저 아이디 입니다.' })
+      return
+    }
+    try {
+      const userProfile = await ReviewService.getUserProfile(userId)
+      res.status(200).json(userProfile)
+    } catch (error) {
+      res
+        .status(400)
+        .json({ message: 'Error fetching user profile', error: error.message })
+    }
+  }
 
-  // }
+  //내 프로필 조회
+  async getMyProfile(req, res) {
+    try {
+      const userId = req.user.id
+      const profileData = await ReviewService.getMyProfile(userId)
+      res.status(200).json(profileData)
+    } catch (error) {
+      next(error)
+    }
+  }
 
+  //날짜별 커뮤니티 조회
   async getReviewsByDate(req, res) {
     const date = req.params.date
     try {
@@ -146,6 +172,38 @@ class ReviewController {
     } catch (error) {
       console.error('커뮤니티 조회 중 오류:', error)
       res.status(400).json({ message: '커뮤니티 조회 중 오류가 발생했습니다.' })
+    }
+  }
+
+  //내 리뷰 수정하기
+  async updateMyReview(req, res, next) {
+    try {
+      const reviewId = req.params.reviewId
+      const userId = req.user.id
+      if (!userId || !isObjectId(userId)) {
+        res.status(400).json({ message: '유효하지 않은 아이디 입니다.' })
+        return
+      }
+      if (reviewId && !isObjectId(reviewId)) {
+        res.status(400).json({ message: '유효하지 않은 리뷰 아이디 입니다.' })
+        return
+      }
+      const { title, content, startPage, endPage } = req.body
+
+      const updatedReview = await ReviewService.updateMyReview(
+        reviewId,
+        userId,
+        {
+          title,
+          content,
+          startPage,
+          endPage,
+        },
+      )
+
+      res.status(200).json(updatedReview)
+    } catch (error) {
+      next(error)
     }
   }
 }

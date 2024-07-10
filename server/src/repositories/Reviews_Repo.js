@@ -43,7 +43,7 @@ class ReviewsRepo {
   async deleteMyReview(reviewId) {
     try {
       const result = await this.collection.findByIdAndDelete(reviewId)
-      return result
+      return result // 그냥 return 비워놔도 되나?
     } catch (error) {
       throw error
     }
@@ -68,6 +68,29 @@ class ReviewsRepo {
       console.error('리뷰 레포지토리 오류:', error)
       throw error
     }
+  }
+
+  async getReviewsByUserId(userId) {
+    try {
+      return await Review.find({ userId }).sort({ updatedAt: -1 })
+    } catch (error) {
+      console.error('리뷰 레포지토리 오류:', error)
+      throw error
+    }
+  }
+
+  async getReviewsById(reviewId) {
+    const result = await this.collection.findById(reviewId)
+    return result
+  }
+
+  async updateMyReview(reviewId, updateData) {
+    const result = await this.collection.findByIdAndUpdate(
+      reviewId,
+      updateData,
+      { new: true },
+    )
+    return result
   }
 }
 module.exports = new ReviewsRepo()

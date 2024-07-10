@@ -11,7 +11,7 @@ class CommentsRepo {
   // //헬퍼 함수
 
   // 리뷰 별로 달린 댓글 불러오기
-  async getCommentsbyReviewIds(reviewIds) {
+  async getCommentsByReviewIds(reviewIds) {
     try {
       const result = await this.collection
         .find({ $in: reviewIds })
