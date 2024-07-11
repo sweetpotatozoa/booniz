@@ -30,7 +30,7 @@ const Register = () => {
     setError('')
 
     // 비밀번호 유효성 검사
-    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/
     if (!passwordPattern.test(formData.password)) {
       setPasswordError(
         '비밀번호는 영어와 숫자를 포함한 8자리 이상이어야 합니다.',

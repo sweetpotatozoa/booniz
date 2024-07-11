@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import truncateContent from '../../utils/truncateContent'
 import getConsecutiveDays from '../../utils/getConsecutiveDays'
 import { useNavigate } from 'react-router'
 import BackendApis from '../../utils/backendApis'
 import NavBar from '../../components/NavBar/NavBar'
 import styles from './MyProfile.module.css'
+import moment from 'moment'
 
 const MyProfile = () => {
   const [userData, setUserData] = useState({
@@ -18,7 +19,7 @@ const MyProfile = () => {
         userId: '6688390aa9bc9999444e1bb0',
         title: '테스트1',
         content:
-          '유구한 역사와 전통에 빛나는 우리 대한국민은 3ㆍ1운동으로 건립된 대한민국임시정부의 법통과 불의에 항거한 4ㆍ19민주이념을 계승하고, 조국의 민주개혁과 평화적 통일의 사명에 입각하여 정의ㆍ인도와 동포애로써 민족의 단결을 공고히 하고, 모든 사회적 폐습과 불의를 타파하며, 자율과 조화를 바탕으로 자유민주적 기본질서를 더욱 확고히 하여 정치ㆍ경제ㆍ사회ㆍ문화의 모든 영역에 있어서 각인의 기회를 균등히 하고, 능력을 최고도로 발휘하게 하며, 자유와 권리에 따르는 책임과 의무를 완수하게 하여, 안으로는 국민생활의 균등한 향상을 기하고 밖으로는 항구적인 세계평화와 인류공영에 이바지함으로써 우리들과 우리들의 자손의 안전과 자유와 행복을 영원히 확보할 것을 다짐하면서 1948년 7월 12일에 제정되고 8차에 걸쳐 개정된 헌법을 이제 국회의 의결을 거쳐 국민투표에 의하여 개정한다.',
+          '유구한 역사와 전통에 빛나는 우리 대한국민은 3ㆍ1운동으로 건립된 대한민국임시정부의 법통과 불의에 항거한 4ㆍ19민주이념을 계승하고...',
         startPage: 0,
         endPage: 30,
         createdAt: '2024-07-07T02:33:06',
@@ -65,12 +66,32 @@ const MyProfile = () => {
     ],
   })
 
+  // Sample users data
+  const users = [
+    {
+      _id: '668550c08965ae3ef16fd2a4',
+      nickName: '닉네임1',
+    },
+    {
+      _id: '668550c08965ae3ef16fd2a5',
+      nickName: '닉네임2',
+    },
+    {
+      _id: '668550c08965ae3ef16fd2a6',
+      nickName: '닉네임3',
+    },
+  ]
+
   const navigate = useNavigate()
+  const challengeStartDate = moment('2024-07-07')
+
   const handleEntryClick = (id) => {
     setUserData((prevState) => ({
       ...prevState,
       reviews: prevState.reviews.map((entry) =>
-        entry._id === id ? { ...entry, expanded: !entry.expanded } : entry,
+        entry._id === id
+          ? { ...entry, expanded: !entry.expanded }
+          : { ...entry, expanded: false },
       ),
     }))
   }
@@ -87,8 +108,8 @@ const MyProfile = () => {
     }))
   }
 
-  const handleEditClick = (nickname, id) => {
-    navigate(`/edit/${nickname}/${id}`)
+  const handleEditClick = (id) => {
+    navigate(`/edit/${userData.nickName}/${id}`)
   }
 
   const handleDeleteClick = async (id) => {
@@ -122,61 +143,74 @@ const MyProfile = () => {
         </div>
         <div className={styles.reviewContainer}>
           {userData.reviews.length > 0 ? (
-            userData.reviews.map((entry) => (
-              <div key={entry._id} className={styles.reviewEntry}>
-                <div onClick={() => handleEntryClick(entry._id)}>
-                  <h3>{entry.title}</h3>
-                  <small>{entry.createdAt.split('T')[0]}</small>
-                  <p>
-                    {entry.expanded
-                      ? entry.content
-                      : truncateContent(entry.content, 150)}
-                  </p>
-                  <div>❤ {entry.likedBy.length}개</div>
-                  <div>□ {entry.comments.length}개</div>
-                </div>
-                {entry.expanded && (
-                  <div className={styles.commentsSection}>
-                    {entry.comments.map((comment) => (
-                      <p key={comment._id}>{comment.content}</p>
-                    ))}
-                    <input
-                      type='text'
-                      placeholder='댓글을 입력하세요'
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && e.target.value) {
-                          handleCommentSubmit(entry._id, e.target.value)
-                          e.target.value = ''
-                        }
-                      }}
-                    />
-                    <button
-                      onClick={() => {
-                        const commentInput = document.querySelector(
-                          `input[placeholder="댓글을 입력하세요"]`,
-                        )
-                        if (commentInput.value) {
-                          handleCommentSubmit(entry._id, commentInput.value)
-                          commentInput.value = ''
-                        }
-                      }}
-                    >
-                      댓글 작성하기
-                    </button>
-                    <button
-                      onClick={() =>
-                        handleEditClick(userData.nickName, entry._id)
-                      }
-                    >
-                      수정하기
-                    </button>
-                    <button onClick={() => handleDeleteClick(entry._id)}>
-                      삭제하기
-                    </button>
+            userData.reviews.map((entry) => {
+              const reviewDate = moment(entry.createdAt)
+              const dayDifference =
+                reviewDate.diff(challengeStartDate, 'days') + 1
+              return (
+                <div key={entry._id} className={styles.reviewEntry}>
+                  <div onClick={() => handleEntryClick(entry._id)}>
+                    <div>{dayDifference}일차 독서일지</div>
+                    <h3>{entry.title}</h3>
+                    <small>{entry.createdAt.split('T')[0]}</small>
+                    <p>
+                      {entry.expanded
+                        ? entry.content
+                        : truncateContent(entry.content, 150)}
+                    </p>
+                    <div>❤ {entry.likedBy.length}개</div>
+                    <div>□ {entry.comments.length}개</div>
                   </div>
-                )}
-              </div>
-            ))
+                  {entry.expanded && (
+                    <div className={styles.commentsSection}>
+                      {entry.comments.map((comment) => {
+                        const commentUser = users.find(
+                          (user) => user._id === comment.userId,
+                        )
+                        return (
+                          <p key={comment._id}>
+                            {comment.content} - {commentUser.nickName} (
+                            {moment(comment.createdAt).format('YYYY-MM-DD')})
+                          </p>
+                        )
+                      })}
+                      <input
+                        type='text'
+                        placeholder='댓글을 입력하세요'
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && e.target.value) {
+                            handleCommentSubmit(entry._id, e.target.value)
+                            e.target.value = ''
+                          }
+                        }}
+                      />
+                      <button
+                        onClick={() => {
+                          const commentInput = document.querySelector(
+                            `input[placeholder="댓글을 입력하세요"]`,
+                          )
+                          if (commentInput.value) {
+                            handleCommentSubmit(entry._id, commentInput.value)
+                            commentInput.value = ''
+                          }
+                        }}
+                      >
+                        댓글 작성하기
+                      </button>
+                      <button onClick={() => handleEditClick(entry._id)}>
+                        수정하기
+                      </button>
+                      <button onClick={() => handleDeleteClick(entry._id)}>
+                        삭제하기
+                      </button>
+                    </div>
+                  )}
+                  <div className={styles.pageInfo}>
+                    {entry.startPage}p ~ {entry.endPage}p
+                  </div>
+                </div>
+              )
+            })
           ) : (
             <p>독서 기록이 없습니다.</p>
           )}
