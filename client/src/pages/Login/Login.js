@@ -36,8 +36,8 @@ const Login = () => {
     <>
       <NavBar />
       <div className={styles.container}>
-        <form onSubmit={handleLogin} className='login-form'>
-          <h2>로그인</h2>
+        <h2>로그인</h2>
+        <form onSubmit={handleLogin} className={styles.form}>
           <div className='input-group'>
             <label htmlFor='userName'>이메일</label>
             <input
