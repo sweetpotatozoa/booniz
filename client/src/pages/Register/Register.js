@@ -59,7 +59,9 @@ const Register = () => {
   const handlePasswordBlur = () => {
     const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
     if (passwordPattern.test(formData.password)) {
-      setPasswordError('')
+      setPasswordError('') // 패스워드가 유효한 경우 오류 메시지 제거
+    } else {
+      setPasswordError('비밀번호는 영어와 숫자를 포함한 8자 이상이어야 합니다.')
     }
   }
 
