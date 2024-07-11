@@ -3,6 +3,7 @@
   justify-content: space-between;
   align-items: center;
   width: 1440px;
+  margin-top: 64px;
 }
 
 .links {
@@ -13,17 +14,24 @@
 
 .link {
   margin-right: 20px;
-  font-size: 16px;
-  color: #334155;
+  font-size: 18px;
+  color: #4c4c4c;
+  padding: 18px 42px;
+  cursor: pointer;
 }
 
 .link2 {
-  background-color:;
+  background-color: #282828;
+  color: #ff7342;
+  font-size: 18px;
+  padding: 18px 50px;
+  border-radius: 50px;
+  margin-left: 48px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .link2:hover {
-  color: #f3f0e9;
-  background-color: #334155;
-  border-radius: 5px;
-  padding: 5px;
+  background-color: #ff7342;
+  color: #282828;
 }
