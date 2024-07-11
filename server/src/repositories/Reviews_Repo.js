@@ -39,56 +39,79 @@ class ReviewsRepo {
   //   return result
   // }
 
+  async checkReviewIdExist(reviewId) {
+    if (!ObjectId.isValid(reviewId)) {
+      return false
+    }
+
+    const review = await this.collection.findOne({
+      _id: new ObjectId(reviewId),
+    })
+    return review !== null
+  }
+
   // 내 리뷰 삭제하기
   async deleteMyReview(reviewId) {
     try {
-      const result = await this.collection.findByIdAndDelete(reviewId)
-      return result // 그냥 return 비워놔도 되나?
+      const result = await this.collection.deleteOne({
+        _id: new ObjectId(reviewId),
+      })
+      return
     } catch (error) {
       throw error
     }
   }
 
-  async getReviewsByDate(date) {
+  async getReviewsBetweenDates(startOfDay, endOfDay) {
     try {
-      const startOfDay = new Date(date)
-      startOfDay.setHours(0, 0, 0, 0)
-      const endOfDay = new Date(date)
-      endOfDay.setHours(23, 59, 59, 999)
-
-      return await this.collection
+      const result = await this.collection
         .find({
           createdAt: {
             $gte: startOfDay,
             $lte: endOfDay,
           },
         })
-        .sort({ updatedAt: -1 })
+        .sort({ createdAt: -1 })
+        .toArray()
+      return result
     } catch (error) {
-      console.error('리뷰 레포지토리 오류:', error)
       throw error
     }
   }
 
+  async findByDateRange(startDate, endDate) {
+    return await this.collection
+      .find({
+        createdAt: { $gte: startDate, $lte: endDate },
+      })
+      .toArray()
+  }
+
+  //유저별
   async getReviewsByUserId(userId) {
     try {
-      return await Review.find({ userId }).sort({ updatedAt: -1 })
+      const result = await this.collection
+        .find({ userId: new ObjectId(userId) })
+        .sort({ updatedAt: -1 })
+        .toArray()
+      return result
     } catch (error) {
-      console.error('리뷰 레포지토리 오류:', error)
       throw error
     }
   }
 
   async getReviewsById(reviewId) {
-    const result = await this.collection.findById(reviewId)
+    const result = await this.collection.find({
+      _id: new ObjectId(reviewId),
+    })
     return result
   }
 
+  // 내 리뷰 수정하기
   async updateMyReview(reviewId, updateData) {
-    const result = await this.collection.findByIdAndUpdate(
-      reviewId,
-      updateData,
-      { new: true },
+    const result = await this.collection.updateOne(
+      { _id: new ObjectId(reviewId) },
+      { $set: updateData },
     )
     return result
   }

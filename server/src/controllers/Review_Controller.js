@@ -1,4 +1,5 @@
 const ReviewService = require('../services/Review_Service')
+const express = require('express')
 const errorHandler = require('../utils/errorHandler')
 const {
   isObjectId,
@@ -159,7 +160,7 @@ class ReviewController {
       const profileData = await ReviewService.getMyProfile(userId)
       res.status(200).json(profileData)
     } catch (error) {
-      next(error)
+      // next(error)
     }
   }
 
@@ -170,7 +171,6 @@ class ReviewController {
       const result = await ReviewService.getReviewsByDate(date)
       res.status(200).json(result)
     } catch (error) {
-      console.error('커뮤니티 조회 중 오류:', error)
       res.status(400).json({ message: '커뮤니티 조회 중 오류가 발생했습니다.' })
     }
   }

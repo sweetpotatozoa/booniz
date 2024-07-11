@@ -158,7 +158,6 @@ class ReviewService {
     if (!ownership) {
       throw new Error('Not your review')
     }
-    console.log('reviewId:', reviewId)
 
     const result = await ReviewsRepo.getMyReview(reviewId)
     return result
@@ -166,7 +165,7 @@ class ReviewService {
 
   // 내 리뷰 삭제하기
   async deleteMyReview(reviewId) {
-    const review = await this.checkReviewIdExist(reviewId)
+    const review = await ReviewsRepo.checkReviewIdExist(reviewId)
 
     if (!review) {
       throw new Error('No review found')
@@ -183,27 +182,49 @@ class ReviewService {
   }
 
   // 커뮤니티 날짜별 조회
-  async getReviewsByDate(date) {
-    const reviews = await ReviewsRepo.getReviewsByDate(date)
-    const reviewIds = reviews.map((review) => review._id)
-    const comments = await CommentsRepo.getCommentsByReviewIds(reviewIds)
-    const result = reviews.map((review) => {
-      const reviewComments = comments.filter(
-        (comment) => comment.reviewId.toString() === review._id.toString(),
-      )
-      return {
-        ...review.toObject(),
-        comments: reviewComments,
-      }
-    })
 
-    return result
+  // async findReviewsByDate(date) {
+  //   const startDate = `${date} 00:00:00`
+  //   const endDate = `${date} 23:59:59`
+  //   return await ReviewsRepo.findByDateRange(startDate, endDate)
+  // }
+
+  async getReviewsByDate(date) {
+    try {
+      const startOfDay = moment(date)
+        .tz('Asia/Seoul')
+        .startOf('day')
+        .format('YYYY-MM-DD HH:mm:ss')
+      const endOfDay = moment(date)
+        .tz('Asia/Seoul')
+        .endOf('day')
+        .format('YYYY-MM-DD HH:mm:ss')
+      const reviews = await ReviewsRepo.getReviewsBetweenDates(
+        startOfDay,
+        endOfDay,
+      )
+      const reviewIds = reviews.map((review) => review._id)
+      const comments = await CommentsRepo.getCommentsByReviewIds(reviewIds)
+      const result = reviews.map((review) => {
+        const reviewComments = comments.filter(
+          (comment) => comment.reviewId.toString() === review._id.toString(),
+        )
+        return {
+          ...review,
+          comments: reviewComments,
+        }
+      })
+
+      return result
+    } catch (error) {
+      throw error
+    }
   }
 
   //다른 유저 프로필 조회
   async getUserProfile(userId) {
     try {
-      const user = await UsersRepo.getUserById(userId)
+      const user = await UsersRepo.getUserData(userId)
       if (!user) {
         throw new Error('User not found')
       }
@@ -217,7 +238,7 @@ class ReviewService {
           (comment) => comment.reviewId.toString() === review._id.toString(),
         )
         return {
-          ...review.toObject(),
+          ...review,
           comments: reviewComments,
         }
       })
@@ -231,7 +252,6 @@ class ReviewService {
       // 배열로 반환하려면 const userInfo = { userId: user._id, nickName: user.nickName, completionRate: (user.readPages / user.allPages) * 100};
       // 하고 return [userInfo, reviewsWithComments] 하고 controller에서도 똑같이 받아와야 함. (const [userInfo, reviewWithComments] = await userService.getUserProfile(userId) 식으로)
     } catch (error) {
-      console.error('유저 프로필 서비스 오류:', error)
       throw error
     }
   }
@@ -239,7 +259,7 @@ class ReviewService {
   //내 프로필 조회
   async getMyProfile(userId) {
     try {
-      const user = await UsersRepo.getUserById(userId)
+      const user = await UsersRepo.getUserData(userId)
       if (!user) {
         throw new Error('User not found')
       }
@@ -253,7 +273,7 @@ class ReviewService {
           (comment) => comment.reviewId.toString() === review._id.toString(),
         )
         return {
-          ...review.toObject(),
+          ...review,
           comments: reviewComments,
         }
       })
@@ -265,20 +285,26 @@ class ReviewService {
         reviews: reviewsWithComments,
       }
     } catch (error) {
-      console.error('내 프로필 조회 서비스 오류:', error)
       throw error
     }
   }
 
+  //내 리뷰 수정하기
   async updateMyReview(reviewId, userId, updateData) {
-    const existingReview = await ReviewsRepo.getReviewById(reviewId)
+    const user = await this.checkUserIdExist(userId)
+    const review = await this.checkReviewIdExist(reviewId)
+    const ownership = await this.checkReviewOwnership(userId, reviewId)
 
-    if (!existingReview) {
-      throw new Error('리뷰가 존재하지 않습니다.')
+    if (!user) {
+      throw new Error('No user found')
     }
 
-    if (existingReview.userId.toString() !== userId.toString()) {
-      throw new Error('해당 리뷰를 수정할 권한이 없습니다.')
+    if (!review) {
+      throw new Error('No review found')
+    }
+
+    if (!ownership) {
+      throw new Error('Not your review')
     }
 
     const updatedReview = await ReviewsRepo.updateMyReview(reviewId, updateData)

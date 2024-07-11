@@ -55,9 +55,8 @@ class UsersRepo {
   //유저 아이디로 찾기
   async getUserById(userId) {
     try {
-      return await this.collection.findById(userId)
+      return await this.collection.find({ _id: new ObjectId(userId) })
     } catch (error) {
-      console.error('유저 레포지토리 오류:', error)
       throw error
     }
   }

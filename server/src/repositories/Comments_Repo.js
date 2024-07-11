@@ -14,11 +14,11 @@ class CommentsRepo {
   async getCommentsByReviewIds(reviewIds) {
     try {
       const result = await this.collection
-        .find({ $in: reviewIds })
+        .find({ reviewId: { $in: reviewIds } })
         .sort({ createdAt: -1 })
+        .toArray()
       return result
     } catch (error) {
-      console.error('댓글 불러오기 실패', error)
       throw error
     }
   }
