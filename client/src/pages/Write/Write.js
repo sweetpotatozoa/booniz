@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import BackendApis from '../../utils/backendApis'
 import NavBar from '../../components/NavBar/NavBar'
+import styles from './Write.module.css'
 
 const Write = () => {
   const { reviewId } = useParams()
@@ -63,7 +64,7 @@ const Write = () => {
   return (
     <>
       <NavBar />
-      <div className='write-container'>
+      <div className={styles.container}>
         <h2>오늘의 독서기록을 작성해 볼까요?</h2>
         <form onSubmit={handleSubmit} className='write-form'>
           <div className='input-group'>

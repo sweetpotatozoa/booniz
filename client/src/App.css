@@ -8,10 +8,10 @@
 body {
   display: flex;
   justify-content: center;
-  min-height: 732px; /*여기에서 세로크기를.*/
-  min-width: 1420px; /*여기에서 가로크기를 지정해줄 수 있습니다.*/
   overflow-y: auto;
   overflow-x: auto;
+  background-color: #f3f0e9;
+  min-width: 1440px;
 }
 
 a {
