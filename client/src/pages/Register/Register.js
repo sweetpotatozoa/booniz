@@ -41,28 +41,23 @@ const Register = () => {
     try {
       const result = await BackendApis.register('POST', formData)
 
-      if (!result || result.error) {
-        throw new Error(result.message || '회원가입에 실패했습니다.')
+      if (
+        result &&
+        result.message === '회원가입에 성공하였습니다. 로그인해주세요.'
+      ) {
+        console.log(result)
+        navigate('/login')
+      } else {
+        setError(result.message || '회원가입에 실패했습니다.')
       }
-
-      navigate('/login')
     } catch (error) {
-      console.error('Error:', error)
+      console.error('회원가입 오류:', error)
       setError(error.message)
     }
   }
 
   const handlePasswordFocus = () => {
     setPasswordError('영어와 숫자로 조합된 8자리 이상의 비밀번호')
-  }
-
-  const handlePasswordBlur = () => {
-    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
-    if (passwordPattern.test(formData.password)) {
-      setPasswordError('') // 패스워드가 유효한 경우 오류 메시지 제거
-    } else {
-      setPasswordError('비밀번호는 영어와 숫자를 포함한 8자 이상이어야 합니다.')
-    }
   }
 
   return (
@@ -93,7 +88,6 @@ const Register = () => {
               value={formData.password}
               onChange={handleChange}
               onFocus={handlePasswordFocus}
-              onBlur={handlePasswordBlur}
               required
               placeholder='비밀번호를 입력해주세요'
               className={styles.input}
