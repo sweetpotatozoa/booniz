@@ -1,4 +1,5 @@
 const ReviewService = require('../services/Review_Service')
+const express = require('express')
 const errorHandler = require('../utils/errorHandler')
 const {
   isObjectId,
@@ -8,15 +9,36 @@ const {
   isValidPassword,
 } = require('../utils/typeValid')
 
-//추가적인 예외처리를 넣고 싶다면 아래와 같이 입력하세요.
-// } catch (err) {
-//   const { status, message } = errorHandler(err, 'anotherFunction', {
-//     'Specific error message': (err) => ({ status: 400, message: 'something wrong' })
-//   });
-//   res.status(status).json({ message });
-// }
+class ReviewController {
+  // 로그인
+  // async login(req, res) {
+  //   const { userName, password } = req.body
+  //   if (!userName || !password) {
+  //     res.status(400).json({ message: '잘못된 이메일 혹은 비밀번호 입니다.' })
+  //     return
+  //   }
+  //   try {
+  //     const result = await AuthService.login(userName, password)
+  //     res.status(200).json(result)
+  //   } catch (err) {
+  //     const { status, message } = errorHandler(err, 'login', {
+  //       'Invalid password': () => ({
+  //         status: 403,
+  //         message: '잘못된 이메일 혹은 비밀번호 입니다.',
+  //       }),
+  //     })
+  //     res.status(status).json({ message })
+  //   }
+  // }
 
-class AuthController {
+  //추가적인 예외처리를 넣고 싶다면 아래와 같이 입력하세요.
+  // } catch (err) {
+  //   const { status, message } = errorHandler(err, 'anotherFunction', {
+  //     'Specific error message': (err) => ({ status: 400, message: 'something wrong' })
+  //   });
+  //   res.status(status).json({ message });
+  // }
+
   // 메인페이지 정보 가져오기
   async getMainInfo(req, res) {
     const userId = req.user.id
@@ -98,6 +120,92 @@ class AuthController {
       res.status(status).json({ message })
     }
   }
+
+  //내 리뷰 삭제하기
+  async deleteMyReview(req, res) {
+    const reviewId = req.params.reviewId
+    if (reviewId && !isObjectId(reviewId)) {
+      res.status(400).json({ message: '유효하지 않은 리뷰 아이디 입니다.' })
+      return
+    }
+    try {
+      const result = await ReviewService.deleteMyReview(reviewId)
+      res.status(200).json(result)
+    } catch (error) {
+      res.status(400).json({ error: '기록 삭제 중 오류가 발생했습니다.' })
+    }
+  }
+
+  //유저 프로필 조회하기
+  async getUserProfile(req, res) {
+    const userId = req.params.userId
+    if (userId && !isObjectId(userId)) {
+      res.status(400).json({ message: '유효하지 않은 유저 아이디 입니다.' })
+      return
+    }
+    try {
+      const userProfile = await ReviewService.getUserProfile(userId)
+      res.status(200).json(userProfile)
+    } catch (error) {
+      res
+        .status(400)
+        .json({ message: 'Error fetching user profile', error: error.message })
+    }
+  }
+
+  //내 프로필 조회
+  async getMyProfile(req, res) {
+    try {
+      const userId = req.user.id
+      const profileData = await ReviewService.getMyProfile(userId)
+      res.status(200).json(profileData)
+    } catch (error) {
+      // next(error)
+    }
+  }
+
+  //날짜별 커뮤니티 조회
+  async getReviewsByDate(req, res) {
+    const date = req.params.date
+    try {
+      const result = await ReviewService.getReviewsByDate(date)
+      res.status(200).json(result)
+    } catch (error) {
+      res.status(400).json({ message: '커뮤니티 조회 중 오류가 발생했습니다.' })
+    }
+  }
+
+  //내 리뷰 수정하기
+  async updateMyReview(req, res, next) {
+    try {
+      const reviewId = req.params.reviewId
+      const userId = req.user.id
+      if (!userId || !isObjectId(userId)) {
+        res.status(400).json({ message: '유효하지 않은 아이디 입니다.' })
+        return
+      }
+      if (reviewId && !isObjectId(reviewId)) {
+        res.status(400).json({ message: '유효하지 않은 리뷰 아이디 입니다.' })
+        return
+      }
+      const { title, content, startPage, endPage } = req.body
+
+      const updatedReview = await ReviewService.updateMyReview(
+        reviewId,
+        userId,
+        {
+          title,
+          content,
+          startPage,
+          endPage,
+        },
+      )
+
+      res.status(200).json(updatedReview)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
-module.exports = new AuthController()
+module.exports = new ReviewController()

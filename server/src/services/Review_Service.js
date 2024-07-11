@@ -1,9 +1,49 @@
-const ReviewsRepo = require('../repositories/Reviews_Repo')
 const UsersRepo = require('../repositories/Users_Repo')
+const ReviewsRepo = require('../repositories/Reviews_Repo')
+const CommentsRepo = require('../repositories/Comments_Repo')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const configs = require('../utils/configs')
 const moment = require('moment-timezone')
 const { ObjectId } = require('bson')
 
 class ReviewService {
+  // //헬퍼 함수
+  // //유저 아이디 존재 검사, 비밀번호 뱉기
+  // async getUserInfo(userName) {
+  //   const user = await UsersRepo.getUserInfo(userName)
+  //   if (!user) {
+  //     throw new Error('No user found - login')
+  //   }
+  //   return user
+  // }
+
+  // //비밀번호 일치 검사
+  // async validatePassword(input, hash) {
+  //   return bcrypt.compareSync(input, hash)
+  // }
+
+  // //토큰 부여
+  // async getToken(userId) {
+  //   const tokenPayload = { user: { id: userId } }
+  //   const token = jwt.sign(tokenPayload, configs.accessTokenSecret)
+  //   return token
+  // }
+
+  // //실제 함수
+  // // 로그인 하기
+  // async login(userName, password) {
+  //   const result = await this.getUserInfo(userName) // 유저 정보 가져오기
+  //   const isValid = await this.validatePassword(password, result.password) // 비밀번호 일치 검사
+  //   if (isValid) {
+  //     const tokenResult = await this.getToken(result._id) // 토큰 부여
+  //     console.log('로그인 성공', tokenResult)
+  //     return { token: tokenResult }
+  //   } else {
+  //     throw new Error('Invalid password')
+  //   }
+  // }
+
   // 헬퍼 함수
   // 유저 아이디 존재 검사
   async checkUserIdExist(userId) {
@@ -118,10 +158,157 @@ class ReviewService {
     if (!ownership) {
       throw new Error('Not your review')
     }
-    console.log('reviewId:', reviewId)
 
     const result = await ReviewsRepo.getMyReview(reviewId)
     return result
+  }
+
+  // 내 리뷰 삭제하기
+  async deleteMyReview(reviewId) {
+    const review = await ReviewsRepo.checkReviewIdExist(reviewId)
+
+    if (!review) {
+      throw new Error('No review found')
+    }
+    try {
+      const result = await ReviewsRepo.deleteMyReview(reviewId)
+      if (!result) {
+        throw new Error('해당 기록을 찾을 수 없습니다.')
+      }
+      return result
+    } catch (error) {
+      throw error
+    }
+  }
+
+  // 커뮤니티 날짜별 조회
+
+  // async findReviewsByDate(date) {
+  //   const startDate = `${date} 00:00:00`
+  //   const endDate = `${date} 23:59:59`
+  //   return await ReviewsRepo.findByDateRange(startDate, endDate)
+  // }
+
+  async getReviewsByDate(date) {
+    try {
+      const startOfDay = moment(date)
+        .tz('Asia/Seoul')
+        .startOf('day')
+        .format('YYYY-MM-DD HH:mm:ss')
+      const endOfDay = moment(date)
+        .tz('Asia/Seoul')
+        .endOf('day')
+        .format('YYYY-MM-DD HH:mm:ss')
+      const reviews = await ReviewsRepo.getReviewsBetweenDates(
+        startOfDay,
+        endOfDay,
+      )
+      const reviewIds = reviews.map((review) => review._id)
+      const comments = await CommentsRepo.getCommentsByReviewIds(reviewIds)
+      const result = reviews.map((review) => {
+        const reviewComments = comments.filter(
+          (comment) => comment.reviewId.toString() === review._id.toString(),
+        )
+        return {
+          ...review,
+          comments: reviewComments,
+        }
+      })
+
+      return result
+    } catch (error) {
+      throw error
+    }
+  }
+
+  //다른 유저 프로필 조회
+  async getUserProfile(userId) {
+    try {
+      const user = await UsersRepo.getUserData(userId)
+      if (!user) {
+        throw new Error('User not found')
+      }
+
+      const reviews = await ReviewsRepo.getReviewsByUserId(userId)
+      const reviewIds = reviews.map((review) => review._id)
+      const allComments = await CommentsRepo.getCommentsByReviewIds(reviewIds)
+
+      const reviewsWithComments = reviews.map((review) => {
+        const reviewComments = allComments.filter(
+          (comment) => comment.reviewId.toString() === review._id.toString(),
+        )
+        return {
+          ...review,
+          comments: reviewComments,
+        }
+      })
+
+      return {
+        userId: user._id,
+        nickName: user.nickName,
+        completionRate: (user.readPages / user.allPages) * 100,
+        reviews: reviewsWithComments,
+      }
+      // 배열로 반환하려면 const userInfo = { userId: user._id, nickName: user.nickName, completionRate: (user.readPages / user.allPages) * 100};
+      // 하고 return [userInfo, reviewsWithComments] 하고 controller에서도 똑같이 받아와야 함. (const [userInfo, reviewWithComments] = await userService.getUserProfile(userId) 식으로)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  //내 프로필 조회
+  async getMyProfile(userId) {
+    try {
+      const user = await UsersRepo.getUserData(userId)
+      if (!user) {
+        throw new Error('User not found')
+      }
+
+      const reviews = await ReviewsRepo.getReviewsByUserId(userId)
+      const reviewIds = reviews.map((review) => review._id)
+      const allComments = await CommentsRepo.getCommentsByReviewIds(reviewIds)
+
+      const reviewsWithComments = reviews.map((review) => {
+        const reviewComments = allComments.filter(
+          (comment) => comment.reviewId.toString() === review._id.toString(),
+        )
+        return {
+          ...review,
+          comments: reviewComments,
+        }
+      })
+
+      return {
+        userId: user._id,
+        nickName: user.nickName,
+        completionRate: (user.readPages / user.allPages) * 100,
+        reviews: reviewsWithComments,
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
+  //내 리뷰 수정하기
+  async updateMyReview(reviewId, userId, updateData) {
+    const user = await this.checkUserIdExist(userId)
+    const review = await this.checkReviewIdExist(reviewId)
+    const ownership = await this.checkReviewOwnership(userId, reviewId)
+
+    if (!user) {
+      throw new Error('No user found')
+    }
+
+    if (!review) {
+      throw new Error('No review found')
+    }
+
+    if (!ownership) {
+      throw new Error('Not your review')
+    }
+
+    const updatedReview = await ReviewsRepo.updateMyReview(reviewId, updateData)
+    return updatedReview
   }
 }
 

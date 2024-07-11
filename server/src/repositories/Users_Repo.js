@@ -51,6 +51,15 @@ class UsersRepo {
     )
     return user
   }
+
+  //유저 아이디로 찾기
+  async getUserById(userId) {
+    try {
+      return await this.collection.find({ _id: new ObjectId(userId) })
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
 module.exports = new UsersRepo()
