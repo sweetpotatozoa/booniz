@@ -52,7 +52,7 @@ const Main = () => {
   return (
     <>
       <NavBar />
-      {/* <div className={styles.mainContainer}>
+      <div className={styles.mainContainer}>
         <h1>안녕하세요 {userData.nickName}님</h1>
         <div className={styles.progressContainer}>
           <div>
@@ -106,7 +106,7 @@ const Main = () => {
             })}
           </div>
         </div>
-      </div> */}
+      </div>
     </>
   )
 }
