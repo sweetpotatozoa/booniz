@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BackendApis from '../../utils/backendApis'
 import NavBar from '../../components/NavBar/NavBar'
+import styles from './Login.module.css'
 
 const Login = () => {
   const [userName, setUserName] = useState('')
@@ -34,7 +35,7 @@ const Login = () => {
   return (
     <>
       <NavBar />
-      <div className='login-container'>
+      <div className={styles.container}>
         <form onSubmit={handleLogin} className='login-form'>
           <h2>로그인</h2>
           <div className='input-group'>
