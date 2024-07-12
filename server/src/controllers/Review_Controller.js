@@ -171,6 +171,7 @@ class ReviewController {
       const result = await ReviewService.getReviewsByDate(date)
       res.status(200).json(result)
     } catch (error) {
+      console.log(error)
       res.status(400).json({ message: '커뮤니티 조회 중 오류가 발생했습니다.' })
     }
   }
