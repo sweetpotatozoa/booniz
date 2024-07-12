@@ -28,13 +28,27 @@ class BackendApis {
     this.token = localStorage.getItem('token') || null
   }
 
-  //로그인 하기(예시)
   async login(method = 'POST', params = {}) {
     const result = await fetcher('/api/auth/login', '', method, params)
     if (result.token) {
       this.token = result.token
       localStorage.setItem('token', this.token)
     }
+    return result
+  }
+
+  async register(method = 'POST', params = {}) {
+    const result = await fetcher('/api/auth/register', '', method, params)
+    return result
+  }
+
+  async getMainInfo() {
+    const result = await fetcher('/api/review/getMainInfo', this.token, 'GET')
+    return result
+  }
+
+  async getMyProfile() {
+    const result = await fetcher('/api/review/myProfile', this.token, 'GET')
     return result
   }
 }
