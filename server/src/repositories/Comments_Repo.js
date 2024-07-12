@@ -20,6 +20,13 @@ class CommentsRepo {
     return review !== null
   }
 
+  // 댓글 생성
+  async createComment(commentData) {
+    console.log(commentData)
+    const result = await this.collection.insertOne(commentData)
+    return { ...commentData, _id: result.insertedId }
+  }
+
   // 내 댓글 삭제하기
   async deleteMyComment(commentId) {
     try {

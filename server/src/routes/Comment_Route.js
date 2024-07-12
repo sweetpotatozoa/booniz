@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const wrapAsync = require('../utils/wrapAsync')
-const ReviewController = require('../controllers/Review_Controller')
 const CommentController = require('../controllers/Comment_Controller')
 
 const fakeAuth = (req, res, next) => {
@@ -10,11 +9,11 @@ const fakeAuth = (req, res, next) => {
 }
 
 // router.get('/liked'.fakeAuth, wrapAsync(ReviewController.getMyLikedList)) //내 좋아요 목록 불러오기
-// router.post(
-//   '/createComment',
-//   fakeAuth,
-//   wrapAsync(ReviewController.createComment),
-// ) //댓글 작성하기
+router.post(
+  '/createComment/:reviewId',
+  fakeAuth,
+  wrapAsync(CommentController.createComment),
+) //댓글 작성하기
 router.delete(
   '/delete/:commentId',
   wrapAsync(CommentController.deleteMyComment),

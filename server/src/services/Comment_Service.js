@@ -45,7 +45,26 @@ class CommentService {
   // }
 
   // 헬퍼 함수
+  // 댓글 작성하기
+  async createComment(reviewId, userId, content) {
+    // const user = await this.checkUserIdExist(userId)
+    // if (!user) {
+    //   throw new Error('No user found')
+    // }
+    if (typeof content === 'object') {
+      content = JSON.stringify(content)
+    }
 
+    const commentData = {
+      reviewId,
+      userId,
+      content,
+      createdAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
+    }
+
+    const result = await CommentsRepo.createComment(commentData)
+    return result
+  }
   // 내 댓글 삭제하기
   async deleteMyComment(commentId) {
     const comment = await CommentsRepo.checkCommentIdExist(commentId)
