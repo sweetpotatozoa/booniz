@@ -56,6 +56,22 @@ class BackendApis {
     const result = await fetcher('/api/review/createReview', '', method, params)
     return result
   }
+
+  async getUserProfile(userId) {
+    console.log('Fetching profile for userId:', userId) // Debugging
+    const result = await fetcher(
+      `/api/review/userProfile/${userId}`,
+      this.token,
+      'GET',
+    )
+    console.log('Profile fetch result:', result) // Debugging
+    return result
+  }
+
+  async getCommunityReviews(date) {
+    const result = await fetcher(`/api/review/community/${date}`, '', 'GET')
+    return result
+  }
 }
 
 export default new BackendApis()

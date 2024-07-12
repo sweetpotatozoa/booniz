@@ -190,6 +190,7 @@ class ReviewService {
   // }
 
   async getReviewsByDate(date) {
+    //커뮤니티
     try {
       const startOfDay = moment(date)
         .tz('Asia/Seoul')
