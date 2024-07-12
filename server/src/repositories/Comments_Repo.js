@@ -9,6 +9,29 @@ class CommentsRepo {
   }
 
   // //헬퍼 함수
+  async checkCommentIdExist(commentId) {
+    if (!ObjectId.isValid(commentId)) {
+      return false
+    }
+
+    const review = await this.collection.findOne({
+      _id: new ObjectId(commentId),
+    })
+    return review !== null
+  }
+
+  // 내 댓글 삭제하기
+  async deleteMyComment(commentId) {
+    try {
+      const result = await this.collection.deleteOne({
+        _id: new ObjectId(commentId),
+      })
+      console.log(result)
+      return result !== null
+    } catch (error) {
+      throw error
+    }
+  }
 
   // 리뷰 별로 달린 댓글 불러오기
   async getCommentsByReviewIds(reviewIds) {
