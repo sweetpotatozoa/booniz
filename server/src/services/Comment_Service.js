@@ -7,7 +7,7 @@ const configs = require('../utils/configs')
 const moment = require('moment-timezone')
 const { ObjectId } = require('bson')
 
-class ReviewService {
+class CommentService {
   // //헬퍼 함수
   // //유저 아이디 존재 검사, 비밀번호 뱉기
   // async getUserInfo(userName) {
@@ -182,15 +182,7 @@ class ReviewService {
   }
 
   // 커뮤니티 날짜별 조회
-
-  // async findReviewsByDate(date) {
-  //   const startDate = `${date} 00:00:00`
-  //   const endDate = `${date} 23:59:59`
-  //   return await ReviewsRepo.findByDateRange(startDate, endDate)
-  // }
-
   async getReviewsByDate(date) {
-    //커뮤니티
     try {
       const startOfDay = moment(date)
         .tz('Asia/Seoul')
@@ -211,7 +203,6 @@ class ReviewService {
         ...new Set(reviews.map((review) => review.userId.toString())),
       ]
       const users = await UsersRepo.getUsersByIds(userIds)
-      console.log(users)
       const userMap = users.reduce((acc, user) => {
         acc[user._id.toString()] = user
         return acc
@@ -326,4 +317,4 @@ class ReviewService {
   }
 }
 
-module.exports = new ReviewService()
+module.exports = new CommentService()

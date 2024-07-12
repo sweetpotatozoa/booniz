@@ -55,7 +55,21 @@ class UsersRepo {
   //유저 아이디로 찾기
   async getUserById(userId) {
     try {
-      return await this.collection.find({ _id: new ObjectId(userId) })
+      const result = await this.collection.find({ _id: new ObjectId(userId) })
+      return result
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async getUsersByIds(userIds) {
+    try {
+      const objectIds = userIds.map((id) => new ObjectId(id))
+      const result = await this.collection
+        .find({ _id: { $in: objectIds } })
+        .toArray()
+
+      return result
     } catch (error) {
       throw error
     }
