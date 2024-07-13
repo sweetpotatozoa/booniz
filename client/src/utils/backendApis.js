@@ -93,6 +93,25 @@ class BackendApis {
     )
     return result
   }
+
+  async getMyReview(userId, reviewId) {
+    const result = await fetcher(
+      `/api/review/getMyReview/${userId}/${reviewId}`,
+      this.token,
+      'GET',
+    )
+    return result
+  }
+
+  async updateMyReview(reviewId, userId, updateData) {
+    const result = await fetcher(
+      `/api/review/updateMyReview/${reviewId}/${userId}`,
+      this.token,
+      'PUT',
+      updateData,
+    )
+    return result
+  }
 }
 
 export default new BackendApis()
