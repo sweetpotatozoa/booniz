@@ -229,6 +229,7 @@ class ReviewService {
       })
 
       return result
+      console.log(result)
     } catch (error) {
       throw error
     }
