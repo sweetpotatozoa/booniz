@@ -49,6 +49,12 @@ const Main = () => {
 
   const challengeStartDate = moment('2024-07-07')
 
+  // Create an array of length 10, filling with existing dailyStatus or inactive dots
+  const fullDailyStatus = Array.from({ length: 10 }, (_, idx) => ({
+    id: `status-${idx}`,
+    status: userData.dailyStatus[idx] ? userData.dailyStatus[idx].status : 0,
+  }))
+
   return (
     <>
       <NavBar />
@@ -86,7 +92,7 @@ const Main = () => {
             매일 독서일지를 쓰면, 선물을 받을 수 있어요!
           </div>
           <div className={styles.attendanceDots}>
-            {userData.dailyStatus.map((day) => (
+            {fullDailyStatus.map((day) => (
               <div
                 key={day.id}
                 className={`${styles.dot} ${day.status ? styles.active : ''}`}
