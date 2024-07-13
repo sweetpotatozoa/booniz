@@ -36,7 +36,7 @@ const Login = () => {
     <>
       <NavBar />
       <div className={styles.container}>
-        <h2>로그인</h2>
+        <h2 style={{ fontSize: '32px' }}>로그인</h2>
         <form onSubmit={handleLogin} className={styles.form}>
           <div className={styles.inputBox}>
             <label htmlFor='userName' className={styles.title}>
@@ -67,7 +67,9 @@ const Login = () => {
               className={styles.input}
               style={{ marginBottom: '8px' }}
             />
-            <small>영어와 숫자로 조합된 8자리 이상의 비밀번호</small>
+            <small style={{ fontSize: '13px', marginBottom: '28px' }}>
+              * 영어와 숫자로 조합된 8자리 이상의 비밀번호
+            </small>
           </div>
           {error && <p className='error'>{error}</p>}
           <button type='submit' className={styles.button}>
@@ -77,6 +79,7 @@ const Login = () => {
             type='button'
             className={styles.button}
             onClick={handleRegisterRedirect}
+            style={{ backgroundColor: '#ffffff', color: '#282828' }}
           >
             회원가입
           </button>

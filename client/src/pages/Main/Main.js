@@ -52,14 +52,16 @@ const Main = () => {
   return (
     <>
       <NavBar />
-      <div className={styles.mainContainer}>
-        <h1>안녕하세요 {userData.nickName}님</h1>
+      <div className={styles.container}>
+        <h1 style={{ fontSize: '32px' }}>안녕하세요 {userData.nickName}님</h1>
         <div className={styles.progressContainer}>
           <div>
             <div className={styles.readingProgress}>
               {readingProgress.toFixed(2)}%
             </div>
-            <div>이만큼 읽었어요!</div>
+            <div style={{ fontSize: '20px', fontWeight: 'bold' }}>
+              이만큼 읽었어요!
+            </div>
           </div>
           <div className={styles.progressBar}>
             <div
@@ -68,7 +70,14 @@ const Main = () => {
             ></div>
           </div>
           <div className={styles.pages}>
-            {`읽은 쪽수: ${userData.readPages}, 남은 쪽수: ${remainingPages}`}
+            <div>
+              <p className={styles.page}>{userData.readPages}p</p>
+              <p className={styles.page}>읽은 쪽수</p>
+            </div>
+            <div>
+              <p className={styles.page}>{remainingPages}p</p>
+              <p className={styles.page}>남은 쪽수</p>
+            </div>
           </div>
         </div>
         <div className={styles.attendanceContainer}>
@@ -83,7 +92,7 @@ const Main = () => {
             ))}
           </div>
         </div>
-        <div className={styles.reviewContainer}>
+        {/* <div className={styles.reviewContainer}>
           <h2>내가 쓴 독서일지</h2>
           <div className={styles.review}>
             {userData.reviews.map((entry) => {
@@ -105,7 +114,7 @@ const Main = () => {
               )
             })}
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   )
