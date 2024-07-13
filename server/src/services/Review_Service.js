@@ -34,6 +34,7 @@ class ReviewService {
   // // 로그인 하기
   // async login(userName, password) {
   //   const result = await this.getUserInfo(userName) // 유저 정보 가져오기
+
   //   const isValid = await this.validatePassword(password, result.password) // 비밀번호 일치 검사
   //   if (isValid) {
   //     const tokenResult = await this.getToken(result._id) // 토큰 부여
@@ -199,19 +200,29 @@ class ReviewService {
       const reviewIds = reviews.map((review) => review._id)
       const comments = await CommentsRepo.getCommentsByReviewIds(reviewIds)
 
-      const userIds = [
-        ...new Set(reviews.map((review) => review.userId.toString())),
-      ]
-      const users = await UsersRepo.getUsersByIds(userIds)
+      const reviewUserIds = reviews.map((review) => review.userId.toString())
+      const commentUserIds = comments.map((comment) =>
+        comment.userId.toString(),
+      )
+
+      const allUserIds = [...new Set([...reviewUserIds, ...commentUserIds])]
+
+      const users = await UsersRepo.getUsersByIds(allUserIds)
       const userMap = users.reduce((acc, user) => {
         acc[user._id.toString()] = user
         return acc
       }, {})
 
       const result = reviews.map((review) => {
-        const reviewComments = comments.filter(
-          (comment) => comment.reviewId.toString() === review._id.toString(),
-        )
+        const reviewComments = comments
+          .filter(
+            (comment) => comment.reviewId.toString() === review._id.toString(),
+          )
+          .map((comment) => ({
+            ...comment,
+            nickName: userMap[comment.userId.toString()]?.nickName,
+          }))
+
         const user = userMap[review.userId.toString()]
         return {
           ...review,
@@ -222,6 +233,7 @@ class ReviewService {
 
       return result
     } catch (error) {
+      console.error('Error in getReviewsByDate', error)
       throw error
     }
   }
@@ -296,55 +308,68 @@ class ReviewService {
 
   //내 리뷰 수정하기
   async updateMyReview(reviewId, userId, updateData) {
-    const user = await this.checkUserIdExist(userId)
-    const review = await this.checkReviewIdExist(reviewId)
-    const ownership = await this.checkReviewOwnership(userId, reviewId)
+    try {
+      const user = await this.checkUserIdExist(userId)
+      const review = await this.checkReviewIdExist(reviewId)
+      const ownership = await this.checkReviewOwnership(userId, reviewId)
 
-    if (!user) {
-      throw new Error('No user found')
+      if (!user) {
+        throw new Error('No user found')
+      }
+
+      if (!review) {
+        throw new Error('No review found')
+      }
+
+      if (!ownership) {
+        throw new Error('Not your review')
+      }
+
+      const updatedReview = await ReviewsRepo.updateMyReview(
+        reviewId,
+        updateData,
+      )
+      return updatedReview
+    } catch (error) {
+      throw error
     }
-
-    if (!review) {
-      throw new Error('No review found')
-    }
-
-    if (!ownership) {
-      throw new Error('Not your review')
-    }
-
-    const updatedReview = await ReviewsRepo.updateMyReview(reviewId, updateData)
-    return updatedReview
   }
 
   //내 좋아요 목록 조회하기
   async getMyLikedList(userId) {
-    const reviews = await ReviewsRepo.getLikedReviewsByUserId(userId)
-    const reviewIds = reviews.map((review) => review._id)
-    const comments = await CommentsRepo.getCommentsByReviewIds(reviewIds)
-    const userIds = [...new Set(reviews.map((review) => review.userId))]
-    const users = await UsersRepo.getUsersByIds(userIds)
+    try {
+      const reviews = await ReviewsRepo.getLikedReviewsByUserId(userId)
+      const reviewIds = reviews.map((review) => review._id)
+      const comments = await CommentsRepo.getCommentsByReviewIds(reviewIds)
+      const userIds = [...new Set(reviews.map((review) => review.userId))]
+      const users = await UsersRepo.getUsersByIds(userIds)
 
-    const userMap = users.reduce((acc, user) => {
-      acc[user._id.toString()] = user.nickName
-      return acc
-    }, {})
+      const userMap = users.reduce((acc, user) => {
+        acc[user._id.toString()] = user.nickName
+        return acc
+      }, {})
 
-    const result = reviews.map((review) => {
-      const reviewComments = comments.filter(
-        (comment) => comment.reviewId.toString() === review._id.toString(),
+      const result = reviews.map((review) => {
+        const reviewComments = comments.filter(
+          (comment) => comment.reviewId.toString() === review._id.toString(),
+        )
+        return {
+          _id: review._id,
+          title: review.title,
+          content: review.content,
+          likedBy: review.likedBy,
+          comments: reviewComments.map((comment) => comment._id),
+          updatedAt: moment(review.updatedAt).format('YYYY.MM.DD'),
+          authorNickName: userMap[review.userId.toString()],
+        }
+      })
+
+      return result.sort(
+        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt),
       )
-      return {
-        _id: review._id,
-        title: review.title,
-        content: review.content,
-        likedBy: review.likedBy,
-        comments: reviewComments.map((comment) => comment._id),
-        updatedAt: moment(review.updatedAt).format('YYYY.MM.DD'),
-        authorNickName: userMap[review.userId.toString()],
-      }
-    })
-
-    return result.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+    } catch (error) {
+      throw error
+    }
   }
 }
 
