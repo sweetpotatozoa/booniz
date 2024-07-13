@@ -13,7 +13,7 @@ const NavBar = () => {
 
   const getLinkStyle = (path) => {
     return activeLink === path
-      ? { textDecoration: 'underline', fontWeight: 'bold' }
+      ? { borderBottom: '5px solid #FF7342', fontWeight: 'bold' }
       : {}
   }
 
