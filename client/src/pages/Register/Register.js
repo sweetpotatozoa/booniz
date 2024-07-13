@@ -61,11 +61,13 @@ const Register = () => {
   return (
     <>
       <NavBar />
-      <div className={styles.registerContainer}>
-        <form onSubmit={handleRegister} className={styles.registerForm}>
-          <h2>회원가입</h2>
+      <div className={styles.container}>
+        <h2 style={{ fontSize: '32px' }}>회원가입</h2>
+        <form onSubmit={handleRegister} className={styles.form}>
           <div className={styles.section}>
-            <h3>로그인 정보</h3>
+            <h3 style={{ fontSize: '20px', marginBottom: '8px' }}>
+              로그인 정보
+            </h3>
             <div className={styles.inputGroup}>
               <input
                 type='email'
@@ -96,7 +98,15 @@ const Register = () => {
             </div>
           </div>
           <div className={styles.section}>
-            <h3>인적사항</h3>
+            <h3
+              style={{
+                fontSize: '20px',
+                marginBottom: '8px',
+                marginTop: '20px',
+              }}
+            >
+              인적사항
+            </h3>
             <div className={styles.inputGroup}>
               <input
                 type='text'

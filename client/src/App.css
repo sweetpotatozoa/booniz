@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  color: #334155; /*여기에서 전체 폰트 색상을 지정해줄 수 있습니다.*/
+  color: #282828; /*여기에서 전체 폰트 색상을 지정해줄 수 있습니다.*/
 }
 
 body {
@@ -12,6 +12,20 @@ body {
   overflow-x: auto;
   background-color: #f3f0e9;
   min-width: 1440px;
+  min-height: 700px;
+}
+
+html,
+body {
+  overflow: -moz-scrollbars-none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* WebKit 브라우저 (Chrome, Safari 등) */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
 }
 
 a {
@@ -19,5 +33,5 @@ a {
 }
 
 button {
-  text-decoration: none;
+  border: none;
 }

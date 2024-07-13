@@ -1,4 +1,4 @@
-.mainContainer {
+/* .mainContainer {
   padding: 20px;
 }
 
@@ -84,4 +84,53 @@
 .reviewEntry small {
   color: #999;
   font-size: 14px;
+} */
+
+.container {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+}
+
+.progressContainer {
+  display: flex;
+  align-items: center;
+  padding: 20px 32px;
+  justify-content: space-between;
+  background-color: #fdfcf7;
+  margin-top: 20px;
+  border-radius: 15px;
+  border: 1px solid #282828;
+}
+
+.readingProgress {
+  font-size: 20px;
+}
+
+.progressBar {
+  width: 954px;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 1px solid #282828;
+  height: 28px;
+}
+
+.progress {
+  height: 100%;
+  background-color: #ff7342;
+  border-radius: 50px;
+}
+
+.pages {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.pages div {
+  margin-left: 60px;
+}
+
+.page {
+  margin-top: 4px;
 }
