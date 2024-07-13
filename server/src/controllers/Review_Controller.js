@@ -160,7 +160,9 @@ class ReviewController {
       const profileData = await ReviewService.getMyProfile(userId)
       res.status(200).json(profileData)
     } catch (error) {
-      // next(error)
+      res
+        .status(400)
+        .json({ message: '내 프로필 조회 중 오류가 발생했습니다.' })
     }
   }
 
