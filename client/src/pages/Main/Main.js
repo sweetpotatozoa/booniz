@@ -81,8 +81,10 @@ const Main = () => {
           </div>
         </div>
         <div className={styles.attendanceContainer}>
-          <div>10일 챌린지 미션 진행중</div>
-          <div>매일 독서일지를 쓰면, 선물을 받을 수 있어요!</div>
+          <div className={styles.title}>10일 챌린지 미션 진행중</div>
+          <div className={styles.subTitle}>
+            매일 독서일지를 쓰면, 선물을 받을 수 있어요!
+          </div>
           <div className={styles.attendanceDots}>
             {userData.dailyStatus.map((day) => (
               <div
@@ -92,16 +94,18 @@ const Main = () => {
             ))}
           </div>
         </div>
-        {/* <div className={styles.reviewContainer}>
-          <h2>내가 쓴 독서일지</h2>
+        <div className={styles.reviewContainer}>
+          <h2 style={{ margin: '20px 0' }}>내가 쓴 독서일지</h2>
           <div className={styles.review}>
             {userData.reviews.map((entry) => {
               const reviewDate = moment(entry.createdAt)
               const dayDifference =
                 reviewDate.diff(challengeStartDate, 'days') + 1
               return (
-                <React.Fragment key={entry._id}>
-                  <div>{dayDifference}일차 독서일지</div>
+                <div key={entry._id} className={styles.reviewData}>
+                  <div className={styles.title}>
+                    {dayDifference}일차 독서일지
+                  </div>
                   <div
                     className={styles.reviewEntry}
                     onClick={handleEntryClick}
@@ -110,11 +114,11 @@ const Main = () => {
                     <p>{truncateContent(entry.content, 150)}</p>
                     <small>{entry.createdAt.split('T')[0]}</small>
                   </div>
-                </React.Fragment>
+                </div>
               )
             })}
           </div>
-        </div> */}
+        </div>
       </div>
     </>
   )

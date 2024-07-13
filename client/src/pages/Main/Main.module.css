@@ -90,6 +90,7 @@
   margin-top: 36px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 36px;
 }
 
 .progressContainer {
@@ -133,4 +134,62 @@
 
 .page {
   margin-top: 4px;
+}
+
+.attendanceContainer {
+  display: flex;
+  padding: 20px 32px;
+  background-color: #fdfcf7;
+  margin-top: 20px;
+  border-radius: 15px;
+  border: 1px solid #282828;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.subTitle {
+  font-size: 16px;
+  margin-top: 4px;
+}
+
+.dot {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 1px solid #282828;
+}
+
+.active {
+  background-color: #ff7342;
+}
+
+.attendanceDots {
+  display: flex;
+  margin-top: 18px;
+  gap: 20px;
+}
+
+.review {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3개의 열로 설정 */
+  gap: 20px; /* 각 항목 간의 간격 */
+  border-radius: 15px;
+  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.reviewData {
+  display: flex;
+  flex-direction: column;
+  max-width: 467px;
+  min-width: 467px;
+  padding: 24px 30px;
+  background-color: #fdfcf7;
+  border-radius: 15px;
+  border: 1px solid #282828;
 }
