@@ -139,5 +139,13 @@ class ReviewsRepo {
     )
     return result
   }
+
+  async getLikedReviewsByUserId(userId) {
+    const result = await this.collection
+      .find({ likedBy: userId })
+      .sort({ updatedAt: -1 })
+      .toArray()
+    return result
+  }
 }
 module.exports = new ReviewsRepo()

@@ -16,27 +16,51 @@ const {
 //   res.status(status).json({ message });
 // }
 
-class AuthController {
-  // 로그인
-  async login(req, res) {
-    const { userName, password } = req.body
-    if (!userName || !password) {
-      res.status(400).json({ message: '잘못된 이메일 혹은 비밀번호 입니다.' })
+class commentController {
+  // 댓글 생성
+  async createComment(req, res) {
+    const reviewId = req.params.reviewId
+    const userId = req.user.id
+    let content = req.body.content
+    if (!userId || !isObjectId(userId)) {
+      res.status(400).json({ message: '유효하지 않은 아이디 입니다.' })
       return
     }
+
+    if (typeof content === 'string') {
+      content = JSON.stringify(content)
+    }
     try {
-      const result = await AuthService.login(userName, password)
+      const result = await CommentService.createComment(
+        reviewId,
+        userId,
+        content,
+      )
       res.status(200).json(result)
     } catch (err) {
-      const { status, message } = errorHandler(err, 'login', {
-        'Invalid password': () => ({
-          status: 403,
-          message: '잘못된 이메일 혹은 비밀번호 입니다.',
+      const { status, message } = errorHandler(err, 'createComment', {
+        'Invalid Comment': () => ({
+          status: 400,
+          message: '댓글 작성에 실패하였습니다.',
         }),
       })
       res.status(status).json({ message })
     }
   }
+  // 댓글 삭제하기
+  async deleteMyComment(req, res) {
+    const commentId = req.params.commentId
+    if (commentId && !isObjectId(commentId)) {
+      res.status(400).json({ message: '유효하지 않은 댓글 아이디 입니다.' })
+      return
+    }
+    try {
+      const result = await CommentService.deleteMyComment(commentId)
+      res.status(200).json(result)
+    } catch (error) {
+      res.status(400).json({ error: '댓글 삭제 중 오류가 발생했습니다.' })
+    }
+  }
 }
 
-module.exports = new CommentController()
+module.exports = new commentController()
