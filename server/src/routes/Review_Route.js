@@ -39,15 +39,6 @@ router.get(
   wrapAsync(ReviewController.getMyReview),
 )
 
-// router.get('/liked'.fakeAuth, wrapAsync(ReviewController.getMyLikedList)) //내 좋아요 목록 불러오기
-// router.post(
-//   '/createComment',
-//   fakeAuth,
-//   wrapAsync(ReviewController.createComment),
-// ) //댓글 작성하기
-router.delete(
-  '/delete/:commentId',
-  wrapAsync(CommentController.deleteMyComment),
-) //댓글 삭제하기
+router.get('/liked', fakeAuth, wrapAsync(ReviewController.getMyLikedList)) //내 좋아요 목록 불러오기
 
 module.exports = router

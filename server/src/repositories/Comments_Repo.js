@@ -22,7 +22,6 @@ class CommentsRepo {
 
   // 댓글 생성
   async createComment(commentData) {
-    console.log(commentData)
     const result = await this.collection.insertOne(commentData)
     return { ...commentData, _id: result.insertedId }
   }
@@ -33,7 +32,6 @@ class CommentsRepo {
       const result = await this.collection.deleteOne({
         _id: new ObjectId(commentId),
       })
-      console.log(result)
       return result !== null
     } catch (error) {
       throw error

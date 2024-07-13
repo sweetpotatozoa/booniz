@@ -171,7 +171,6 @@ class ReviewController {
       const result = await ReviewService.getReviewsByDate(date)
       res.status(200).json(result)
     } catch (error) {
-      console.log(error)
       res.status(400).json({ message: '커뮤니티 조회 중 오류가 발생했습니다.' })
     }
   }
@@ -203,6 +202,17 @@ class ReviewController {
       )
 
       res.status(200).json(updatedReview)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  //내 좋아요 목록 조회하기
+  async getMyLikedList(req, res, next) {
+    try {
+      const userId = req.user.id
+      const likedReviews = await ReviewService.getMyLikedList(userId)
+      res.status(200).json(likedReviews)
     } catch (error) {
       next(error)
     }

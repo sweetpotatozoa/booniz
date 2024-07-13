@@ -22,25 +22,14 @@ class commentController {
     const reviewId = req.params.reviewId
     const userId = req.user.id
     let content = req.body.content
-    console.log(content)
     if (!userId || !isObjectId(userId)) {
       res.status(400).json({ message: '유효하지 않은 아이디 입니다.' })
       return
     }
 
     if (typeof content === 'string') {
-      try {
-        const parsedContent = JSON.parse(content)
-        content = parsedContent.content || parsedContent
-      } catch (e) {
-        // 파싱에 실패하면 원래 문자열 사용
-        console.error('Failed to parse content:', e)
-      }
-    } else if (typeof content === 'object' && content.content) {
-      // content가 객체이고 내부에 content 필드가 있으면 그 값을 사용
-      content = content.content
+      content = JSON.stringify(content)
     }
-    console.log('Content to be saved:', content)
     try {
       const result = await CommentService.createComment(
         reviewId,

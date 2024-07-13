@@ -56,8 +56,8 @@ class CommentService {
     }
 
     const commentData = {
-      reviewId,
-      userId,
+      reviewId: new ObjectId(reviewId),
+      userId: new ObjectId(userId),
       content,
       createdAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
     }
