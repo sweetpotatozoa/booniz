@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import truncateContent from '../../utils/truncateContent'
 import BackendApis from '../../utils/backendApis'
 import NavBar from '../../components/NavBar/NavBar'
 import styles from './MyProfile.module.css'
 import moment from 'moment'
+import getConsecutiveDays from '../../utils/getConsecutiveDays'
+import Review from '../../components/Review/Review'
 
 const MyProfile = () => {
   const [userData, setUserData] = useState({
@@ -12,6 +13,7 @@ const MyProfile = () => {
     nickName: '',
     completionRate: 0,
     reviews: [],
+    dailyStatus: [],
   })
   const navigate = useNavigate()
 
@@ -26,15 +28,43 @@ const MyProfile = () => {
     }))
   }
 
-  const handleCommentSubmit = (id, newComment) => {
-    setUserData((prevState) => ({
-      ...prevState,
-      reviews: prevState.reviews.map((entry) =>
-        entry._id === id
-          ? { ...entry, comments: [...entry.comments, newComment] }
-          : entry,
-      ),
-    }))
+  const handleCommentSubmit = async (reviewId, content) => {
+    try {
+      const newComment = await BackendApis.createComment(reviewId, { content })
+      setUserData((prevState) => ({
+        ...prevState,
+        reviews: prevState.reviews.map((entry) =>
+          entry._id === reviewId
+            ? { ...entry, comments: [...entry.comments, newComment] }
+            : entry,
+        ),
+      }))
+    } catch (error) {
+      console.error('댓글 제출 중 오류 발생:', error)
+    }
+  }
+
+  const handleDeleteComment = async (reviewId, commentId) => {
+    try {
+      const result = await BackendApis.deleteComment(commentId)
+      if (result) {
+        setUserData((prevState) => ({
+          ...prevState,
+          reviews: prevState.reviews.map((entry) =>
+            entry._id === reviewId
+              ? {
+                  ...entry,
+                  comments: entry.comments.filter(
+                    (comment) => comment._id !== commentId,
+                  ),
+                }
+              : entry,
+          ),
+        }))
+      }
+    } catch (error) {
+      console.error('댓글 삭제 중 오류 발생:', error)
+    }
   }
 
   const handleEditClick = (id) => {
@@ -67,9 +97,7 @@ const MyProfile = () => {
   }, [])
 
   const challengeStartDate = moment('2024-07-07')
-  const consecutiveDays = userData.dailyStatus
-    ? userData.dailyStatus.filter((status) => status).length
-    : 0
+  const consecutiveDays = getConsecutiveDays(userData.dailyStatus)
 
   return (
     <>
@@ -95,62 +123,15 @@ const MyProfile = () => {
               const dayDifference =
                 reviewDate.diff(challengeStartDate, 'days') + 1
               return (
-                <div key={entry._id} className={styles.reviewEntry}>
-                  <div onClick={() => handleEntryClick(entry._id)}>
-                    <div>{dayDifference}일차 독서일지</div>
-                    <h3>{entry.title}</h3>
-                    <small>{entry.createdAt.split('T')[0]}</small>
-                    <p>
-                      {entry.expanded
-                        ? entry.content
-                        : truncateContent(entry.content, 150)}
-                    </p>
-                    <div>❤ {entry.likedBy.length}개</div>
-                    <div>□ {entry.comments.length}개</div>
-                  </div>
-                  {entry.expanded && (
-                    <div className={styles.commentsSection}>
-                      {entry.comments.map((comment) => (
-                        <div key={comment._id}>
-                          <p>{comment.content}</p>
-                          <small>
-                            {comment.userNickName} |{' '}
-                            {moment(comment.createdAt).format('YYYY-MM-DD')}
-                          </small>
-                        </div>
-                      ))}
-                      <input
-                        type='text'
-                        placeholder='댓글을 입력하세요'
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' && e.target.value) {
-                            handleCommentSubmit(entry._id, e.target.value)
-                            e.target.value = ''
-                          }
-                        }}
-                      />
-                      <button
-                        onClick={() => {
-                          const commentInput = document.querySelector(
-                            `input[placeholder="댓글을 입력하세요"]`,
-                          )
-                          if (commentInput.value) {
-                            handleCommentSubmit(entry._id, commentInput.value)
-                            commentInput.value = ''
-                          }
-                        }}
-                      >
-                        댓글 작성하기
-                      </button>
-                      <button onClick={() => handleEditClick(entry._id)}>
-                        수정하기
-                      </button>
-                      <button onClick={() => handleDeleteClick(entry._id)}>
-                        삭제하기
-                      </button>
-                    </div>
-                  )}
-                </div>
+                <Review
+                  key={entry._id}
+                  entry={entry}
+                  dayDifference={dayDifference}
+                  handleEntryClick={handleEntryClick}
+                  handleEditClick={handleEditClick}
+                  handleDeleteComment={handleDeleteComment}
+                  handleCommentSubmit={handleCommentSubmit}
+                />
               )
             })
           ) : (

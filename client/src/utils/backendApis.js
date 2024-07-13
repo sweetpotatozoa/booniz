@@ -49,6 +49,7 @@ class BackendApis {
 
   async getMyProfile() {
     const result = await fetcher('/api/review/myProfile', this.token, 'GET')
+    console.log(result)
     return result
   }
 
@@ -70,6 +71,26 @@ class BackendApis {
 
   async getCommunityReviews(date) {
     const result = await fetcher(`/api/review/community/${date}`, '', 'GET')
+    console.log(result)
+    return result
+  }
+
+  async createComment(reviewId, params = {}) {
+    const result = await fetcher(
+      `/api/comment/createComment/${reviewId}`,
+      this.token,
+      'POST',
+      params,
+    )
+    return result
+  }
+
+  async deleteComment(commentId) {
+    const result = await fetcher(
+      `/api/comment/delete/${commentId}`,
+      this.token,
+      'DELETE',
+    )
     return result
   }
 }

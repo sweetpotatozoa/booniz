@@ -7,6 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import styles from './Community.module.css'
 import BackendApis from '../../utils/backendApis'
+import moment from 'moment'
 
 const Community = () => {
   const [selectedDate, setSelectedDate] = useState(new Date())
@@ -18,15 +19,19 @@ const Community = () => {
     setExpandedEntryId(expandedEntryId === id ? null : id)
   }
 
-  const handleCommentSubmit = (id, newComment) => {
-    setReviews((prevEntries) =>
-      prevEntries.map((entry) =>
-        entry._id === id
-          ? { ...entry, comments: [...entry.comments, newComment] }
-          : entry,
-      ),
-    )
-    console.log(reviews)
+  const handleCommentSubmit = async (reviewId, content) => {
+    try {
+      const newComment = await BackendApis.createComment(reviewId, content)
+      setReviews((prevEntries) =>
+        prevEntries.map((entry) =>
+          entry._id === reviewId
+            ? { ...entry, comments: [...entry.comments, newComment] }
+            : entry,
+        ),
+      )
+    } catch (error) {
+      console.error('Error submitting comment:', error)
+    }
   }
 
   const handlePreviousDay = () => {
@@ -60,6 +65,8 @@ const Community = () => {
     fetchReviews()
   }, [selectedDate])
 
+  const challengeStartDate = moment('2024-07-07')
+
   return (
     <>
       <NavBar />
@@ -80,65 +87,75 @@ const Community = () => {
         </div>
         <div className={styles.diaryContainer}>
           {reviews.length > 0 ? (
-            reviews.map((entry) => (
-              <div key={entry._id} className={styles.diaryEntry}>
-                <div onClick={() => handleEntryClick(entry._id)}>
-                  <h3 onClick={(e) => handleNicknameClick(entry.userId, e)}>
-                    {entry.nickname}
-                  </h3>
-                  <h4>{entry.title}</h4>
-                  <small>
-                    {new Date(entry.createdAt).toLocaleDateString('ko-KR')}
-                  </small>
-                  <p>
-                    {expandedEntryId === entry._id
-                      ? entry.content
-                      : truncateContent(entry.content, 150)}
-                  </p>
-                  <div>
-                    {entry.startPage}p~{entry.endPage}p
+            reviews.map((entry) => {
+              const reviewDate = moment(entry.createdAt)
+              const dayDifference =
+                reviewDate.diff(challengeStartDate, 'days') + 1
+              return (
+                <div key={entry._id} className={styles.diaryEntry}>
+                  <div onClick={() => handleEntryClick(entry._id)}>
+                    <h3 onClick={(e) => handleNicknameClick(entry.userId, e)}>
+                      {entry.nickName}
+                    </h3>
+                    <h4>{entry.title}</h4>
+                    <small>
+                      {new Date(entry.createdAt).toLocaleDateString('ko-KR')}
+                    </small>
+                    <div>
+                      {entry.startPage}p~{entry.endPage}p
+                    </div>
+                    <small>{dayDifference}일차</small>
+
+                    <p>
+                      {expandedEntryId === entry._id
+                        ? entry.content
+                        : truncateContent(entry.content, 150)}
+                    </p>
+
+                    <div>❤ {entry.likedBy.length}개</div>
+                    <div>□ {entry.comments.length}개</div>
                   </div>
-                  <div>❤ {entry.likedBy.length}개</div>
-                  <div>□ {entry.comments.length}개</div>
+                  {expandedEntryId === entry._id && (
+                    <div className={styles.commentsSection}>
+                      {entry.comments.map((comment, index) => (
+                        <div key={index}>
+                          <strong>{comment.nickName}</strong>
+                          <small>
+                            {new Date(comment.createdAt).toLocaleDateString(
+                              'ko-KR',
+                            )}
+                          </small>
+                          <p>{comment.content}</p>
+                        </div>
+                      ))}
+                      <input
+                        type='text'
+                        placeholder='댓글을 입력하세요'
+                        onClick={(e) => e.stopPropagation()}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && e.target.value) {
+                            handleCommentSubmit(entry._id, e.target.value)
+                            e.target.value = ''
+                          }
+                        }}
+                      />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          const commentInput = e.target.previousSibling
+                          if (commentInput.value) {
+                            handleCommentSubmit(entry._id, commentInput.value)
+                            commentInput.value = ''
+                          }
+                        }}
+                      >
+                        댓글 작성하기
+                      </button>
+                    </div>
+                  )}
                 </div>
-                {expandedEntryId === entry._id && (
-                  <div className={styles.commentsSection}>
-                    {entry.comments.map((comment, index) => (
-                      <p key={index}>{comment.text}</p>
-                    ))}
-                    <input
-                      type='text'
-                      placeholder='댓글을 입력하세요'
-                      onClick={(e) => e.stopPropagation()}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && e.target.value) {
-                          handleCommentSubmit(entry._id, {
-                            userId: 'currentUserId',
-                            text: e.target.value,
-                          })
-                          e.target.value = ''
-                        }
-                      }}
-                    />
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        const commentInput = e.target.previousSibling
-                        if (commentInput.value) {
-                          handleCommentSubmit(entry._id, {
-                            userId: 'currentUserId',
-                            text: commentInput.value,
-                          })
-                          commentInput.value = ''
-                        }
-                      }}
-                    >
-                      댓글 작성하기
-                    </button>
-                  </div>
-                )}
-              </div>
-            ))
+              )
+            })
           ) : (
             <p>선택된 날짜에 해당하는 독서 기록이 없습니다.</p>
           )}
