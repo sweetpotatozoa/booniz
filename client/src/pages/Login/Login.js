@@ -38,8 +38,10 @@ const Login = () => {
       <div className={styles.container}>
         <h2>로그인</h2>
         <form onSubmit={handleLogin} className={styles.form}>
-          <div className='input-group'>
-            <label htmlFor='userName'>이메일</label>
+          <div className={styles.inputBox}>
+            <label htmlFor='userName' className={styles.title}>
+              이메일
+            </label>
             <input
               type='email'
               id='userName'
@@ -47,11 +49,14 @@ const Login = () => {
               onChange={(e) => setUserName(e.target.value)}
               required
               placeholder='이메일을 입력해주세요'
-              className='input'
+              className={styles.input}
+              style={{ marginBottom: '24px' }}
             />
           </div>
-          <div className='input-group'>
-            <label htmlFor='password'>비밀번호</label>
+          <div className={styles.inputBox}>
+            <label htmlFor='password' className={styles.title}>
+              비밀번호
+            </label>
             <input
               type='password'
               id='password'
@@ -59,17 +64,18 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder='비밀번호를 입력해주세요'
-              className='input'
+              className={styles.input}
+              style={{ marginBottom: '8px' }}
             />
             <small>영어와 숫자로 조합된 8자리 이상의 비밀번호</small>
           </div>
           {error && <p className='error'>{error}</p>}
-          <button type='submit' className='button'>
+          <button type='submit' className={styles.button}>
             로그인
           </button>
           <button
             type='button'
-            className='register-button'
+            className={styles.button}
             onClick={handleRegisterRedirect}
           >
             회원가입
