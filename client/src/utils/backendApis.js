@@ -49,11 +49,48 @@ class BackendApis {
 
   async getMyProfile() {
     const result = await fetcher('/api/review/myProfile', this.token, 'GET')
+    console.log(result)
     return result
   }
 
   async createReview(method = 'POST', params = {}) {
     const result = await fetcher('/api/review/createReview', '', method, params)
+    return result
+  }
+
+  async getUserProfile(userId) {
+    console.log('Fetching profile for userId:', userId) // Debugging
+    const result = await fetcher(
+      `/api/review/userProfile/${userId}`,
+      this.token,
+      'GET',
+    )
+    console.log('Profile fetch result:', result) // Debugging
+    return result
+  }
+
+  async getCommunityReviews(date) {
+    const result = await fetcher(`/api/review/community/${date}`, '', 'GET')
+    console.log(result)
+    return result
+  }
+
+  async createComment(reviewId, params = {}) {
+    const result = await fetcher(
+      `/api/comment/createComment/${reviewId}`,
+      this.token,
+      'POST',
+      params,
+    )
+    return result
+  }
+
+  async deleteComment(commentId) {
+    const result = await fetcher(
+      `/api/comment/delete/${commentId}`,
+      this.token,
+      'DELETE',
+    )
     return result
   }
 }
