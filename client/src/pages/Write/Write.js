@@ -1,37 +1,54 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import BackendApis from '../../utils/backendApis'
 import NavBar from '../../components/NavBar/NavBar'
+import styles from './Write.module.css'
 
 const Write = () => {
-  const { reviewId } = useParams()
-  const [startPage, setStartPage] = useState('')
-  const [endPage, setEndPage] = useState('')
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
+  const [formData, setFormData] = useState({
+    startPage: '',
+    endPage: '',
+    title: '',
+    content: '',
+  })
   const [error, setError] = useState('')
   const navigate = useNavigate()
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData({
+      ...formData,
+      [name]: value,
+    })
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
 
-    try {
-      const response = reviewId
-        ? await BackendApis.updateReview(reviewId, {
-            startPage,
-            endPage,
-            title,
-            content,
-          })
-        : await BackendApis.createReview('POST', {
-            startPage,
-            endPage,
-            title,
-            content,
-          })
+    // Validate inputs on the client-side before sending to the server
+    const { title, content, startPage, endPage } = formData
+    if (title.length > 50) {
+      setError('제목은 50자 이하여야 합니다.')
+      return
+    }
+    if (content.length < 100) {
+      setError('내용은 100자 이상이어야 합니다.')
+      return
+    }
+    if (isNaN(startPage) || isNaN(endPage)) {
+      setError('시작 페이지와 끝 페이지는 숫자여야 합니다.')
+      return
+    }
+    if (Number(startPage) > Number(endPage)) {
+      setError('시작 페이지는 끝 페이지 보다 더 클 수 없습니다.')
+      return
+    }
 
-      if (response.ok) {
+    try {
+      const result = await BackendApis.createReview('POST', formData)
+
+      if (result && result.acknowledged) {
         navigate('/')
       } else {
         setError('글 작성에 실패했습니다.')
@@ -41,29 +58,10 @@ const Write = () => {
     }
   }
 
-  const handleSave = () => {
-    navigate('/')
-  }
-
-  useEffect(() => {
-    const fetchReview = async () => {
-      if (reviewId) {
-        const result = await BackendApis.getMyReview(reviewId)
-        if (result) {
-          setStartPage(result.startPage)
-          setEndPage(result.endPage)
-          setTitle(result.title)
-          setContent(result.content)
-        }
-      }
-    }
-    fetchReview()
-  }, [reviewId])
-
   return (
     <>
       <NavBar />
-      <div className='write-container'>
+      <div className={styles.container}>
         <h2>오늘의 독서기록을 작성해 볼까요?</h2>
         <form onSubmit={handleSubmit} className='write-form'>
           <div className='input-group'>
@@ -71,8 +69,9 @@ const Write = () => {
             <input
               type='number'
               id='startPage'
-              value={startPage}
-              onChange={(e) => setStartPage(e.target.value)}
+              name='startPage'
+              value={formData.startPage}
+              onChange={handleChange}
               placeholder='시작 쪽수'
               required
             />
@@ -80,8 +79,9 @@ const Write = () => {
             <input
               type='number'
               id='endPage'
-              value={endPage}
-              onChange={(e) => setEndPage(e.target.value)}
+              name='endPage'
+              value={formData.endPage}
+              onChange={handleChange}
               placeholder='끝 쪽수'
               required
             />
@@ -91,8 +91,9 @@ const Write = () => {
             <input
               type='text'
               id='title'
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              name='title'
+              value={formData.title}
+              onChange={handleChange}
               placeholder='제목을 입력하세요'
               required
             />
@@ -101,8 +102,9 @@ const Write = () => {
             <label htmlFor='content'>본문</label>
             <textarea
               id='content'
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
+              name='content'
+              value={formData.content}
+              onChange={handleChange}
               placeholder='내용을 입력하세요'
               required
             ></textarea>
@@ -112,7 +114,11 @@ const Write = () => {
             <button type='submit' className='submit-button'>
               업로드 하기
             </button>
-            <button type='button' className='save-button' onClick={handleSave}>
+            <button
+              type='button'
+              className='save-button'
+              onClick={() => navigate('/')}
+            >
               수정하기
             </button>
           </div>

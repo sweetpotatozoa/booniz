@@ -22,8 +22,8 @@ function App() {
         <Route path='/myProfile' element={<MyProfile />} />
         <Route path='/community' element={<Community />} />
         <Route path='/myLikes' element={<MyLikes />} />
-        <Route path='/userProfile/:nickname' element={<UserProfile />} />
-        <Route path='/edit/:userNickname/:reviewId' element='<Edit />' />
+        <Route path='/UserProfile/:userId' element={<UserProfile />} />
+        <Route path='/edit/:userId/:reviewId' element={<Edit />} />
       </Routes>
     </>
   )

@@ -1,0 +1,37 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 1440px;
+  margin-top: 64px;
+}
+
+.links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.link {
+  margin-right: 20px;
+  font-size: 18px;
+  color: #4c4c4c;
+  padding: 18px 42px;
+  cursor: pointer;
+}
+
+.link2 {
+  background-color: #282828;
+  color: #ff7342;
+  font-size: 18px;
+  padding: 18px 50px;
+  border-radius: 50px;
+  margin-left: 48px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.link2:hover {
+  background-color: #ff7342;
+  color: #282828;
+}

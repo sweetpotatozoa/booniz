@@ -184,6 +184,7 @@ class ReviewService {
 
   //날짜별 커뮤니티 조회
   async getReviewsByDate(date) {
+    //커뮤니티
     try {
       const startOfDay = moment(date)
         .tz('Asia/Seoul')

@@ -1,26 +1,57 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import styles from './NavBar.module.css'
 
 const NavBar = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const [activeLink, setActiveLink] = useState('/')
+
+  useEffect(() => {
+    setActiveLink(location.pathname)
+  }, [location.pathname])
+
+  const getLinkStyle = (path) => {
+    return activeLink === path
+      ? { borderBottom: '5px solid #FF7342', fontWeight: 'bold' }
+      : {}
+  }
+
   return (
-    <nav className='navbar'>
+    <nav className={styles.navbar}>
       <div className='logo'>
-        <img src='로고_이미지_링크' alt='Logo' />
+        <img src='/images/logo.svg' alt='Logo' />
       </div>
-      <ul className='nav-links'>
-        <li>
-          <Link to='/'>홈</Link>
-        </li>
-        <li>
-          <Link to='/myProfile'>내 독서일지</Link>
-        </li>
-        <li>
-          <Link to='/community'>게시판</Link>
-        </li>
-        <li>
-          <Link to='/write'>일지 쓰기</Link>
-        </li>
-      </ul>
+      <div className={styles.links}>
+        <div
+          className={styles.link}
+          onClick={() => navigate('/')}
+          style={getLinkStyle('/')}
+        >
+          홈
+        </div>
+        <div
+          className={styles.link}
+          onClick={() => navigate('/myProfile')}
+          style={getLinkStyle('/myProfile')}
+        >
+          내 독서일지
+        </div>
+        <div
+          className={styles.link}
+          onClick={() => navigate('/community')}
+          style={getLinkStyle('/community')}
+        >
+          게시판
+        </div>
+        <div
+          className={styles.link2}
+          onClick={() => navigate('/write')}
+          style={getLinkStyle('/write')}
+        >
+          일지 쓰기
+        </div>
+      </div>
     </nav>
   )
 }
