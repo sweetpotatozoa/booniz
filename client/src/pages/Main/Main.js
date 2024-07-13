@@ -93,7 +93,6 @@ const Main = () => {
               return (
                 <React.Fragment key={entry._id}>
                   <div>{dayDifference}일차 독서일지</div>
-                  {/* challengeStartDate를 기준으로 각 리뷰의 작성 날짜와의 차이를 계산하여 일차를 구했습니다. 이를 통해 사용자가 일차를 빼먹더라도 정확한 일차 계산이 가능 */}
                   <div
                     className={styles.reviewEntry}
                     onClick={handleEntryClick}

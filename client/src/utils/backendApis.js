@@ -51,6 +51,11 @@ class BackendApis {
     const result = await fetcher('/api/review/myProfile', this.token, 'GET')
     return result
   }
+
+  async createReview(method = 'POST', params = {}) {
+    const result = await fetcher('/api/review/createReview', '', method, params)
+    return result
+  }
 }
 
 export default new BackendApis()
