@@ -207,6 +207,17 @@ class ReviewController {
       next(error)
     }
   }
+
+  //내 좋아요 목록 조회하기
+  async getMyLikedList(req, res, next) {
+    try {
+      const userId = req.user.id
+      const likedReviews = await ReviewService.getMyLikedList(userId)
+      res.status(200).json(likedReviews)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 module.exports = new ReviewController()

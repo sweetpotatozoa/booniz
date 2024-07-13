@@ -181,14 +181,7 @@ class ReviewService {
     }
   }
 
-  // 커뮤니티 날짜별 조회
-
-  // async findReviewsByDate(date) {
-  //   const startDate = `${date} 00:00:00`
-  //   const endDate = `${date} 23:59:59`
-  //   return await ReviewsRepo.findByDateRange(startDate, endDate)
-  // }
-
+  //날짜별 커뮤니티 조회
   async getReviewsByDate(date) {
     try {
       const startOfDay = moment(date)
@@ -323,6 +316,37 @@ class ReviewService {
 
     const updatedReview = await ReviewsRepo.updateMyReview(reviewId, updateData)
     return updatedReview
+  }
+
+  //내 좋아요 목록 조회하기
+  async getMyLikedList(userId) {
+    const reviews = await ReviewsRepo.getLikedReviewsByUserId(userId)
+    const reviewIds = reviews.map((review) => review._id)
+    const comments = await CommentsRepo.getCommentsByReviewIds(reviewIds)
+    const userIds = [...new Set(reviews.map((review) => review.userId))]
+    const users = await UsersRepo.getUsersByIds(userIds)
+
+    const userMap = users.reduce((acc, user) => {
+      acc[user._id.toString()] = user.nickName
+      return acc
+    }, {})
+
+    const result = reviews.map((review) => {
+      const reviewComments = comments.filter(
+        (comment) => comment.reviewId.toString() === review._id.toString(),
+      )
+      return {
+        _id: review._id,
+        title: review.title,
+        content: review.content,
+        likedBy: review.likedBy,
+        comments: reviewComments.map((comment) => comment._id),
+        updatedAt: moment(review.updatedAt).format('YYYY.MM.DD'),
+        authorNickName: userMap[review.userId.toString()],
+      }
+    })
+
+    return result.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
   }
 }
 
