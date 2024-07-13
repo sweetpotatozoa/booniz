@@ -203,7 +203,6 @@ class ReviewService {
         ...new Set(reviews.map((review) => review.userId.toString())),
       ]
       const users = await UsersRepo.getUsersByIds(userIds)
-      console.log(users)
       const userMap = users.reduce((acc, user) => {
         acc[user._id.toString()] = user
         return acc
@@ -222,7 +221,6 @@ class ReviewService {
       })
 
       return result
-      console.log(result)
     } catch (error) {
       throw error
     }

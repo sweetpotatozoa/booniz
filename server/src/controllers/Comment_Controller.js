@@ -30,7 +30,6 @@ class commentController {
     if (typeof content === 'string') {
       content = JSON.stringify(content)
     }
-    console.log(content)
     try {
       const result = await CommentService.createComment(
         reviewId,

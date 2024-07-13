@@ -32,7 +32,6 @@ class CommentsRepo {
       const result = await this.collection.deleteOne({
         _id: new ObjectId(commentId),
       })
-      console.log(result)
       return result !== null
     } catch (error) {
       throw error
