@@ -6,6 +6,7 @@ import styles from './MyProfile.module.css'
 import moment from 'moment'
 import getConsecutiveDays from '../../utils/getConsecutiveDays'
 import Review from '../../components/Review/Review'
+import ProfileInfo from '../../components/ProfileInfo.js/ProfileInfo'
 
 const MyProfile = () => {
   const [userData, setUserData] = useState({
@@ -31,14 +32,29 @@ const MyProfile = () => {
   const handleCommentSubmit = async (reviewId, content) => {
     try {
       const newComment = await BackendApis.createComment(reviewId, { content })
-      setUserData((prevState) => ({
-        ...prevState,
-        reviews: prevState.reviews.map((entry) =>
-          entry._id === reviewId
-            ? { ...entry, comments: [...entry.comments, newComment] }
-            : entry,
-        ),
-      }))
+      console.log('새 댓글:', newComment)
+      if (newComment && newComment.insertedId) {
+        setUserData((prevState) => ({
+          ...prevState,
+          reviews: prevState.reviews.map((entry) =>
+            entry._id === reviewId
+              ? {
+                  ...entry,
+                  comments: [
+                    ...entry.comments,
+                    {
+                      ...newComment,
+                      _id: newComment.insertedId,
+                      content: content, // 댓글 내용을 명시적으로 추가
+                      userNickName: '사용자 닉네임', // 필요에 따라 추가
+                      createdAt: new Date().toISOString(), // 현재 시간으로 설정
+                    },
+                  ],
+                }
+              : entry,
+          ),
+        }))
+      }
     } catch (error) {
       console.error('댓글 제출 중 오류 발생:', error)
     }
@@ -98,23 +114,25 @@ const MyProfile = () => {
 
   const challengeStartDate = moment('2024-07-07')
   const consecutiveDays = getConsecutiveDays(userData.dailyStatus)
+  const latestEndPage =
+    userData.reviews.length > 0
+      ? userData.reviews.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+        )[0].endPage
+      : 0 // 가장 최근 리뷰의 endPage를 얻음. 리뷰가 없으면 0.
 
   return (
     <>
       <NavBar />
       <div className={styles.myProfileContainer}>
         <div className={styles.profileHeader}>
-          <h1>{userData.nickName}님, 매일 독서기록을 쓰고 선물 받아가세요</h1>
-          <div className={styles.profileInfo}>
-            <div>
-              <img src='/' alt='프로필사진'></img>
-              <div>{userData.nickName}님</div>
-            </div>
-            <div>연속 기록: {consecutiveDays}일차</div>
-            <div>완독률: {userData.completionRate.toFixed(2)}%</div>
-            <div>읽은 쪽수: {userData.readPages}쪽</div>
-            <button onClick={() => navigate('/myLikes')}>좋아요한 글</button>
-          </div>
+          <h1>{userData.nickName}님! 매일 독서기록을 쓰고 선물 받아가세요</h1>
+          <ProfileInfo
+            nickName={userData.nickName}
+            consecutiveDays={consecutiveDays}
+            completionRate={userData.completionRate}
+            readPages={latestEndPage}
+          />
         </div>
         <div className={styles.reviewContainer}>
           {userData.reviews.length > 0 ? (
@@ -129,6 +147,7 @@ const MyProfile = () => {
                   dayDifference={dayDifference}
                   handleEntryClick={handleEntryClick}
                   handleEditClick={handleEditClick}
+                  handleDeleteClick={handleDeleteClick}
                   handleDeleteComment={handleDeleteComment}
                   handleCommentSubmit={handleCommentSubmit}
                 />

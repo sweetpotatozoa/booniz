@@ -56,6 +56,7 @@ class BackendApis {
 
   async createReview(method = 'POST', params = {}) {
     const result = await fetcher('/api/review/createReview', '', method, params)
+    console.log(result)
     return result
   }
 

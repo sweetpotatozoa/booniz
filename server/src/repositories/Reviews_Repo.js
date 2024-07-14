@@ -61,11 +61,7 @@ class ReviewsRepo {
       throw error
     }
   }
-
-<<<<<<< HEAD
-=======
   //내가 쓴 일지 가져오기
->>>>>>> 1234f80d07da6b3f853cbb2520ffc6baca797364
   async getMyReviews(userId) {
     const reviews = await this.collection
       .find(
@@ -77,8 +73,6 @@ class ReviewsRepo {
     return reviews
   }
 
-<<<<<<< HEAD
-=======
   //내 리뷰 가져오기
   async getMyReview(reviewId) {
     const review = await this.collection.findOne(
@@ -91,7 +85,6 @@ class ReviewsRepo {
     return review
   }
 
->>>>>>> 1234f80d07da6b3f853cbb2520ffc6baca797364
   async getReviewsBetweenDates(startOfDay, endOfDay) {
     try {
       const result = await this.collection
