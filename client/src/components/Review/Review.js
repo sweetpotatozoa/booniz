@@ -44,7 +44,9 @@ const Review = ({
         <p>
           {entry.expanded ? entry.content : truncateContent(entry.content, 150)}
         </p>
-        <div>❤ {entry.likedBy.length}개</div>
+        <div>
+          <div className={styles.heartIcon}>❤</div> {entry.likedBy.length}개
+        </div>
         <div>□ {entry.comments.length}개</div>
         {entry.expanded && (
           <button onClick={() => handleDeleteClick(entry._id)}>삭제하기</button>
