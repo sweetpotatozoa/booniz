@@ -87,10 +87,8 @@ const Main = () => {
           </div>
         </div>
         <div className={styles.attendanceContainer}>
-          <div className={styles.title}>10일 챌린지 미션 진행중</div>
-          <div className={styles.subTitle}>
-            매일 독서일지를 쓰면, 선물을 받을 수 있어요!
-          </div>
+          <div>10일 챌린지 미션 진행 중!</div>
+          <div>매일 독서일지를 쓰면, 선물을 받을 수 있어요</div>
           <div className={styles.attendanceDots}>
             {fullDailyStatus.map((day) => (
               <div
@@ -108,17 +106,20 @@ const Main = () => {
               const dayDifference =
                 reviewDate.diff(challengeStartDate, 'days') + 1
               return (
-                <div key={entry._id} className={styles.reviewData}>
-                  <div className={styles.title}>
-                    {dayDifference}일차 독서일지
-                  </div>
-                  <div
-                    className={styles.reviewEntry}
-                    onClick={handleEntryClick}
-                  >
-                    <h3>{entry.title}</h3>
-                    <p>{truncateContent(entry.content, 150)}</p>
-                    <small>{entry.createdAt.split('T')[0]}</small>
+                <div key={entry._id}>
+                  <div key={entry._id} className={styles.reviewData}>
+                    <div className={styles.title}>
+                      {dayDifference}일차 독서일지
+                    </div>
+                    <div
+                      className={styles.reviewEntry}
+                      onClick={handleEntryClick}
+                    >
+                      <div>{dayDifference}일차</div>
+                      <h3>{entry.title}</h3>
+                      <small>{reviewDate.format('YYYY-MM-DD')}</small>
+                      <p>{truncateContent(entry.content, 150)}</p>
+                    </div>
                   </div>
                 </div>
               )

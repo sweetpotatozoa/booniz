@@ -18,16 +18,16 @@ const Review = ({
   return (
     <div key={entry._id} className={styles.reviewEntry}>
       <div onClick={() => handleEntryClick(entry._id)}>
-        <div>{dayDifference}일차 독서일지</div>
+        <div>{dayDifference}일차 독서기록</div>
+        <div className={styles.startFromEnd}>
+          {entry.startPage}p~{entry.endPage}p
+        </div>
         <h3>{entry.title}</h3>
         <small>{reviewDate.format('YYYY-MM-DD')}</small>
         <button onClick={() => handleEditClick(entry._id)}>수정하기</button>
         <p>
           {entry.expanded ? entry.content : truncateContent(entry.content, 150)}
         </p>
-        <div>
-          {entry.startPage}p~{entry.endPage}p
-        </div>
         <div>❤ {entry.likedBy.length}개</div>
         <div>□ {entry.comments.length}개</div>
       </div>
