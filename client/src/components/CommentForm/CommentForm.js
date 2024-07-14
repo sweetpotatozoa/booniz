@@ -19,7 +19,7 @@ const CommentForm = ({ reviewId, handleCommentSubmit }) => {
         onChange={(e) => setCommentContent(e.target.value)}
         placeholder='댓글을 입력하세요'
       />
-      <button type='submit'>댓글 작성하기</button>
+      <button type='submit'>댓글 달기</button>
     </form>
   )
 }

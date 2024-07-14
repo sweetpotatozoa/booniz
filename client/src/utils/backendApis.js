@@ -44,6 +44,7 @@ class BackendApis {
 
   async getMainInfo() {
     const result = await fetcher('/api/review/getMainInfo', this.token, 'GET')
+    console.log(result)
     return result
   }
 
@@ -55,6 +56,7 @@ class BackendApis {
 
   async createReview(method = 'POST', params = {}) {
     const result = await fetcher('/api/review/createReview', '', method, params)
+    console.log(result)
     return result
   }
 
