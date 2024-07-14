@@ -61,7 +61,6 @@ class ReviewsRepo {
       throw error
     }
   }
-
   //내가 쓴 일지 가져오기
   async getMyReviews(userId) {
     const reviews = await this.collection
