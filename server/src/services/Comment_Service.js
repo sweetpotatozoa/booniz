@@ -47,23 +47,27 @@ class CommentService {
   // 헬퍼 함수
   // 댓글 작성하기
   async createComment(reviewId, userId, content) {
-    // const user = await this.checkUserIdExist(userId)
-    // if (!user) {
-    //   throw new Error('No user found')
-    // }
+    const user = await UsersRepo.getUserById(userId)
+    if (!user) {
+      throw new Error('사용자를 찾을 수 없습니다.')
+    }
     if (typeof content === 'object') {
       content = JSON.stringify(content)
     }
+    try {
+      const commentData = {
+        reviewId: new ObjectId(reviewId),
+        userId: new ObjectId(userId),
+        nickName: user.nickName,
+        content,
+        createdAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
+      }
 
-    const commentData = {
-      reviewId: new ObjectId(reviewId),
-      userId: new ObjectId(userId),
-      content,
-      createdAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
+      const result = await CommentsRepo.createComment(commentData)
+      return result
+    } catch (error) {
+      throw error
     }
-
-    const result = await CommentsRepo.createComment(commentData)
-    return result
   }
   // 내 댓글 삭제하기
   async deleteMyComment(commentId) {

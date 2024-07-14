@@ -6,6 +6,7 @@ import styles from './UserProfile.module.css'
 import moment from 'moment'
 import getConsecutiveDays from '../../utils/getConsecutiveDays'
 import Review from '../../components/Review/Review'
+import ProfileInfo from '../../components/ProfileInfo.js/ProfileInfo'
 
 const UserProfile = () => {
   const { userId } = useParams()
@@ -13,7 +14,7 @@ const UserProfile = () => {
   const [userData, setUserData] = useState({
     userId: '',
     nickName: '',
-    completionRate: '',
+    completionRate: 0,
     reviews: [],
     dailyStatus: [], // Ensure this is initialized
   })
@@ -93,6 +94,12 @@ const UserProfile = () => {
 
   const challengeStartDate = moment('2024-07-07')
   const consecutiveDays = getConsecutiveDays(userData.dailyStatus)
+  const latestEndPage =
+    userData.reviews.length > 0
+      ? userData.reviews.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+        )[0].endPage
+      : 0 // 가장 최근 리뷰의 endPage를 얻음. 리뷰가 없으면 0.
 
   return (
     <>
@@ -100,19 +107,12 @@ const UserProfile = () => {
       <div className={styles.userProfileContainer}>
         <div className={styles.profileHeader}>
           <h1>{userData.nickName}님의 프로필</h1>
-          <div className={styles.profileInfo}>
-            <div>
-              <img src='/' alt='프로필사진' />
-              <div>{userData.nickName}님</div>
-            </div>
-            <div>연속 기록: {consecutiveDays}일차</div>
-            <div>
-              완독률:{' '}
-              {userData.completionRate
-                ? `${userData.completionRate.toFixed(2)}%`
-                : '0.00%'}
-            </div>
-          </div>
+          <ProfileInfo
+            nickName={userData.nickName}
+            consecutiveDays={consecutiveDays}
+            completionRate={userData.completionRate}
+            readPages={latestEndPage}
+          />
         </div>
         <div className={styles.reviewContainer}>
           {userData.reviews && userData.reviews.length > 0 ? (

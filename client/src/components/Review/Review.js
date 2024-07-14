@@ -10,13 +10,25 @@ const Review = ({
   dayDifference,
   handleEntryClick,
   handleEditClick,
+  handleDeleteClick,
   handleDeleteComment,
   handleCommentSubmit,
+  handleNicknameClick,
+  showNickName = false,
 }) => {
   const reviewDate = moment(entry.createdAt)
+  //   console.log(entry.userId)
 
   return (
     <div key={entry._id} className={styles.reviewEntry}>
+      {showNickName ? (
+        <div>{dayDifference}일차</div>
+      ) : (
+        <div>{dayDifference}일차 독서기록</div>
+      )}
+      <div className={styles.startFromEnd}>
+        {entry.startPage}p~{entry.endPage}p
+      </div>
       <div onClick={() => handleEntryClick(entry._id)}>
         <div className={styles.header}>
           <div className={styles.day}>{dayDifference}일차 독서기록</div>
@@ -50,13 +62,13 @@ const Review = ({
       </div>
       {entry.expanded && (
         <div className={styles.commentsSection}>
-          {entry.comments.map((comment) => (
-            <div key={comment._id}>
-              <p>{comment.content}</p>
+          {entry.comments.map((comment, index) => (
+            <div key={comment._id || index}>
               <small>
-                {comment.userNickName} |{' '}
-                {moment(comment.createdAt).format('YYYY-MM-DD')}
+                {comment.nickName} |{' '}
+                {moment(comment.createdAt).format('YYYY.MM.DD')}
               </small>
+              <p>{comment.content}</p>
               <CommentDelete
                 reviewId={entry._id}
                 commentId={comment._id}
