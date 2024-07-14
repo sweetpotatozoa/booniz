@@ -118,28 +118,40 @@ class ReviewService {
 
   // 리뷰 생성
   async createReview(userId, title, content, startPage, endPage) {
-    const user = await this.checkUserIdExist(userId)
-    if (!user) {
-      throw new Error('No user found')
-    }
+    try {
+      const user = await this.checkUserIdExist(userId)
+      if (!user) {
+        throw new Error('No user found')
+      }
 
-    if (startPage > endPage) {
-      throw new Error('Invalid page range')
-    }
+      if (startPage > endPage) {
+        throw new Error('Invalid page range')
+      }
 
-    const reviewData = {
-      userId: new ObjectId(userId),
-      title: title,
-      content: content,
-      startPage: startPage,
-      endPage: endPage,
-      createdAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
-      updatedAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
-      likedBy: [],
-    }
+      const todayReviewCount = await ReviewsRepo.getTodayReviewCount(userId)
+      if (todayReviewCount > 0) {
+        throw new Error('하루에 1개의 글만 작성하실 수 있습니다.')
+      }
 
-    const result = await ReviewsRepo.createReview(reviewData)
-    return result
+      const reviewData = {
+        userId: new ObjectId(userId),
+        title: title,
+        content: content,
+        startPage: startPage,
+        endPage: endPage,
+        createdAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
+        updatedAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
+        likedBy: [],
+      }
+
+      await UsersRepo.updateReadPages(userId, endPage)
+
+      const result = await ReviewsRepo.createReview(reviewData)
+      return result
+    } catch (error) {
+      console.error('Error in createReview:', error)
+      throw error
+    }
   }
 
   // 내 리뷰 가져오기
@@ -281,6 +293,7 @@ class ReviewService {
         nickName: user.nickName,
         completionRate: (user.readPages / user.allPages) * 100,
         reviews: reviewsWithComments,
+        readPages: user.readPages,
       }
     } catch (error) {
       throw error
@@ -330,6 +343,7 @@ class ReviewService {
         nickName: user.nickName,
         completionRate: (user.readPages / user.allPages) * 100,
         reviews: reviewsWithComments,
+        readPages: user.readPages,
       }
     } catch (error) {
       throw error

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const mongodb = require('../utils/mongodb')
 const { ObjectId } = require('bson')
+const moment = require('moment-timezone')
 
 class ReviewsRepo {
   constructor() {
@@ -61,6 +62,21 @@ class ReviewsRepo {
       throw error
     }
   }
+
+  //당일 리뷰 갯수 계산하기
+  async getTodayReviewCount(userId) {
+    try {
+      const today = moment().tz('Asia/Seoul').startOf('day').toDate()
+      const count = await this.collection.countDocuments({
+        userId: new ObjectId(userId),
+        createdAt: { $gte: today },
+      })
+      return count
+    } catch (error) {
+      throw error
+    }
+  }
+
   //내가 쓴 일지 가져오기
   async getMyReviews(userId) {
     const reviews = await this.collection
@@ -71,6 +87,21 @@ class ReviewsRepo {
       .sort({ createdAt: 1 })
       .toArray()
     return reviews
+  }
+
+  //리뷰 생성
+  async createReview(review) {
+    const result = await this.collection.insertOne(review)
+    return result
+  }
+
+  //리뷰 소유권 확인
+  async checkReviewOwnership(userId, reviewId) {
+    const ownership = await this.collection.findOne({
+      _id: new ObjectId(reviewId),
+      userId: new ObjectId(userId),
+    })
+    return ownership !== null
   }
 
   //내 리뷰 가져오기
