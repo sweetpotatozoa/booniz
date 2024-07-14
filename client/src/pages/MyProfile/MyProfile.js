@@ -124,6 +124,7 @@ const MyProfile = () => {
   return (
     <>
       <NavBar />
+      <div>{userData.dailyStatus}</div>
       <div className={styles.container}>
         <div className={styles.profileHeader}>
           <h1 style={{ fontSize: '32px' }}>

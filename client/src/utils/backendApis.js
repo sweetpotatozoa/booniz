@@ -97,6 +97,7 @@ class BackendApis {
   }
 
   async getMyReview(userId, reviewId) {
+    //수정하기 1단계. 내가 쓴 글 가져오기
     const result = await fetcher(
       `/api/review/getMyReview/${userId}/${reviewId}`,
       this.token,
@@ -112,6 +113,11 @@ class BackendApis {
       'PUT',
       updateData,
     )
+    return result
+  }
+
+  async getLikedReviews() {
+    const result = await fetcher('/api/review/liked', '', 'GET')
     return result
   }
 }

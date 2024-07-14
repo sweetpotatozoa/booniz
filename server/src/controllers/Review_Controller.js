@@ -210,13 +210,36 @@ class ReviewController {
   }
 
   //내 좋아요 목록 조회하기
-  async getMyLikedList(req, res, next) {
+  async getMyLikedList(req, res) {
     try {
       const userId = req.user.id
       const likedReviews = await ReviewService.getMyLikedList(userId)
       res.status(200).json(likedReviews)
     } catch (error) {
-      next(error)
+      console.error('Error in getMyLikedList controller:', error)
+      res.status(500).json({
+        message: 'An error occurred while fetching liked list',
+        error:
+          process.env.NODE_ENV === 'development' ? error.message : undefined,
+      })
+    }
+  }
+
+  //좋아요 누르기
+  async likeReview(req, res) {
+    const reviewId = req.params.reviewId
+    const userId = req.user.id
+
+    try {
+      const result = await ReviewService.likeReview(reviewId, userId)
+      res.status(200).json(result)
+    } catch (error) {
+      console.error('Error in likeReview controller:', error)
+      res.status(500).json({
+        message: 'An error occurred while liking the review',
+        error:
+          process.env.NODE_ENV === 'development' ? error.message : undefined,
+      })
     }
   }
 }
