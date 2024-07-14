@@ -76,7 +76,7 @@ const Review = ({
                   <div className={styles.commentHeader}>
                     <small>
                       <span className={styles.commentName}>
-                        {comment.nickName}임시 닉네임
+                        {comment.nickName}
                       </span>
                       <span className={styles.commentDate}>
                         {moment(comment.createdAt).format('YYYY.MM.DD')}
