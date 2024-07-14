@@ -6,28 +6,28 @@ import styles from './Write.module.css'
 
 const Write = () => {
   const [formData, setFormData] = useState({
-    startPage: '',
-    endPage: '',
     title: '',
     content: '',
+    startPage: '',
+    endPage: '',
   })
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setFormData({
-      ...formData,
-      [name]: value,
-    })
+    setFormData((prevState) => ({ ...prevState, [name]: value }))
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
 
-    // Validate inputs on the client-side before sending to the server
     const { title, content, startPage, endPage } = formData
+
+    // console.log(formData)
+
+    // Client-side validation
     if (title.length > 50) {
       setError('제목은 50자 이하여야 합니다.')
       return
@@ -61,67 +61,46 @@ const Write = () => {
   return (
     <>
       <NavBar />
-      <div className={styles.container}>
-        <h2>오늘의 독서기록을 작성해 볼까요?</h2>
-        <form onSubmit={handleSubmit} className='write-form'>
-          <div className='input-group'>
-            <label htmlFor='startPage'>읽은 쪽수</label>
-            <input
-              type='number'
-              id='startPage'
-              name='startPage'
-              value={formData.startPage}
-              onChange={handleChange}
-              placeholder='시작 쪽수'
-              required
-            />
-            <span>~</span>
-            <input
-              type='number'
-              id='endPage'
-              name='endPage'
-              value={formData.endPage}
-              onChange={handleChange}
-              placeholder='끝 쪽수'
-              required
-            />
-          </div>
-          <div className='input-group'>
-            <label htmlFor='title'>제목</label>
+      <div className={styles.writeContainer}>
+        <h1>글 작성하기</h1>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>제목</label>
             <input
               type='text'
-              id='title'
               name='title'
               value={formData.title}
               onChange={handleChange}
-              placeholder='제목을 입력하세요'
-              required
             />
           </div>
-          <div className='input-group'>
-            <label htmlFor='content'>본문</label>
+          <div>
+            <label>내용</label>
             <textarea
-              id='content'
               name='content'
               value={formData.content}
               onChange={handleChange}
-              placeholder='내용을 입력하세요'
-              required
-            ></textarea>
+            />
           </div>
-          {error && <p className='error'>{error}</p>}
-          <div className='button-group'>
-            <button type='submit' className='submit-button'>
-              업로드 하기
-            </button>
-            <button
-              type='button'
-              className='save-button'
-              onClick={() => navigate('/')}
-            >
-              수정하기
-            </button>
+          <div>
+            <label>시작 페이지</label>
+            <input
+              type='text'
+              name='startPage'
+              value={formData.startPage}
+              onChange={handleChange}
+            />
           </div>
+          <div>
+            <label>끝 페이지</label>
+            <input
+              type='text'
+              name='endPage'
+              value={formData.endPage}
+              onChange={handleChange}
+            />
+          </div>
+          {error && <p className={styles.error}>{error}</p>}
+          <button type='submit'>작성하기</button>
         </form>
       </div>
     </>
