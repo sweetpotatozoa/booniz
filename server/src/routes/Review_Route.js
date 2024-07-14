@@ -40,5 +40,6 @@ router.get(
 )
 
 router.get('/liked', fakeAuth, wrapAsync(ReviewController.getMyLikedList)) //내 좋아요 목록 불러오기
+router.post('/like/:reviewId', fakeAuth, ReviewController.likeReview) //좋아요 누르기
 
 module.exports = router
