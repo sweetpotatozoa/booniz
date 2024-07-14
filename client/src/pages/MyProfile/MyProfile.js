@@ -102,9 +102,11 @@ const MyProfile = () => {
   return (
     <>
       <NavBar />
-      <div className={styles.myProfileContainer}>
+      <div className={styles.container}>
         <div className={styles.profileHeader}>
-          <h1>{userData.nickName}님, 매일 독서기록을 쓰고 선물 받아가세요</h1>
+          <h1 style={{ fontSize: '32px' }}>
+            {userData.nickName}님, 매일 독서기록을 쓰고 선물 받아가세요
+          </h1>
           <div className={styles.profileInfo}>
             <div>
               <img src='/' alt='프로필사진'></img>
@@ -117,7 +119,7 @@ const MyProfile = () => {
           </div>
         </div>
         <div className={styles.reviewContainer}>
-          {userData.reviews.length > 0 ? (
+          {/* {userData.reviews.length > 0 ? (
             userData.reviews.map((entry) => {
               const reviewDate = moment(entry.createdAt)
               const dayDifference =
@@ -136,7 +138,7 @@ const MyProfile = () => {
             })
           ) : (
             <p>독서 기록이 없습니다.</p>
-          )}
+          )} */}
         </div>
       </div>
     </>
