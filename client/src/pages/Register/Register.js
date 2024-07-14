@@ -133,7 +133,7 @@ const Register = () => {
             </div>
             <div className={styles.inputGroup}>
               <input
-                type='number'
+                type='text'
                 id='age'
                 name='age'
                 value={formData.age}

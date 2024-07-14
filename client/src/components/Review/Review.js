@@ -17,7 +17,7 @@ const Review = ({
   showNickName = false,
 }) => {
   const reviewDate = moment(entry.createdAt)
-  //   console.log(entry.userId)
+  //   console.log(entry.comments)
 
   return (
     <div key={entry._id} className={styles.reviewEntry}>

@@ -22,7 +22,7 @@ function App() {
         <Route path='/myProfile' element={<MyProfile />} />
         <Route path='/community' element={<Community />} />
         <Route path='/myLikes' element={<MyLikes />} />
-        <Route path='/UserProfile/:userId' element={<UserProfile />} />
+        <Route path='/userProfile/:userId' element={<UserProfile />} />
         <Route path='/edit/:userId/:reviewId' element={<Edit />} />
       </Routes>
     </>
