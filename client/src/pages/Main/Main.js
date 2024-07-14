@@ -99,7 +99,7 @@ const Main = () => {
           </div>
         </div>
         <div className={styles.reviewContainer}>
-          <h2>내가 쓴 독서일지</h2>
+          <h2 style={{ margin: '20px 0' }}>내가 쓴 독서일지</h2>
           <div className={styles.review}>
             {userData.reviews.map((entry) => {
               const reviewDate = moment(entry.createdAt)
@@ -107,14 +107,19 @@ const Main = () => {
                 reviewDate.diff(challengeStartDate, 'days') + 1
               return (
                 <div key={entry._id}>
-                  <div
-                    className={styles.reviewEntry}
-                    onClick={handleEntryClick}
-                  >
-                    <div>{dayDifference}일차</div>
-                    <h3>{entry.title}</h3>
-                    <small>{reviewDate.format('YYYY-MM-DD')}</small>
-                    <p>{truncateContent(entry.content, 150)}</p>
+                  <div key={entry._id} className={styles.reviewData}>
+                    <div className={styles.title}>
+                      {dayDifference}일차 독서일지
+                    </div>
+                    <div
+                      className={styles.reviewEntry}
+                      onClick={handleEntryClick}
+                    >
+                      <div>{dayDifference}일차</div>
+                      <h3>{entry.title}</h3>
+                      <small>{reviewDate.format('YYYY-MM-DD')}</small>
+                      <p>{truncateContent(entry.content, 150)}</p>
+                    </div>
                   </div>
                 </div>
               )

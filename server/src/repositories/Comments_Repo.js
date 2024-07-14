@@ -23,7 +23,7 @@ class CommentsRepo {
   // 댓글 생성
   async createComment(commentData) {
     const result = await this.collection.insertOne(commentData)
-    return { ...commentData, _id: result.insertedId }
+    return result
   }
 
   // 내 댓글 삭제하기
@@ -43,6 +43,7 @@ class CommentsRepo {
     try {
       const result = await this.collection
         .find({ reviewId: { $in: reviewIds } })
+        .project({ reviewId: 1, content: 1, createdAt: 1, userId: 1 })
         .sort({ createdAt: -1 })
         .toArray()
       return result
