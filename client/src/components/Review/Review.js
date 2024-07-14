@@ -13,8 +13,11 @@ const Review = ({
   handleDeleteClick,
   handleDeleteComment,
   handleCommentSubmit,
+  handleNicknameClick,
+  showNickName = false,
 }) => {
   const reviewDate = moment(entry.createdAt)
+  //   console.log(entry.userId)
 
   return (
     <div key={entry._id} className={styles.reviewEntry}>
@@ -24,6 +27,12 @@ const Review = ({
       </div>
       <div onClick={() => handleEntryClick(entry._id)}>
         <div className={styles.reviewHeader}>
+          {showNickName && (
+            <h3 onClick={(e) => handleNicknameClick(entry.userId, e)}>
+              {entry.nickName}
+            </h3>
+          )}{' '}
+          {/* 닉네임 표시 */}
           <h3>{entry.title}</h3>
           <small>{reviewDate.format('YYYY-MM-DD')}</small>
           <button onClick={() => handleEditClick(entry._id)}>수정하기</button>

@@ -129,7 +129,8 @@ const Community = () => {
                   handleDeleteClick={() => {}} // 필요 시 구현
                   handleDeleteComment={handleDeleteComment}
                   handleCommentSubmit={handleCommentSubmit}
-                  expanded={entry.expanded}
+                  handleNicknameClick={handleNicknameClick}
+                  showNickName={true} // 닉네임 표시 여부 추가
                 />
               )
             })

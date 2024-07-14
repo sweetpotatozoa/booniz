@@ -6,6 +6,7 @@ import styles from './MyProfile.module.css'
 import moment from 'moment'
 import getConsecutiveDays from '../../utils/getConsecutiveDays'
 import Review from '../../components/Review/Review'
+import ProfileInfo from '../../components/ProfileInfo.js/ProfileInfo'
 
 const MyProfile = () => {
   const [userData, setUserData] = useState({
@@ -113,6 +114,12 @@ const MyProfile = () => {
 
   const challengeStartDate = moment('2024-07-07')
   const consecutiveDays = getConsecutiveDays(userData.dailyStatus)
+  const latestEndPage =
+    userData.reviews.length > 0
+      ? userData.reviews.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+        )[0].endPage
+      : 0 // 가장 최근 리뷰의 endPage를 얻음. 리뷰가 없으면 0.
 
   return (
     <>
@@ -120,15 +127,12 @@ const MyProfile = () => {
       <div className={styles.myProfileContainer}>
         <div className={styles.profileHeader}>
           <h1>{userData.nickName}님! 매일 독서기록을 쓰고 선물 받아가세요</h1>
-          <div className={styles.profileInfo}>
-            <div>
-              <div>{userData.nickName}님</div>
-            </div>
-            <div>연속 기록: {consecutiveDays}일차</div>
-            <div>완독률: {userData.completionRate.toFixed(2)}%</div>
-            <div>읽은 쪽수: {userData.readPages}쪽</div>
-            <button onClick={() => navigate('/myLikes')}>좋아요한 글</button>
-          </div>
+          <ProfileInfo
+            nickName={userData.nickName}
+            consecutiveDays={consecutiveDays}
+            completionRate={userData.completionRate}
+            readPages={latestEndPage}
+          />
         </div>
         <div className={styles.reviewContainer}>
           {userData.reviews.length > 0 ? (
