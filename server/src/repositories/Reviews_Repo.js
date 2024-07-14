@@ -62,19 +62,6 @@ class ReviewsRepo {
     }
   }
 
-  //내가 쓴 일지 가져오기
-
-  async getMyReviews(userId) {
-    const reviews = await this.collection
-      .find(
-        { userId: new ObjectId(userId) },
-        { projection: { _id: 1, title: 1, content: 1, createdAt: 1 } },
-      )
-      .sort({ createdAt: 1 })
-      .toArray()
-    return reviews
-  }
-
   //내 리뷰 가져오기
   async getMyReview(reviewId) {
     const review = await this.collection.findOne(
