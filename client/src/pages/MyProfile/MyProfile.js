@@ -124,9 +124,45 @@ const MyProfile = () => {
   return (
     <>
       <NavBar />
-      <div className={styles.myProfileContainer}>
+      <div className={styles.container}>
         <div className={styles.profileHeader}>
-          <h1>{userData.nickName}님! 매일 독서기록을 쓰고 선물 받아가세요</h1>
+          <h1 style={{ fontSize: '32px' }}>
+            {userData.nickName}님, 매일 독서기록을 쓰고 선물 받아가세요
+          </h1>
+          <div className={styles.profileInfo}>
+            <div className={styles.basicInfo}>
+              <div className={styles.userName}>{userData.nickName}님</div>
+              <div className={styles.orangeCircle}></div>
+              <div className={styles.infos}>
+                <div className={styles.info}>
+                  {consecutiveDays}일차
+                  <br /> <span>연속 기록</span>
+                </div>
+                <div
+                  className={styles.info}
+                  style={{
+                    borderLeft: '2px solid #7D7D7D',
+                    borderRight: '2px solid #7D7D7D',
+                  }}
+                >
+                  {userData.completionRate.toFixed(2)}%
+                  <br />
+                  <span>완독률</span>
+                </div>
+                <div className={styles.info}>
+                  {userData.readPages}p
+                  <br />
+                  <span>읽은 쪽수</span>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => navigate('/myLikes')}
+              className={styles.likedReviews}
+            >
+              좋아요한 글
+            </button>
+          </div>
           <ProfileInfo
             nickName={userData.nickName}
             consecutiveDays={consecutiveDays}

@@ -250,11 +250,26 @@ class ReviewService {
       const reviews = await ReviewsRepo.getReviewsByUserId(userId)
       const reviewIds = reviews.map((review) => review._id)
       const allComments = await CommentsRepo.getCommentsByReviewIds(reviewIds)
+      const commentUserIds = [
+        ...new Set(allComments.map((comment) => comment.userId.toString())),
+      ]
+      const commentUsers = await UsersRepo.getUsersByIds(commentUserIds)
+
+      const userMap = commentUsers.reduce((acc, user) => {
+        acc[user._id.toString()] = user
+        return acc
+      }, {})
 
       const reviewsWithComments = reviews.map((review) => {
-        const reviewComments = allComments.filter(
-          (comment) => comment.reviewId.toString() === review._id.toString(),
-        )
+        const reviewComments = allComments
+          .filter(
+            (comment) => comment.reviewId.toString() === review._id.toString(),
+          )
+          .map((comment) => ({
+            ...comment,
+            nickName:
+              userMap[comment.userId.toString()]?.nickName || 'Unknown User',
+          }))
         return {
           ...review,
           comments: reviewComments,
@@ -267,8 +282,6 @@ class ReviewService {
         completionRate: (user.readPages / user.allPages) * 100,
         reviews: reviewsWithComments,
       }
-      // 배열로 반환하려면 const userInfo = { userId: user._id, nickName: user.nickName, completionRate: (user.readPages / user.allPages) * 100};
-      // 하고 return [userInfo, reviewsWithComments] 하고 controller에서도 똑같이 받아와야 함. (const [userInfo, reviewWithComments] = await userService.getUserProfile(userId) 식으로)
     } catch (error) {
       throw error
     }
@@ -286,10 +299,26 @@ class ReviewService {
       const reviewIds = reviews.map((review) => review._id)
       const allComments = await CommentsRepo.getCommentsByReviewIds(reviewIds)
 
+      const commentUserIds = [
+        ...new Set(allComments.map((comment) => comment.userId.toString())),
+      ]
+      const commentUsers = await UsersRepo.getUsersByIds(commentUserIds)
+
+      const userMap = commentUsers.reduce((acc, user) => {
+        acc[user._id.toString()] = user
+        return acc
+      }, {})
+
       const reviewsWithComments = reviews.map((review) => {
-        const reviewComments = allComments.filter(
-          (comment) => comment.reviewId.toString() === review._id.toString(),
-        )
+        const reviewComments = allComments
+          .filter(
+            (comment) => comment.reviewId.toString() === review._id.toString(),
+          )
+          .map((comment) => ({
+            ...comment,
+            nickName:
+              userMap[comment.userId.toString()]?.nickName || 'Unknown User',
+          }))
         return {
           ...review,
           comments: reviewComments,
@@ -346,7 +375,10 @@ class ReviewService {
       const users = await UsersRepo.getUsersByIds(userIds)
 
       const userMap = users.reduce((acc, user) => {
-        acc[user._id.toString()] = user.nickName
+        acc[user._id.toString()] = {
+          nickName: user.nickName,
+          userId: user._id.toString(),
+        }
         return acc
       }, {})
 
@@ -354,6 +386,10 @@ class ReviewService {
         const reviewComments = comments.filter(
           (comment) => comment.reviewId.toString() === review._id.toString(),
         )
+        const author = userMap[review.userId.toString()] || {
+          nickName: 'Unknown',
+          userId: 'Unknown',
+        }
         return {
           _id: review._id,
           title: review.title,
@@ -361,7 +397,8 @@ class ReviewService {
           likedBy: review.likedBy,
           comments: reviewComments.map((comment) => comment._id),
           updatedAt: moment(review.updatedAt).format('YYYY.MM.DD'),
-          authorNickName: userMap[review.userId.toString()],
+          authorNickName: author.nickName,
+          authorUserId: author.userId,
         }
       })
 
