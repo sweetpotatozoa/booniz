@@ -17,21 +17,20 @@ const Review = ({
   showNickName = false,
 }) => {
   const reviewDate = moment(entry.createdAt)
-  //   console.log(entry.userId)
+
+  const handleClick = (e) => {
+    e.stopPropagation()
+  }
 
   return (
     <div key={entry._id} className={styles.reviewEntry}>
-      {showNickName ? (
-        <div>{dayDifference}일차</div>
-      ) : (
-        <div>{dayDifference}일차 독서기록</div>
-      )}
-      <div className={styles.startFromEnd}>
-        {entry.startPage}p~{entry.endPage}p
-      </div>
       <div onClick={() => handleEntryClick(entry._id)}>
         <div className={styles.header}>
-          <div className={styles.day}>{dayDifference}일차 독서기록</div>
+          {showNickName ? (
+            <div>{dayDifference}일차</div>
+          ) : (
+            <div className={styles.day}>{dayDifference}일차 독서기록</div>
+          )}
           <div className={styles.page}>
             {entry.startPage}p~{entry.endPage}p
           </div>
@@ -43,7 +42,14 @@ const Review = ({
               <h3>{entry.title}</h3>
               <small>{reviewDate.format('YYYY.MM.DD')}</small>
             </div>
-            <button onClick={() => handleEditClick(entry._id)}>수정하기</button>
+            <button
+              onClick={(e) => {
+                handleClick(e)
+                handleEditClick(entry._id)
+              }}
+            >
+              수정하기
+            </button>
           </div>
           <p className={styles.main}>
             {entry.expanded
@@ -52,36 +58,47 @@ const Review = ({
           </p>
           <div className={styles.bottom}>
             <div>
-              <img src='/images/Heart_01.svg'></img> {entry.likedBy.length}개
+              <img src='/images/Heart_01.svg' alt='Heart Icon'></img>{' '}
+              {entry.likedBy.length}개
             </div>
             <div>
-              <img src='/images/Chat.svg'></img> {entry.comments.length}개
+              <img src='/images/Chat.svg' alt='Chat Icon'></img>{' '}
+              {entry.comments.length}개
             </div>
           </div>
-        </div>
-      </div>
-      {entry.expanded && (
-        <div className={styles.commentsSection}>
-          {entry.comments.map((comment, index) => (
-            <div key={comment._id || index}>
-              <small>
-                {comment.nickName} |{' '}
-                {moment(comment.createdAt).format('YYYY.MM.DD')}
-              </small>
-              <p>{comment.content}</p>
-              <CommentDelete
+          {entry.expanded && (
+            <div className={styles.commentsSection} onClick={handleClick}>
+              {entry.comments.map((comment, index) => (
+                <div
+                  key={comment._id || index}
+                  className={styles.commentWrapper}
+                >
+                  <div className={styles.commentHeader}>
+                    <small>
+                      <span className={styles.commentName}>
+                        {comment.nickName}임시 닉네임
+                      </span>
+                      <span className={styles.commentDate}>
+                        {moment(comment.createdAt).format('YYYY.MM.DD')}
+                      </span>
+                    </small>
+                    <CommentDelete
+                      reviewId={entry._id}
+                      commentId={comment._id}
+                      handleDeleteComment={handleDeleteComment}
+                    />
+                  </div>
+                  <p className={styles.mainComment}>{comment.content}</p>
+                </div>
+              ))}
+              <CommentForm
                 reviewId={entry._id}
-                commentId={comment._id}
-                handleDeleteComment={handleDeleteComment}
+                handleCommentSubmit={handleCommentSubmit}
               />
             </div>
-          ))}
-          <CommentForm
-            reviewId={entry._id}
-            handleCommentSubmit={handleCommentSubmit}
-          />
+          )}
         </div>
-      )}
+      </div>
     </div>
   )
 }

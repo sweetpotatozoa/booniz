@@ -3,6 +3,7 @@
   flex-direction: column;
   border-radius: 15px;
   width: 1440px;
+  cursor: pointer;
 }
 
 .day {
@@ -87,4 +88,44 @@
 
 .bottom div img {
   margin-right: 8px;
+}
+
+.commentsSection {
+  margin-top: 20px;
+}
+
+.commentHeader {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 12px;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.commentName {
+  font-size: 20px;
+  font-weight: bold;
+  padding-right: 8px;
+  border-right: 2px solid #7d7d7d;
+}
+
+.commentDate {
+  font-size: 16px;
+  color: #282828;
+  padding-left: 8px;
+  align-self: center;
+}
+
+.mainComment {
+  font-size: 16px;
+  padding-bottom: 20px;
+}
+
+.commentWrapper {
+  border-bottom: 1px solid #282828;
+  margin-bottom: 8px;
+}
+
+.commentWrapper:last-of-type {
+  border-bottom: none;
 }

@@ -1,0 +1,7 @@
+.button {
+  font-size: 16px;
+  color: #282828;
+  background-color: #fdfcf7;
+  text-decoration: underline;
+  cursor: pointer;
+}
