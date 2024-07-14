@@ -375,7 +375,10 @@ class ReviewService {
       const users = await UsersRepo.getUsersByIds(userIds)
 
       const userMap = users.reduce((acc, user) => {
-        acc[user._id.toString()] = user.nickName
+        acc[user._id.toString()] = {
+          nickName: user.nickName,
+          userId: user._id.toString(),
+        }
         return acc
       }, {})
 
@@ -383,6 +386,10 @@ class ReviewService {
         const reviewComments = comments.filter(
           (comment) => comment.reviewId.toString() === review._id.toString(),
         )
+        const author = userMap[review.userId.toString()] || {
+          nickName: 'Unknown',
+          userId: 'Unknown',
+        }
         return {
           _id: review._id,
           title: review.title,
@@ -390,7 +397,8 @@ class ReviewService {
           likedBy: review.likedBy,
           comments: reviewComments.map((comment) => comment._id),
           updatedAt: moment(review.updatedAt).format('YYYY.MM.DD'),
-          authorNickName: userMap[review.userId.toString()],
+          authorNickName: author.nickName,
+          authorUserId: author.userId,
         }
       })
 
