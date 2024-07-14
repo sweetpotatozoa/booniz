@@ -21,7 +21,11 @@ const Review = ({
 
   return (
     <div key={entry._id} className={styles.reviewEntry}>
-      <div>{dayDifference}일차 독서기록</div>
+      {showNickName ? (
+        <div>{dayDifference}일차</div>
+      ) : (
+        <div>{dayDifference}일차 독서기록</div>
+      )}
       <div className={styles.startFromEnd}>
         {entry.startPage}p~{entry.endPage}p
       </div>
