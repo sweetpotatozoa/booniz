@@ -108,16 +108,13 @@ const Main = () => {
               return (
                 <div key={entry._id}>
                   <div key={entry._id} className={styles.reviewData}>
-                    <div className={styles.title}>
-                      {dayDifference}일차 독서일지
-                    </div>
                     <div
                       className={styles.reviewEntry}
                       onClick={handleEntryClick}
                     >
                       <div>{dayDifference}일차</div>
                       <h3>{entry.title}</h3>
-                      <small>{reviewDate.format('YYYY-MM-DD')}</small>
+                      <small>{reviewDate.format('YYYY.MM.DD')}</small>
                       <p>{truncateContent(entry.content, 150)}</p>
                     </div>
                   </div>

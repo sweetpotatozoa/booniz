@@ -10,6 +10,7 @@ const Review = ({
   dayDifference,
   handleEntryClick,
   handleEditClick,
+  handleDeleteClick,
   handleDeleteComment,
   handleCommentSubmit,
 }) => {
@@ -32,16 +33,19 @@ const Review = ({
         </p>
         <div>❤ {entry.likedBy.length}개</div>
         <div>□ {entry.comments.length}개</div>
+        {entry.expanded && (
+          <button onClick={() => handleDeleteClick(entry._id)}>삭제하기</button>
+        )}
       </div>
       {entry.expanded && (
         <div className={styles.commentsSection}>
-          {entry.comments.map((comment) => (
-            <div key={comment._id}>
-              <p>{comment.content}</p>
+          {entry.comments.map((comment, index) => (
+            <div key={comment._id || index}>
               <small>
-                {comment.userNickName} |{' '}
-                {moment(comment.createdAt).format('YYYY-MM-DD')}
+                {comment.nickName} |{' '}
+                {moment(comment.createdAt).format('YYYY.MM.DD')}
               </small>
+              <p>{comment.content}</p>
               <CommentDelete
                 reviewId={entry._id}
                 commentId={comment._id}
