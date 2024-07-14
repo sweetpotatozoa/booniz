@@ -112,9 +112,11 @@ const Main = () => {
                       className={styles.reviewEntry}
                       onClick={handleEntryClick}
                     >
-                      <div>{dayDifference}일차</div>
-                      <h3>{entry.title}</h3>
-                      <small>{reviewDate.format('YYYY.MM.DD')}</small>
+                      <div className={styles.reviewHeader}>
+                        <div>{dayDifference}일차</div>
+                        <h3>{entry.title}</h3>
+                        <small>{reviewDate.format('YYYY.MM.DD')}</small>
+                      </div>
                       <p>{truncateContent(entry.content, 150)}</p>
                     </div>
                   </div>
