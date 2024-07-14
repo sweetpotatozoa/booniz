@@ -112,7 +112,6 @@ class ReviewsRepo {
       },
       { projection: { title: 1, content: 1, startPage: 1, endPage: 1 } },
     )
-    console.log(review)
     return review
   }
 
@@ -176,6 +175,20 @@ class ReviewsRepo {
       .sort({ updatedAt: -1 })
       .toArray()
     return result
+  }
+
+  //좋아요
+  async addLikeToReview(reviewId, userId) {
+    const result = await this.collection.findOneAndUpdate(
+      { _id: new ObjectId(reviewId) },
+      { $addToSet: { likedBy: new ObjectId(userId) } },
+      { returnDocument: 'after' },
+    )
+    return result.value
+  }
+
+  async getReviewById(reviewId) {
+    return await this.collection.findOne({ _id: new ObjectId(reviewId) })
   }
 }
 module.exports = new ReviewsRepo()
