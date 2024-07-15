@@ -219,5 +219,15 @@ class ReviewsRepo {
 
     return result
   }
+
+  //좋아요 취소
+  async removeLikeFromReview(reviewId, userId) {
+    const result = await this.collection.findOneAndUpdate(
+      { _id: new ObjectId(reviewId) },
+      { $pull: { likedBy: new ObjectId(userId) } },
+      { returnDocument: 'after' },
+    )
+    return result.value
+  }
 }
 module.exports = new ReviewsRepo()

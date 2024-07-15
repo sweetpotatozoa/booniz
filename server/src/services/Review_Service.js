@@ -433,16 +433,20 @@ class ReviewService {
   async likeReview(reviewId, userId) {
     try {
       const review = await ReviewsRepo.getReviewById(reviewId)
-      if (!review) {
-        throw new Error('해당 글을 찾을 수 없습니다.')
+      let updatedReview
+      let message
+
+      if (review.likedBy.some((id) => id.toString() === userId)) {
+        console.log('Removing like')
+        updatedReview = await ReviewsRepo.removeLikeFromReview(reviewId, userId)
+        message = '좋아요 취소'
+      } else {
+        console.log('Adding like')
+        updatedReview = await ReviewsRepo.addLikeToReview(reviewId, userId)
+        message = '좋아요 +1'
       }
 
-      if (review.likedBy.includes(userId)) {
-        throw new Error('이미 좋아요를 누른 글입니다.')
-      }
-
-      const updatedReview = await ReviewsRepo.addLikeToReview(reviewId, userId)
-      return { message: '좋아요 +1', review: updatedReview }
+      return { message, review: updatedReview }
     } catch (error) {
       console.error('Error in likeReview service:', error)
       throw error
