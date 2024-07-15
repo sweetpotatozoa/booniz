@@ -44,11 +44,7 @@ const NavBar = () => {
         >
           게시판
         </div>
-        <div
-          className={styles.link2}
-          onClick={() => navigate('/write')}
-          style={getLinkStyle('/write')}
-        >
+        <div className={styles.link2} onClick={() => navigate('/write')}>
           일지 쓰기
         </div>
       </div>
