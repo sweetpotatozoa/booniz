@@ -126,6 +126,7 @@
   padding: 8px 20px;
   background-color: #ff7342;
   border-radius: 100px;
+  border: 1px solid #282828;
 }
 
 .reviewHeader h3 {
