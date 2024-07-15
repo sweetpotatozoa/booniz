@@ -12,13 +12,38 @@ const ProfileInfo = ({
 
   return (
     <div className={styles.profileInfo}>
-      <div>
-        <div>{nickName}님</div>
+      <div className={styles.basicInfo}>
+        <div className={styles.userName}>{nickName}님</div>
+        <div className={styles.orangeCircle}></div>
+        <div className={styles.infos}>
+          <div className={styles.info}>
+            {consecutiveDays}일차
+            <br /> <span>연속 기록</span>
+          </div>
+          <div
+            className={styles.info}
+            style={{
+              borderLeft: '2px solid #7D7D7D',
+              borderRight: '2px solid #7D7D7D',
+            }}
+          >
+            {completionRate.toFixed(2)}%
+            <br />
+            <span>완독률</span>
+          </div>
+          <div className={styles.info}>
+            {readPages}p
+            <br />
+            <span>읽은 쪽수</span>
+          </div>
+        </div>
       </div>
-      <div>연속 기록: {consecutiveDays}일차</div>
-      <div>완독률: {completionRate.toFixed(2)}%</div>
-      <div>읽은 쪽수: {readPages}쪽</div>
-      <button onClick={() => navigate('/myLikes')}>좋아요한 글</button>
+      <button
+        onClick={() => navigate('/myLikes')}
+        className={styles.likedReviews}
+      >
+        좋아요한 글
+      </button>
     </div>
   )
 }

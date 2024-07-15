@@ -118,28 +118,40 @@ class ReviewService {
 
   // 리뷰 생성
   async createReview(userId, title, content, startPage, endPage) {
-    const user = await this.checkUserIdExist(userId)
-    if (!user) {
-      throw new Error('No user found')
-    }
+    try {
+      const user = await this.checkUserIdExist(userId)
+      if (!user) {
+        throw new Error('No user found')
+      }
 
-    if (startPage > endPage) {
-      throw new Error('Invalid page range')
-    }
+      if (startPage > endPage) {
+        throw new Error('Invalid page range')
+      }
 
-    const reviewData = {
-      userId: new ObjectId(userId),
-      title: title,
-      content: content,
-      startPage: startPage,
-      endPage: endPage,
-      createdAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
-      updatedAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
-      likedBy: [],
-    }
+      const todayReviewCount = await ReviewsRepo.getTodayReviewCount(userId)
+      if (todayReviewCount > 0) {
+        throw new Error('하루에 1개의 글만 작성하실 수 있습니다.')
+      }
 
-    const result = await ReviewsRepo.createReview(reviewData)
-    return result
+      const reviewData = {
+        userId: new ObjectId(userId),
+        title: title,
+        content: content,
+        startPage: startPage,
+        endPage: endPage,
+        createdAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
+        updatedAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
+        likedBy: [],
+      }
+
+      await UsersRepo.updateReadPages(userId, endPage)
+
+      const result = await ReviewsRepo.createReview(reviewData)
+      return result
+    } catch (error) {
+      console.error('Error in createReview:', error)
+      throw error
+    }
   }
 
   // 내 리뷰 가져오기
@@ -275,12 +287,15 @@ class ReviewService {
           comments: reviewComments,
         }
       })
+      const streak = await this.calculateStreak(userId)
 
       return {
         userId: user._id,
         nickName: user.nickName,
         completionRate: (user.readPages / user.allPages) * 100,
         reviews: reviewsWithComments,
+        readPages: user.readPages,
+        streak: streak,
       }
     } catch (error) {
       throw error
@@ -325,11 +340,15 @@ class ReviewService {
         }
       })
 
+      const streak = await this.calculateStreak(userId)
+
       return {
         userId: user._id,
         nickName: user.nickName,
         completionRate: (user.readPages / user.allPages) * 100,
         reviews: reviewsWithComments,
+        readPages: user.readPages,
+        streak: streak,
       }
     } catch (error) {
       throw error
@@ -407,6 +426,71 @@ class ReviewService {
       )
     } catch (error) {
       throw error
+    }
+  }
+
+  //좋아요 누르기
+  async likeReview(reviewId, userId) {
+    try {
+      const review = await ReviewsRepo.getReviewById(reviewId)
+      let updatedReview
+      let message
+
+      if (review.likedBy.some((id) => id.toString() === userId)) {
+        console.log('Removing like')
+        updatedReview = await ReviewsRepo.removeLikeFromReview(reviewId, userId)
+        message = '좋아요 취소'
+      } else {
+        console.log('Adding like')
+        updatedReview = await ReviewsRepo.addLikeToReview(reviewId, userId)
+        message = '좋아요 +1'
+      }
+
+      return { message, review: updatedReview }
+    } catch (error) {
+      console.error('Error in likeReview service:', error)
+      throw error
+    }
+  }
+
+  //연속기록
+  async calculateStreak(userId) {
+    try {
+      const reviews = await ReviewsRepo.getReviewsByUserId(userId)
+      const reviewDates = reviews.map((review) =>
+        moment(review.createdAt).format('YYYY-MM-DD'),
+      )
+
+      const today = moment().format('YYYY-MM-DD')
+      const yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD')
+      const attendanceArray = []
+      let streak = 0
+      let missedDay = false
+
+      for (let i = 30; i >= 0; i--) {
+        const date = moment().subtract(i, 'days').format('YYYY-MM-DD')
+        if (reviewDates.includes(date)) {
+          attendanceArray.push(1)
+          if (date <= yesterday) {
+            streak++
+          }
+        } else {
+          attendanceArray.push(0)
+          if (date === moment().subtract(1, 'days').format('YYYY-MM-DD')) {
+            missedDay = true
+          }
+          if (date <= yesterday) {
+            streak = 0 // Reset if any day is missed before today
+          }
+        }
+      }
+
+      const consecutiveAttendance = missedDay ? 1 : streak + 1
+
+      return consecutiveAttendance
+    } catch (error) {
+      console.error('Error calculating streak:', error)
+      return 0 // 오류 발생 시 기본값 반환
     }
   }
 }

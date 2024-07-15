@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import styles from './CommentForm.module.css'
 
 const CommentForm = ({ reviewId, handleCommentSubmit }) => {
   const [commentContent, setCommentContent] = useState('')
@@ -11,10 +12,13 @@ const CommentForm = ({ reviewId, handleCommentSubmit }) => {
     }
   }
 
+  const handleClick = (e) => {
+    e.stopPropagation()
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type='text'
+    <form onSubmit={handleSubmit} className={styles.form} onClick={handleClick}>
+      <textarea
         value={commentContent}
         onChange={(e) => setCommentContent(e.target.value)}
         placeholder='댓글을 입력하세요'

@@ -45,9 +45,9 @@ const MyProfile = () => {
                     {
                       ...newComment,
                       _id: newComment.insertedId,
-                      content: content, // 댓글 내용을 명시적으로 추가
-                      userNickName: '사용자 닉네임', // 필요에 따라 추가
-                      createdAt: new Date().toISOString(), // 현재 시간으로 설정
+                      content: content,
+                      userNickName: '사용자 닉네임',
+                      createdAt: new Date().toISOString(),
                     },
                   ],
                 }
@@ -130,40 +130,6 @@ const MyProfile = () => {
           <h1 style={{ fontSize: '32px' }}>
             {userData.nickName}님, 매일 독서기록을 쓰고 선물 받아가세요
           </h1>
-          <div className={styles.profileInfo}>
-            <div className={styles.basicInfo}>
-              <div className={styles.userName}>{userData.nickName}님</div>
-              <div className={styles.orangeCircle}></div>
-              <div className={styles.infos}>
-                <div className={styles.info}>
-                  {consecutiveDays}일차
-                  <br /> <span>연속 기록</span>
-                </div>
-                <div
-                  className={styles.info}
-                  style={{
-                    borderLeft: '2px solid #7D7D7D',
-                    borderRight: '2px solid #7D7D7D',
-                  }}
-                >
-                  {userData.completionRate.toFixed(2)}%
-                  <br />
-                  <span>완독률</span>
-                </div>
-                <div className={styles.info}>
-                  {userData.readPages}p
-                  <br />
-                  <span>읽은 쪽수</span>
-                </div>
-              </div>
-            </div>
-            <button
-              onClick={() => navigate('/myLikes')}
-              className={styles.likedReviews}
-            >
-              좋아요한 글
-            </button>
-          </div>
           <ProfileInfo
             nickName={userData.nickName}
             consecutiveDays={consecutiveDays}
@@ -185,8 +151,12 @@ const MyProfile = () => {
                   handleEntryClick={handleEntryClick}
                   handleEditClick={handleEditClick}
                   handleDeleteClick={handleDeleteClick}
-                  handleDeleteComment={handleDeleteComment}
-                  handleCommentSubmit={handleCommentSubmit}
+                  handleDeleteComment={(reviewId, commentId) =>
+                    handleDeleteComment(reviewId, commentId)
+                  }
+                  handleCommentSubmit={(reviewId, content) =>
+                    handleCommentSubmit(reviewId, content)
+                  }
                 />
               )
             })

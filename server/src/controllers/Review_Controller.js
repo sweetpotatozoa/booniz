@@ -224,6 +224,24 @@ class ReviewController {
       })
     }
   }
+
+  //좋아요 누르기
+  async likeReview(req, res) {
+    const reviewId = req.params.reviewId
+    const userId = req.user.id
+
+    try {
+      const result = await ReviewService.likeReview(reviewId, userId)
+      res.status(200).json(result)
+    } catch (error) {
+      console.error('Error in likeReview controller:', error)
+      res.status(500).json({
+        message: 'An error occurred while liking the review',
+        error:
+          process.env.NODE_ENV === 'development' ? error.message : undefined,
+      })
+    }
+  }
 }
 
 module.exports = new ReviewController()
