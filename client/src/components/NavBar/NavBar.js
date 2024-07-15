@@ -33,7 +33,7 @@ const NavBar = () => {
         <div
           className={styles.link}
           onClick={() => navigate('/myProfile')}
-          style={getLinkStyle(['/myProfile', '/write'])}
+          style={getLinkStyle(['/myProfile', '/write', '/myLikes'])}
         >
           내 독서일지
         </div>
