@@ -28,15 +28,27 @@ const Community = () => {
   const handleCommentSubmit = async (reviewId, content) => {
     try {
       const newComment = await BackendApis.createComment(reviewId, { content })
-      setReviews((prevEntries) =>
-        prevEntries.map((entry) =>
-          entry._id === reviewId
-            ? { ...entry, comments: [...entry.comments, newComment] }
-            : entry,
-        ),
-      )
+      if (newComment && newComment.insertedId) {
+        setReviews((prevReviews) =>
+          prevReviews.map((entry) =>
+            entry._id === reviewId
+              ? {
+                  ...entry,
+                  comments: [
+                    ...entry.comments,
+                    {
+                      ...newComment,
+                      _id: newComment.insertedId,
+                      content: content, // 댓글 내용을 명시적으로 추가
+                    },
+                  ],
+                }
+              : entry,
+          ),
+        )
+      }
     } catch (error) {
-      console.error('Error submitting comment:', error)
+      console.error('댓글 제출 중 오류 발생:', error)
     }
   }
 

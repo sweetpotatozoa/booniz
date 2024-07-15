@@ -62,8 +62,8 @@ const Review = ({
       </div>
       {entry.expanded && (
         <div className={styles.commentsSection}>
-          {entry.comments.map((comment, index) => (
-            <div key={comment._id || index}>
+          {entry.comments.map((comment) => (
+            <div key={comment._id}>
               <small>
                 {comment.nickName} |{' '}
                 {moment(comment.createdAt).format('YYYY.MM.DD')}
