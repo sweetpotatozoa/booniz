@@ -190,5 +190,44 @@ class ReviewsRepo {
   async getReviewById(reviewId) {
     return await this.collection.findOne({ _id: new ObjectId(reviewId) })
   }
+
+  //연속기록
+  async getReviewDatesForUser(userId, daysToCheck = 30) {
+    const startDate = moment()
+      .subtract(daysToCheck, 'days')
+      .startOf('day')
+      .toDate()
+    const result = await this.collection
+      .aggregate([
+        {
+          $match: {
+            userId: new ObjectId(userId),
+            createdAt: { $gte: startDate },
+          },
+        },
+        {
+          $group: {
+            _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $sort: { _id: -1 },
+        },
+      ])
+      .toArray()
+
+    return result
+  }
+
+  //좋아요 취소
+  async removeLikeFromReview(reviewId, userId) {
+    const result = await this.collection.findOneAndUpdate(
+      { _id: new ObjectId(reviewId) },
+      { $pull: { likedBy: new ObjectId(userId) } },
+      { returnDocument: 'after' },
+    )
+    return result.value
+  }
 }
 module.exports = new ReviewsRepo()

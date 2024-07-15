@@ -287,6 +287,7 @@ class ReviewService {
           comments: reviewComments,
         }
       })
+      const streak = await this.calculateStreak(userId)
 
       return {
         userId: user._id,
@@ -294,6 +295,7 @@ class ReviewService {
         completionRate: (user.readPages / user.allPages) * 100,
         reviews: reviewsWithComments,
         readPages: user.readPages,
+        streak: streak,
       }
     } catch (error) {
       throw error
@@ -338,12 +340,15 @@ class ReviewService {
         }
       })
 
+      const streak = await this.calculateStreak(userId)
+
       return {
         userId: user._id,
         nickName: user.nickName,
         completionRate: (user.readPages / user.allPages) * 100,
         reviews: reviewsWithComments,
         readPages: user.readPages,
+        streak: streak,
       }
     } catch (error) {
       throw error
@@ -428,19 +433,64 @@ class ReviewService {
   async likeReview(reviewId, userId) {
     try {
       const review = await ReviewsRepo.getReviewById(reviewId)
-      if (!review) {
-        throw new Error('해당 글을 찾을 수 없습니다.')
+      let updatedReview
+      let message
+
+      if (review.likedBy.some((id) => id.toString() === userId)) {
+        console.log('Removing like')
+        updatedReview = await ReviewsRepo.removeLikeFromReview(reviewId, userId)
+        message = '좋아요 취소'
+      } else {
+        console.log('Adding like')
+        updatedReview = await ReviewsRepo.addLikeToReview(reviewId, userId)
+        message = '좋아요 +1'
       }
 
-      if (review.likedBy.includes(userId)) {
-        throw new Error('이미 좋아요를 누른 글입니다.')
-      }
-
-      const updatedReview = await ReviewsRepo.addLikeToReview(reviewId, userId)
-      return { message: '좋아요 +1', review: updatedReview }
+      return { message, review: updatedReview }
     } catch (error) {
       console.error('Error in likeReview service:', error)
       throw error
+    }
+  }
+
+  //연속기록
+  async calculateStreak(userId) {
+    try {
+      const reviews = await ReviewsRepo.getReviewsByUserId(userId)
+      const reviewDates = reviews.map((review) =>
+        moment(review.createdAt).format('YYYY-MM-DD'),
+      )
+
+      const today = moment().format('YYYY-MM-DD')
+      const yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD')
+      const attendanceArray = []
+      let streak = 0
+      let missedDay = false
+
+      for (let i = 30; i >= 0; i--) {
+        const date = moment().subtract(i, 'days').format('YYYY-MM-DD')
+        if (reviewDates.includes(date)) {
+          attendanceArray.push(1)
+          if (date <= yesterday) {
+            streak++
+          }
+        } else {
+          attendanceArray.push(0)
+          if (date === moment().subtract(1, 'days').format('YYYY-MM-DD')) {
+            missedDay = true
+          }
+          if (date <= yesterday) {
+            streak = 0 // Reset if any day is missed before today
+          }
+        }
+      }
+
+      const consecutiveAttendance = missedDay ? 1 : streak + 1
+
+      return consecutiveAttendance
+    } catch (error) {
+      console.error('Error calculating streak:', error)
+      return 0 // 오류 발생 시 기본값 반환
     }
   }
 }
