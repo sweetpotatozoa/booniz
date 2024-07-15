@@ -11,8 +11,8 @@ const NavBar = () => {
     setActiveLink(location.pathname)
   }, [location.pathname])
 
-  const getLinkStyle = (path) => {
-    return activeLink === path
+  const getLinkStyle = (paths) => {
+    return paths.includes(activeLink)
       ? { borderBottom: '5px solid #FF7342', fontWeight: 'bold' }
       : {}
   }
@@ -26,21 +26,21 @@ const NavBar = () => {
         <div
           className={styles.link}
           onClick={() => navigate('/')}
-          style={getLinkStyle('/')}
+          style={getLinkStyle(['/', '/login', '/register'])}
         >
           홈
         </div>
         <div
           className={styles.link}
           onClick={() => navigate('/myProfile')}
-          style={getLinkStyle('/myProfile')}
+          style={getLinkStyle(['/myProfile', '/write'])}
         >
           내 독서일지
         </div>
         <div
           className={styles.link}
           onClick={() => navigate('/community')}
-          style={getLinkStyle('/community')}
+          style={getLinkStyle(['/community'])}
         >
           게시판
         </div>
