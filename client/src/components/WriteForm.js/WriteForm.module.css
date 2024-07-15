@@ -87,6 +87,7 @@
   font-weight: bold;
   padding: 8px 20px;
   align-self: flex-end;
+  cursor: pointer;
 }
 
 #text {

@@ -4,7 +4,6 @@ import truncateContent from '../../utils/truncateContent'
 import DatePicker from 'react-datepicker'
 import NavBar from '../../components/NavBar/NavBar'
 import 'react-datepicker/dist/react-datepicker.css'
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import styles from './Community.module.css'
 import BackendApis from '../../utils/backendApis'
 import moment from 'moment'
@@ -98,21 +97,25 @@ const Community = () => {
   return (
     <>
       <NavBar />
-      <div className={styles.communityContainer}>
-        <h1>다른 사람들은 어떤 기록을 썼을까요?</h1>
-        <div className={styles.datePicker}>
-          <button onClick={handlePreviousDay}>
-            <FaChevronLeft />
-          </button>
-          <DatePicker
-            selected={selectedDate}
-            onChange={(date) => setSelectedDate(date)}
-            dateFormat='yyyy-MM-dd'
-          />
-          <button onClick={handleNextDay}>
-            <FaChevronRight />
-          </button>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1>다른 사람들은 어떤 일지를 썼을까요?</h1>
+          <div className={styles.datePicker}>
+            <button onClick={handlePreviousDay}>
+              <img src='/images/left.svg' alt='Previous Day' />
+            </button>
+            <DatePicker
+              selected={selectedDate}
+              onChange={(date) => setSelectedDate(date)}
+              dateFormat='yyyy.MM.dd'
+              className={styles.datePickerInput}
+            />
+            <button onClick={handleNextDay}>
+              <img src='/images/right.svg' alt='Next Day' />
+            </button>
+          </div>
         </div>
+
         <div className={styles.diaryContainer}>
           {reviews.length > 0 ? (
             reviews.map((entry) => {

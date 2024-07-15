@@ -26,9 +26,7 @@ const Review = ({
     <div key={entry._id} className={styles.reviewEntry}>
       <div onClick={() => handleEntryClick(entry._id)}>
         <div className={styles.header}>
-          {showNickName ? (
-            <div>{dayDifference}일차</div>
-          ) : (
+          {showNickName ? null : (
             <div className={styles.day}>{dayDifference}일차 독서기록</div>
           )}
           <div className={styles.page}>
