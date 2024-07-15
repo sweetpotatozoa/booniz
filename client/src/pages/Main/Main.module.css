@@ -105,4 +105,37 @@
   border-radius: 15px;
   border: 1px solid #282828;
   cursor: pointer;
+  min-height: 196.53px;
+}
+
+.sub {
+  margin-top: 4px;
+  font-size: 16px;
+}
+
+.reviewHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.reviewHeader div {
+  display: flex;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 8px 20px;
+  background-color: #ff7342;
+  border-radius: 100px;
+}
+
+.reviewHeader h3 {
+  margin-left: 8px;
+  padding-right: 8px;
+}
+
+.reviewHeader small {
+  font-size: 16px;
+  color: #282828;
+  padding-left: 8px;
+  border-left: 2px solid #7d7d7d;
 }

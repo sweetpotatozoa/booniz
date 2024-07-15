@@ -87,8 +87,10 @@ const Main = () => {
           </div>
         </div>
         <div className={styles.attendanceContainer}>
-          <div>10일 챌린지 미션 진행 중!</div>
-          <div>매일 독서일지를 쓰면, 선물을 받을 수 있어요</div>
+          <div className={styles.title}>10일 챌린지 미션 진행 중!</div>
+          <div className={styles.sub}>
+            매일 독서일지를 쓰면, 선물을 받을 수 있어요
+          </div>
           <div className={styles.attendanceDots}>
             {fullDailyStatus.map((day) => (
               <div
