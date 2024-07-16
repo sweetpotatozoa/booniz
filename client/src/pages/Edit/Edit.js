@@ -50,7 +50,6 @@ const Edit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
-
     const { title, content, startPage, endPage } = reviewData
     if (title.length > 50) {
       setError('제목은 50자 이하여야 합니다.')
@@ -70,7 +69,11 @@ const Edit = () => {
     }
 
     try {
-      const result = await BackendApis.createReview('POST', reviewData)
+      const result = await BackendApis.updateMyReview(
+        'PUT',
+        reviewId,
+        reviewData,
+      )
       if (result && result.acknowledged) {
         navigate('/')
       } else {
@@ -93,6 +96,7 @@ const Edit = () => {
           handleChange={handleChange}
           handleSubmit={handleSubmit}
           error
+          // reviewId={reviewId}
         />
       </div>
     </>
