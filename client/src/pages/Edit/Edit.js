@@ -70,7 +70,10 @@ const Edit = () => {
     }
 
     try {
-      const result = await BackendApis.createReview('POST', reviewData)
+      const result = await BackendApis.updateMyReview('PUT', {
+        reviewId,
+        reviewData,
+      })
       if (result && result.acknowledged) {
         navigate('/')
       } else {
