@@ -182,6 +182,7 @@ class ReviewController {
     try {
       const reviewId = req.params.reviewId
       const userId = req.user.id
+      console.log('userId', userId, 'reviewId', reviewId)
       if (!userId || !isObjectId(userId)) {
         res.status(400).json({ message: '유효하지 않은 아이디 입니다.' })
         return
