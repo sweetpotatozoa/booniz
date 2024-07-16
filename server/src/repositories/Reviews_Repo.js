@@ -63,7 +63,7 @@ class ReviewsRepo {
     }
   }
 
-  //당일 리뷰 갯수 계산하기
+  //당일 리뷰 개수 계산하기
   async getTodayReviewCount(userId) {
     try {
       const today = moment().tz('Asia/Seoul').startOf('day').toDate()
