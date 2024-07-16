@@ -43,7 +43,7 @@ const MyLikes = () => {
             <div
               key={entry._id}
               className={styles.like}
-              onClick={() => handleEntryClick(entry.userId)}
+              onClick={() => handleEntryClick(entry.authorUserId)}
             >
               <h3>{entry.authorNickName}</h3>
               <div className={styles.top}>

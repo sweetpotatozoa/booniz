@@ -102,6 +102,7 @@ const MyProfile = () => {
       try {
         const result = await BackendApis.getMyProfile()
         if (result) {
+          console.log('result:', result)
           setUserData(result)
         }
       } catch (error) {
