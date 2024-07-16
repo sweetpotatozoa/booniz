@@ -82,7 +82,7 @@ const Community = () => {
   }
 
   const handleNicknameClick = (id, e) => {
-    e.stopPropagation()
+    if (e) e.stopPropagation()
     navigate(`/userProfile/${id}`)
   }
 

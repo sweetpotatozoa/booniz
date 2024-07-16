@@ -18,6 +18,7 @@ const Review = ({
 }) => {
   const reviewDate = moment(entry.createdAt)
 
+  console.log(entry)
   const handleClick = (e) => {
     e.stopPropagation()
   }
@@ -26,7 +27,19 @@ const Review = ({
     <div key={entry._id} className={styles.reviewEntry}>
       <div onClick={() => handleEntryClick(entry._id)}>
         <div className={styles.header}>
-          {showNickName ? null : (
+          {showNickName ? (
+            <div>
+              <div
+                className={styles.nickName}
+                onClick={() => {
+                  handleNicknameClick(entry.userId)
+                }}
+              >
+                {entry.nickName}
+              </div>
+              <div className={styles.day}>{dayDifference}일차 독서기록</div>
+            </div>
+          ) : (
             <div className={styles.day}>{dayDifference}일차 독서기록</div>
           )}
           <div className={styles.page}>
