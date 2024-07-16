@@ -115,12 +115,6 @@ const MyProfile = () => {
 
   const challengeStartDate = moment('2024-07-07')
   const consecutiveDays = getConsecutiveDays(userData.dailyStatus)
-  const latestEndPage =
-    userData.reviews.length > 0
-      ? userData.reviews.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-        )[0].endPage
-      : 0 // 가장 최근 리뷰의 endPage를 얻음. 리뷰가 없으면 0.
 
   return (
     <>
@@ -133,9 +127,9 @@ const MyProfile = () => {
           </h1>
           <ProfileInfo
             nickName={userData.nickName}
-            consecutiveDays={consecutiveDays}
+            consecutiveDays={userData.streak}
             completionRate={userData.completionRate}
-            readPages={latestEndPage}
+            readPages={userData.readPages}
           />
         </div>
         <div className={styles.reviewContainer}>

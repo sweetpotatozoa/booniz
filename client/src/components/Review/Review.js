@@ -38,11 +38,16 @@ const Review = ({
                 {entry.nickName}
               </div>
             ) : null}
+            {showNickName ? null : (
+              <div className={styles.day}>{dayDifference}일차</div>
+            )}
             <div>
               <div className={styles.page}>
                 {entry.startPage}p~{entry.endPage}p
               </div>
-              <div className={styles.day}>{dayDifference}일차</div>
+              {showNickName && (
+                <div className={styles.day}>{dayDifference}일차</div>
+              )}
             </div>
           </div>
           <div className={styles.contentInfo}>
