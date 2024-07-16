@@ -108,13 +108,14 @@ class BackendApis {
     return result
   }
 
-  async updateMyReview(reviewId, updateData) {
+  async updateMyReview(method = 'PUT', params = {}) {
     const result = await fetcher(
-      `/api/review/edit/${reviewId}`,
+      `/api/review/edit/${params.reviewId}`,
       this.token,
-      'PUT',
-      updateData,
+      method,
+      params.reviewData,
     )
+    console.log(result)
     return result
   }
 
