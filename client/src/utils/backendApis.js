@@ -96,19 +96,20 @@ class BackendApis {
     return result
   }
 
-  async getMyReview(userId, reviewId) {
+  async getMyReview(reviewId) {
     //수정하기 1단계. 내가 쓴 글 가져오기
     const result = await fetcher(
-      `/api/review/getMyReview/${userId}/${reviewId}`,
+      `/api/review/getMyReview/${reviewId}`,
       this.token,
       'GET',
     )
+    console.log(result)
     return result
   }
 
-  async updateMyReview(reviewId, userId, updateData) {
+  async updateMyReview(reviewId, updateData) {
     const result = await fetcher(
-      `/api/review/updateMyReview/${reviewId}/${userId}`,
+      `/api/review/edit/${reviewId}`,
       this.token,
       'PUT',
       updateData,
