@@ -18,7 +18,6 @@ const Review = ({
 }) => {
   const reviewDate = moment(entry.createdAt)
 
-  //   console.log(entry)
   const handleClick = (e) => {
     e.stopPropagation()
   }
@@ -26,45 +25,37 @@ const Review = ({
   return (
     <div key={entry._id} className={styles.reviewEntry}>
       <div onClick={() => handleEntryClick(entry._id)}>
-        <div className={styles.content}>
-          <div className={styles.header}>
-            {showNickName ? (
-              <div
-                className={styles.nickName}
-                onClick={() => {
-                  handleNicknameClick(entry.userId)
-                }}
-              >
-                {entry.nickName}
-              </div>
-            ) : null}
-            {showNickName ? null : (
-              <div className={styles.day}>{dayDifference}일차</div>
-            )}
-            <div>
-              <div className={styles.page}>
-                {entry.startPage}p~{entry.endPage}p
-              </div>
-              {showNickName && (
-                <div className={styles.day}>{dayDifference}일차</div>
-              )}
+        <div className={styles.header}>
+          {showNickName ? null : (
+            <div
+              className={styles.nickName}
+              onClick={() => {
+                handleNicknameClick()
+              }}
+            >
+              {entry.nickName}
             </div>
+          )}
+          <div className={styles.day}>{dayDifference}일차 독서기록</div>
+          <div className={styles.page}>
+            {entry.startPage}p~{entry.endPage}p
           </div>
+        </div>
+
+        <div className={styles.content}>
           <div className={styles.contentInfo}>
             <div className={styles.top}>
               <h3>{entry.title}</h3>
               <small>{reviewDate.format('YYYY.MM.DD')}</small>
             </div>
-            {showNickName ? null : (
-              <button
-                onClick={(e) => {
-                  handleClick(e)
-                  handleEditClick(entry._id)
-                }}
-              >
-                수정하기
-              </button>
-            )}
+            <button
+              onClick={(e) => {
+                handleClick(e)
+                handleEditClick(entry._id)
+              }}
+            >
+              수정하기
+            </button>
           </div>
           <p className={styles.main}>
             {entry.expanded
@@ -83,8 +74,11 @@ const Review = ({
           </div>
           {entry.expanded && (
             <div className={styles.commentsSection} onClick={handleClick}>
-              {entry.comments.map((comment) => (
-                <div key={comment._id} className={styles.commentWrapper}>
+              {entry.comments.map((comment, index) => (
+                <div
+                  key={comment._id || index}
+                  className={styles.commentWrapper}
+                >
                   <div className={styles.commentHeader}>
                     <small>
                       <span className={styles.commentName}>
