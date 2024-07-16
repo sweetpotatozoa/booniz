@@ -195,7 +195,7 @@ class ReviewService {
   }
 
   //날짜별 커뮤니티 조회
-  async getReviewsByDate(date) {
+  async getReviewsByDate(date, userId) {
     //커뮤니티
     try {
       const startOfDay = moment(date)
@@ -241,6 +241,7 @@ class ReviewService {
           ...review,
           nickName: user.nickName,
           comments: reviewComments,
+          userId,
         }
       })
 
