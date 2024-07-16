@@ -38,7 +38,7 @@ const Review = ({
                 {entry.nickName}
               </div>
             ) : null}
-            <div>
+            <div className={styles.rightHeader}>
               <div className={styles.page}>
                 {entry.startPage}p~{entry.endPage}p
               </div>
