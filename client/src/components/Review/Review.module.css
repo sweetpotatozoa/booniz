@@ -129,3 +129,8 @@
 .commentWrapper:last-of-type {
   border-bottom: none;
 }
+
+.smallHeader {
+  display: flex;
+  flex-direction: row;
+}

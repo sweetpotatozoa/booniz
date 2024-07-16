@@ -84,6 +84,7 @@ class BackendApis {
       'POST',
       params,
     )
+    console.log('result:', result)
     return result
   }
 

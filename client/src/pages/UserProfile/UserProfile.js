@@ -52,14 +52,29 @@ const UserProfile = () => {
   const handleCommentSubmit = async (reviewId, content) => {
     try {
       const newComment = await BackendApis.createComment(reviewId, { content })
-      setUserData((prevState) => ({
-        ...prevState,
-        reviews: prevState.reviews.map((entry) =>
-          entry._id === reviewId
-            ? { ...entry, comments: [...entry.comments, newComment] }
-            : entry,
-        ),
-      }))
+      console.log('새 댓글:', newComment)
+      if (newComment && newComment.insertedId) {
+        setUserData((prevState) => ({
+          ...prevState,
+          reviews: prevState.reviews.map((entry) =>
+            entry._id === reviewId
+              ? {
+                  ...entry,
+                  comments: [
+                    ...entry.comments,
+                    {
+                      ...newComment,
+                      _id: newComment.insertedId,
+                      content: content, // 댓글 내용을 명시적으로 추가
+                      userNickName: '사용자 닉네임', // 필요에 따라 추가
+                      createdAt: new Date().toISOString(), // 현재 시간으로 설정
+                    },
+                  ],
+                }
+              : entry,
+          ),
+        }))
+      }
     } catch (error) {
       console.error('댓글 제출 중 오류 발생:', error)
     }
