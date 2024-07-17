@@ -196,7 +196,7 @@ class ReviewService {
   }
 
   //날짜별 커뮤니티 조회
-  async getReviewsByDate(date) {
+  async getReviewsByDate(date, userId) {
     //커뮤니티
     try {
       const startOfDay = moment(date)
@@ -242,6 +242,9 @@ class ReviewService {
           ...review,
           nickName: user.nickName,
           comments: reviewComments,
+          isLiked: review.likedBy.some((id) => id.toString() === userId),
+          likeCount: review.likedBy.length,
+          userId: new ObjectId(userId),
         }
       })
 
@@ -291,7 +294,7 @@ class ReviewService {
       const streak = await this.calculateStreak(userId)
 
       return {
-        userId: user._id,
+        userId: new ObjectId(userId),
         nickName: user.nickName,
         completionRate: (user.readPages / user.allPages) * 100,
         reviews: reviewsWithComments,
@@ -344,7 +347,7 @@ class ReviewService {
       const streak = await this.calculateStreak(userId)
 
       return {
-        userId: user._id,
+        userId: new ObjectId(userId),
         nickName: user.nickName,
         completionRate: (user.readPages / user.allPages) * 100,
         reviews: reviewsWithComments,
@@ -431,7 +434,7 @@ class ReviewService {
   }
 
   //좋아요 누르기
-  async likeReview(reviewId, userId) {
+  async toggleLike(reviewId, userId) {
     try {
       const review = await ReviewsRepo.getReviewById(reviewId)
       let updatedReview
@@ -447,7 +450,14 @@ class ReviewService {
         message = '좋아요 +1'
       }
 
-      return { message, review: updatedReview }
+      return {
+        message,
+        review: {
+          ...updatedReview,
+          isLiked: updatedReview.likedBy.some((id) => id.toString() === userId),
+          likeCount: updatedReview.likedBy.length,
+        },
+      }
     } catch (error) {
       console.error('Error in likeReview service:', error)
       throw error

@@ -169,9 +169,9 @@ class ReviewController {
   //날짜별 커뮤니티 조회
   async getReviewsByDate(req, res) {
     const date = req.params.date
-    // const userId = req.user.id
+    const userId = req.user.id
     try {
-      const result = await ReviewService.getReviewsByDate(date)
+      const result = await ReviewService.getReviewsByDate(date, userId)
       res.status(200).json(result)
     } catch (error) {
       res.status(400).json({ message: '커뮤니티 조회 중 오류가 발생했습니다.' })
@@ -233,7 +233,7 @@ class ReviewController {
     const userId = req.user.id
 
     try {
-      const result = await ReviewService.likeReview(reviewId, userId)
+      const result = await ReviewService.toggleLike(reviewId, userId)
       res.status(200).json(result)
     } catch (error) {
       console.error('Error in likeReview controller:', error)
