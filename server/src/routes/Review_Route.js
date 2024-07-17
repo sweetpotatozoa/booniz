@@ -21,7 +21,11 @@ router.put(
 
 router.delete('/delete/:reviewId', wrapAsync(ReviewController.deleteMyReview)) //기록 삭제하기
 
-router.get('/community/:date', wrapAsync(ReviewController.getReviewsByDate)) //날짜별 커뮤니티 내용 불러오기
+router.get(
+  '/community/:date',
+  fakeAuth,
+  wrapAsync(ReviewController.getReviewsByDate),
+) //날짜별 커뮤니티 내용 불러오기
 
 router.get(
   '/userProfile/:userId',

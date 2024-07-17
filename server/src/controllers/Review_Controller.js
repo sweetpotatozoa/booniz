@@ -232,7 +232,7 @@ class ReviewController {
     const userId = req.user.id
 
     try {
-      const result = await ReviewService.likeReview(reviewId, userId)
+      const result = await ReviewService.toggleLike(reviewId, userId)
       res.status(200).json(result)
     } catch (error) {
       console.error('Error in likeReview controller:', error)
