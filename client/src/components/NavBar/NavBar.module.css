@@ -35,3 +35,7 @@
   background-color: #ff7342;
   color: #282828;
 }
+
+.logo {
+  cursor: pointer;
+}

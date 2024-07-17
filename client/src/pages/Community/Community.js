@@ -20,7 +20,7 @@ const Community = () => {
 
   const handleEntryClick = (id) => {
     setUserData((prevDatas) =>
-      prevDatas.map((entry) =>
+      prevDatas.reviews.map((entry) =>
         entry._id === id
           ? { ...entry, expanded: !entry.expanded }
           : { ...entry, expanded: false },
