@@ -23,7 +23,14 @@ class CommentsRepo {
   // 댓글 생성
   async createComment(commentData) {
     const result = await this.collection.insertOne(commentData)
-    return result
+    if (result.acknowledged) {
+      return {
+        ...commentData,
+        _id: result.insertedId,
+      }
+    } else {
+      throw new Error('댓글 생성에 실패했습니다.')
+    }
   }
 
   // 내 댓글 삭제하기
