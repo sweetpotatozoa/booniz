@@ -66,13 +66,25 @@ class ReviewsRepo {
   //당일 리뷰 개수 계산하기
   async getTodayReviewCount(userId) {
     try {
-      const today = moment().tz('Asia/Seoul').startOf('day').toDate()
+      const startOfDay = moment()
+        .tz('Asia/Seoul')
+        .startOf('day')
+        .format('YYYY-MM-DD HH:mm:ss')
+      const endOfDay = moment()
+        .tz('Asia/Seoul')
+        .endOf('day')
+        .format('YYYY-MM-DD HH:mm:ss')
+
       const count = await this.collection.countDocuments({
         userId: new ObjectId(userId),
-        createdAt: { $gte: today },
+        createdAt: {
+          $gte: startOfDay,
+          $lte: endOfDay,
+        },
       })
       return count
     } catch (error) {
+      console.error('Error in getTodayReviewCount:', error)
       throw error
     }
   }

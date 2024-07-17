@@ -129,7 +129,7 @@ class ReviewService {
       }
 
       const todayReviewCount = await ReviewsRepo.getTodayReviewCount(userId)
-      if (todayReviewCount > 0) {
+      if (todayReviewCount >= 1) {
         throw new Error('하루에 1개의 글만 작성하실 수 있습니다.')
       }
 
@@ -235,6 +235,7 @@ class ReviewService {
           .map((comment) => ({
             ...comment,
             nickName: userMap[comment.userId.toString()]?.nickName,
+            userId: comment.userId,
           }))
 
         const user = userMap[review.userId.toString()]
@@ -244,6 +245,7 @@ class ReviewService {
           comments: reviewComments,
           isLiked: review.likedBy.some((id) => id.toString() === userId),
           likeCount: review.likedBy.length,
+          userId: review.userId,
         }
       })
 
@@ -287,10 +289,12 @@ class ReviewService {
             ...comment,
             nickName:
               userMap[comment.userId.toString()]?.nickName || 'Unknown User',
+            userId: comment.userId,
           }))
         return {
           ...review,
           comments: reviewComments,
+          userId: review.userId,
         }
       })
       const streak = await this.calculateStreak(userId)
@@ -339,10 +343,12 @@ class ReviewService {
             ...comment,
             nickName:
               userMap[comment.userId.toString()]?.nickName || 'Unknown User',
+            userId: comment.userId,
           }))
         return {
           ...review,
           comments: reviewComments,
+          userId: review.userId,
         }
       })
 
