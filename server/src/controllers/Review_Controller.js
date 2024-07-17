@@ -192,7 +192,7 @@ class ReviewController {
         res.status(400).json({ message: '유효하지 않은 리뷰 아이디 입니다.' })
         return
       }
-      const { title, content, startPage, endPage } = req.body
+      const { title, content, startPage, endPage, updatedAt } = req.body
 
       const updatedReview = await ReviewService.updateMyReview(
         reviewId,
@@ -202,6 +202,7 @@ class ReviewController {
           content,
           startPage,
           endPage,
+          updatedAt,
         },
       )
 
