@@ -73,7 +73,7 @@ class BackendApis {
 
   async getCommunityReviews(date) {
     const result = await fetcher(`/api/review/community/${date}`, '', 'GET')
-    console.log(result)
+    // console.log(result)
     return result
   }
 
@@ -131,7 +131,6 @@ class BackendApis {
       this.token,
       'POST',
     )
-    console.log(result)
     return result
   }
 

@@ -10,12 +10,17 @@ import Review from '../../components/Review/Review'
 
 const Community = () => {
   const [selectedDate, setSelectedDate] = useState(new Date())
-  const [reviews, setReviews] = useState([])
+  const [userData, setUserData] = useState({
+    reviews: [],
+    userId: '',
+  })
   const navigate = useNavigate()
 
+  console.log('userData:', userData)
+
   const handleEntryClick = (id) => {
-    setReviews((prevReviews) =>
-      prevReviews.map((entry) =>
+    setUserData((prevDatas) =>
+      prevDatas.map((entry) =>
         entry._id === id
           ? { ...entry, expanded: !entry.expanded }
           : { ...entry, expanded: false },
@@ -27,8 +32,8 @@ const Community = () => {
     try {
       const newComment = await BackendApis.createComment(reviewId, { content })
       if (newComment && newComment.insertedId) {
-        setReviews((prevReviews) =>
-          prevReviews.map((entry) =>
+        setUserData((prevDatas) =>
+          prevDatas.map((entry) =>
             entry._id === reviewId
               ? {
                   ...entry,
@@ -54,7 +59,7 @@ const Community = () => {
     try {
       const result = await BackendApis.deleteComment(commentId)
       if (result) {
-        setReviews((prevEntries) =>
+        setUserData((prevEntries) =>
           prevEntries.map((entry) =>
             entry._id === reviewId
               ? {
@@ -92,7 +97,7 @@ const Community = () => {
         const result = await BackendApis.getCommunityReviews(formattedDate)
         if (result) {
           console.log('result:', result)
-          setReviews(result)
+          setUserData(result)
         }
       } catch (error) {
         console.error('Error fetching reviews:', error)
@@ -127,8 +132,8 @@ const Community = () => {
         </div>
 
         <div className={styles.diaryContainer}>
-          {reviews.length > 0 ? (
-            reviews.map((entry) => {
+          {userData.reviews.length > 0 ? (
+            userData.reviews.map((entry) => {
               const reviewDate = moment(entry.createdAt)
               const dayDifference =
                 reviewDate.diff(challengeStartDate, 'days') + 1
@@ -136,9 +141,8 @@ const Community = () => {
                 <Review
                   key={entry._id}
                   entry={entry}
-                  userId={fakeAuth}
-                  // reviews={reviews}
-                  // setReviews={setReviews} -> userData로 받으면 수정하기. 제발!
+                  userData={userData}
+                  setUserData={setUserData}
                   dayDifference={dayDifference}
                   handleEntryClick={handleEntryClick}
                   handleEditClick={() => {}} // 필요 시 구현
