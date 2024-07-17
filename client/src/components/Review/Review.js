@@ -111,6 +111,17 @@ const Review = ({
                 수정하기
               </button>
             )}
+            {userData.userId === entry.userId && (
+              <button
+                className={styles.reviewDelete}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleDeleteClick()
+                }}
+              >
+                삭제하기
+              </button>
+            )}
           </div>
           <p className={styles.main}>
             {entry.expanded
@@ -133,17 +144,6 @@ const Review = ({
                 {entry.comments.length}개
               </div>
             </div>
-            {userData.userId === entry.userId && (
-              <button
-                className={styles.reviewDelete}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleDeleteClick()
-                }}
-              >
-                삭제하기
-              </button>
-            )}
           </div>
           {entry.expanded && (
             <div className={styles.commentsSection} onClick={handleClick}>
