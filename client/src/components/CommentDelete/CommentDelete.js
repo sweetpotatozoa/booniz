@@ -1,7 +1,12 @@
 import React from 'react'
 import styles from './CommentDelete.module.css'
 
-const CommentDelete = ({ reviewId, commentId, handleDeleteComment }) => {
+const CommentDelete = ({
+  userId,
+  reviewId,
+  commentId,
+  handleDeleteComment,
+}) => {
   console.log(commentId)
   return (
     <button

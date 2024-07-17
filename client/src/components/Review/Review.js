@@ -159,6 +159,7 @@ const Review = ({
                       </span>
                     </small>
                     <CommentDelete
+                      userId={userData.userId}
                       reviewId={entry._id}
                       commentId={comment._id}
                       handleDeleteComment={handleDeleteComment}
