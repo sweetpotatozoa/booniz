@@ -57,7 +57,7 @@ class ReviewsRepo {
       const result = await this.collection.deleteOne({
         _id: new ObjectId(reviewId),
       })
-      return
+      return result
     } catch (error) {
       throw error
     }

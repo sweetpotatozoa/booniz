@@ -185,6 +185,7 @@ class ReviewService {
     }
     try {
       const result = await ReviewsRepo.deleteMyReview(reviewId)
+      console.log(result)
       if (!result) {
         throw new Error('해당 기록을 찾을 수 없습니다.')
       }
@@ -195,7 +196,7 @@ class ReviewService {
   }
 
   //날짜별 커뮤니티 조회
-  async getReviewsByDate(date, userId) {
+  async getReviewsByDate(date) {
     //커뮤니티
     try {
       const startOfDay = moment(date)
@@ -241,7 +242,6 @@ class ReviewService {
           ...review,
           nickName: user.nickName,
           comments: reviewComments,
-          userId,
         }
       })
 
