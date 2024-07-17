@@ -130,7 +130,7 @@ class ReviewController {
     }
     try {
       const result = await ReviewService.deleteMyReview(reviewId)
-      res.status(200).json(result)
+      res.status(200).json({ message: '일지 삭제 성공' })
     } catch (error) {
       res.status(400).json({ error: '기록 삭제 중 오류가 발생했습니다.' })
     }
@@ -183,6 +183,7 @@ class ReviewController {
     try {
       const reviewId = req.params.reviewId
       const userId = req.user.id
+      console.log('userId', userId, 'reviewId', reviewId)
       if (!userId || !isObjectId(userId)) {
         res.status(400).json({ message: '유효하지 않은 아이디 입니다.' })
         return

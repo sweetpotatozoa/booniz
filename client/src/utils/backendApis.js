@@ -50,7 +50,7 @@ class BackendApis {
 
   async getMyProfile() {
     const result = await fetcher('/api/review/myProfile', this.token, 'GET')
-    console.log(result)
+    // console.log(result)
     return result
   }
 
@@ -61,13 +61,13 @@ class BackendApis {
   }
 
   async getUserProfile(userId) {
-    console.log('Fetching profile for userId:', userId) // Debugging
+    // console.log('Fetching profile for userId:', userId) // Debugging
     const result = await fetcher(
       `/api/review/userProfile/${userId}`,
       this.token,
       'GET',
     )
-    console.log('Profile fetch result:', result) // Debugging
+    // console.log('Profile fetch result:', result) // Debugging
     return result
   }
 
@@ -84,6 +84,7 @@ class BackendApis {
       'POST',
       params,
     )
+    console.log('result:', result)
     return result
   }
 
@@ -107,18 +108,41 @@ class BackendApis {
     return result
   }
 
-  async updateMyReview(reviewId, updateData) {
+  async updateMyReview(method = 'PUT', params = {}) {
     const result = await fetcher(
-      `/api/review/edit/${reviewId}`,
+      `/api/review/edit/${params.reviewId}`,
       this.token,
-      'PUT',
-      updateData,
+      method,
+      params.reviewData,
     )
+    console.log(result)
     return result
   }
 
   async getLikedReviews() {
     const result = await fetcher('/api/review/liked', '', 'GET')
+    return result
+  }
+
+  //좋아요
+  async likeReview(reviewId) {
+    const result = await fetcher(
+      `/api/review/like/${reviewId}`,
+      this.token,
+      'POST',
+    )
+    console.log(result)
+    return result
+  }
+
+  //글삭제
+  async deleteReview(reviewId) {
+    const result = await fetcher(
+      `/api/review/delete/${reviewId}`,
+      this.token,
+      'DELETE',
+    )
+    console.log(result)
     return result
   }
 }

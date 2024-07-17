@@ -4,17 +4,16 @@ import BackendApis from '../../utils/backendApis'
 import NavBar from '../../components/NavBar/NavBar'
 import styles from './MyProfile.module.css'
 import moment from 'moment'
-import getConsecutiveDays from '../../utils/getConsecutiveDays'
 import Review from '../../components/Review/Review'
 import ProfileInfo from '../../components/ProfileInfo.js/ProfileInfo'
 
 const MyProfile = () => {
   const [userData, setUserData] = useState({
-    userId: '',
     nickName: '',
+    readPages: 0, //읽은 쪽수
     completionRate: 0,
     reviews: [],
-    dailyStatus: [],
+    streak: 0, //연속일차 계산
   })
   const navigate = useNavigate()
 
@@ -102,6 +101,7 @@ const MyProfile = () => {
       try {
         const result = await BackendApis.getMyProfile()
         if (result) {
+          // console.log('result:', result)
           setUserData(result)
         }
       } catch (error) {
@@ -113,13 +113,8 @@ const MyProfile = () => {
   }, [])
 
   const challengeStartDate = moment('2024-07-07')
-  const consecutiveDays = getConsecutiveDays(userData.dailyStatus)
-  const latestEndPage =
-    userData.reviews.length > 0
-      ? userData.reviews.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-        )[0].endPage
-      : 0 // 가장 최근 리뷰의 endPage를 얻음. 리뷰가 없으면 0.
+
+  const fakeAuth = '6688390aa9bc9999444e1bb0'
 
   return (
     <>
@@ -132,9 +127,9 @@ const MyProfile = () => {
           </h1>
           <ProfileInfo
             nickName={userData.nickName}
-            consecutiveDays={consecutiveDays}
+            consecutiveDays={userData.streak}
             completionRate={userData.completionRate}
-            readPages={latestEndPage}
+            readPages={userData.readPages}
           />
         </div>
         <div className={styles.reviewContainer}>
@@ -147,6 +142,9 @@ const MyProfile = () => {
                 <Review
                   key={entry._id}
                   entry={entry}
+                  userData={userData}
+                  setUserData={setUserData}
+                  userId={fakeAuth} // userData에서 userId가 반환될 때는 이 props가 필요 없다.
                   dayDifference={dayDifference}
                   handleEntryClick={handleEntryClick}
                   handleEditClick={handleEditClick}
@@ -157,6 +155,7 @@ const MyProfile = () => {
                   handleCommentSubmit={(reviewId, content) =>
                     handleCommentSubmit(reviewId, content)
                   }
+                  myProfile={true}
                 />
               )
             })

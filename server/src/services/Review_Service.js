@@ -185,6 +185,7 @@ class ReviewService {
     }
     try {
       const result = await ReviewsRepo.deleteMyReview(reviewId)
+      console.log(result)
       if (!result) {
         throw new Error('해당 기록을 찾을 수 없습니다.')
       }

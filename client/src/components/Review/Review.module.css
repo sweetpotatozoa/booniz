@@ -6,10 +6,20 @@
   cursor: pointer;
 }
 
+.nickName {
+  font-size: 20px;
+  font-weight: bold;
+}
+
 .day {
-  font-size: 24px;
+  font-size: 13px;
   font-weight: bold;
   color: #282828;
+  margin-left: 20px;
+  padding: 8px 20px;
+  background-color: #ff7342;
+  border: 1px solid #282828;
+  border-radius: 100px;
 }
 
 .content {
@@ -128,4 +138,14 @@
 
 .commentWrapper:last-of-type {
   border-bottom: none;
+}
+
+.smallHeader {
+  display: flex;
+  flex-direction: row;
+}
+.rightHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
