@@ -17,10 +17,20 @@ const NavBar = () => {
       : {}
   }
 
+  const handleLogoClick = () => {
+    navigate('/')
+  }
+
   return (
     <nav className={styles.navbar}>
       <div className='logo'>
-        <img src='/images/logo.svg' alt='Logo' />
+        <img
+          onClick={() => {
+            handleLogoClick()
+          }}
+          src='/images/logo.svg'
+          alt='Logo'
+        />
       </div>
       <div className={styles.links}>
         <div
