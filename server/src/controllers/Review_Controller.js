@@ -130,7 +130,7 @@ class ReviewController {
     }
     try {
       const result = await ReviewService.deleteMyReview(reviewId)
-      res.status(200).json(result)
+      res.status(200).json({ message: '일지 삭제 성공' })
     } catch (error) {
       res.status(400).json({ error: '기록 삭제 중 오류가 발생했습니다.' })
     }
@@ -169,9 +169,9 @@ class ReviewController {
   //날짜별 커뮤니티 조회
   async getReviewsByDate(req, res) {
     const date = req.params.date
-    const userId = req.user.id
+    // const userId = req.user.id
     try {
-      const result = await ReviewService.getReviewsByDate(date, userId)
+      const result = await ReviewService.getReviewsByDate(date)
       res.status(200).json(result)
     } catch (error) {
       res.status(400).json({ message: '커뮤니티 조회 중 오류가 발생했습니다.' })
