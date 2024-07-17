@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import truncateContent from '../../utils/truncateContent'
 import DatePicker from 'react-datepicker'
 import NavBar from '../../components/NavBar/NavBar'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -90,10 +89,9 @@ const Community = () => {
     const fetchReviews = async () => {
       try {
         const formattedDate = selectedDate.toISOString().split('T')[0]
-        console.log('Fetching reviews for date:', formattedDate)
         const result = await BackendApis.getCommunityReviews(formattedDate)
         if (result) {
-          console.log('Fetched reviews:', result)
+          console.log('result:', result)
           setReviews(result)
         }
       } catch (error) {
@@ -105,7 +103,7 @@ const Community = () => {
   }, [selectedDate])
 
   const challengeStartDate = moment('2024-07-07')
-
+  const fakeAuth = '6688390aa9bc9999444e1bb0'
   return (
     <>
       <NavBar />
@@ -138,6 +136,9 @@ const Community = () => {
                 <Review
                   key={entry._id}
                   entry={entry}
+                  userId={fakeAuth}
+                  // reviews={reviews}
+                  // setReviews={setReviews} -> userData로 받으면 수정하기. 제발!
                   dayDifference={dayDifference}
                   handleEntryClick={handleEntryClick}
                   handleEditClick={() => {}} // 필요 시 구현

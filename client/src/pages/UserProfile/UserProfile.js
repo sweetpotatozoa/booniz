@@ -4,7 +4,6 @@ import BackendApis from '../../utils/backendApis'
 import NavBar from '../../components/NavBar/NavBar'
 import styles from './UserProfile.module.css'
 import moment from 'moment'
-import getConsecutiveDays from '../../utils/getConsecutiveDays'
 import Review from '../../components/Review/Review'
 import ProfileInfo from '../../components/ProfileInfo.js/ProfileInfo'
 
@@ -12,11 +11,11 @@ const UserProfile = () => {
   const { userId } = useParams()
   const navigate = useNavigate()
   const [userData, setUserData] = useState({
-    userId: '',
     nickName: '',
     completionRate: 0,
     reviews: [],
-    dailyStatus: [], // Ensure this is initialized
+    readPages: 0,
+    streak: 0,
   })
 
   const fetchUserProfile = async (id) => {
@@ -27,6 +26,7 @@ const UserProfile = () => {
     try {
       const result = await BackendApis.getUserProfile(id)
       if (result) {
+        // console.log('result:', result)
         setUserData(result)
       }
     } catch (error) {
@@ -108,13 +108,6 @@ const UserProfile = () => {
   }
 
   const challengeStartDate = moment('2024-07-07')
-  const consecutiveDays = getConsecutiveDays(userData.dailyStatus)
-  const latestEndPage =
-    userData.reviews.length > 0
-      ? userData.reviews.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-        )[0].endPage
-      : 0 // 가장 최근 리뷰의 endPage를 얻음. 리뷰가 없으면 0.
 
   return (
     <>
@@ -124,9 +117,9 @@ const UserProfile = () => {
           <h1>{userData.nickName}님의 프로필</h1>
           <ProfileInfo
             nickName={userData.nickName}
-            consecutiveDays={consecutiveDays}
+            consecutiveDays={userData.streak}
             completionRate={userData.completionRate}
-            readPages={latestEndPage}
+            readPages={userData.readPages}
           />
         </div>
         <div className={styles.reviewContainer}>
@@ -139,6 +132,9 @@ const UserProfile = () => {
                 <Review
                   key={entry._id}
                   entry={entry}
+                  userId={userId}
+                  userData={userData}
+                  setUserData={setUserData}
                   dayDifference={dayDifference}
                   handleEntryClick={handleEntryClick}
                   handleEditClick={handleEditClick}
