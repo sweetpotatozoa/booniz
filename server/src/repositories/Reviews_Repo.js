@@ -162,9 +162,15 @@ class ReviewsRepo {
 
   // 내 리뷰 수정하기
   async updateMyReview(reviewId, updateData) {
-    const result = await this.collection.updateOne(
+    const result = await this.collection.findOneAndUpdate(
       { _id: new ObjectId(reviewId) },
-      { $set: updateData },
+      {
+        $set: {
+          ...updateData,
+          updatedAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
+        },
+      },
+      { returnDocument: 'after' },
     )
     return result
   }
@@ -179,12 +185,20 @@ class ReviewsRepo {
 
   //좋아요
   async addLikeToReview(reviewId, userId) {
-    const result = await this.collection.findOneAndUpdate(
-      { _id: new ObjectId(reviewId) },
-      { $addToSet: { likedBy: new ObjectId(userId) } },
-      { returnDocument: 'after' },
-    )
-    return result.value
+    try {
+      const result = await this.collection.findOneAndUpdate(
+        { _id: new ObjectId(reviewId) },
+        { $addToSet: { likedBy: new ObjectId(userId) } },
+        { returnDocument: 'after', upsert: false },
+      )
+      if (!result.value && !result.ok) {
+        throw new Error('리뷰를 찾을 수 없거나 업데이트에 실패했습니다.')
+      }
+      return result.value || result
+    } catch (error) {
+      console.error('Error in addLikeToReview:', error)
+      throw error
+    }
   }
 
   async getReviewById(reviewId) {

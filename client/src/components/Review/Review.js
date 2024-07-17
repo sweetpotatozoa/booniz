@@ -118,20 +118,20 @@ const Review = ({
               : truncateContent(entry.content, 150)}
           </p>
           <div className={styles.bottom}>
-            <div
-              onClick={(e) => {
-                handleClick(e)
-                handleLikeClick()
-              }}
-            >
-              <div>
-                <img src='/images/Heart_01.svg' alt='Heart Icon'></img>
-              </div>
-              {likedBy.length}개
-            </div>
             <div>
-              <img src='/images/Chat.svg' alt='Chat Icon'></img>
-              {entry.comments.length}개
+              <div
+                onClick={(e) => {
+                  handleClick(e)
+                  handleLikeClick()
+                }}
+              >
+                <img src='/images/Heart_01.svg' alt='Heart Icon'></img>
+                {likedBy.length}개
+              </div>
+              <div>
+                <img src='/images/Chat.svg' alt='Chat Icon'></img>
+                {entry.comments.length}개
+              </div>
             </div>
             {userData.userId === entry.userId && (
               <button
