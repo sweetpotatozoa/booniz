@@ -101,27 +101,29 @@ const Review = ({
               <h3>{entry.title}</h3>
               <small>{reviewDate.format('YYYY.MM.DD')}</small>
             </div>
-            {myProfile && (
-              <button
-                onClick={(e) => {
-                  handleClick(e)
-                  handleEditClick(entry._id)
-                }}
-              >
-                수정하기
-              </button>
-            )}
-            {userData.userId === entry.userId && (
-              <button
-                className={styles.reviewDelete}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleDeleteClick()
-                }}
-              >
-                삭제하기
-              </button>
-            )}
+            <div>
+              {userData.userId === entry.userId && (
+                <button
+                  onClick={(e) => {
+                    handleClick(e)
+                    handleEditClick(entry._id)
+                  }}
+                >
+                  수정하기
+                </button>
+              )}
+              {userData.userId === entry.userId && (
+                <button
+                  className={styles.reviewDelete}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleDeleteClick()
+                  }}
+                >
+                  삭제하기
+                </button>
+              )}
+            </div>
           </div>
           <p className={styles.main}>
             {entry.expanded

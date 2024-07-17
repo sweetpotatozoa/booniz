@@ -23,7 +23,7 @@ const NavBar = () => {
 
   return (
     <nav className={styles.navbar}>
-      <div className='logo'>
+      <div className={styles.logo}>
         <img
           onClick={() => {
             handleLogoClick()
