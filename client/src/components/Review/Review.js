@@ -67,12 +67,14 @@ const Review = ({
   return (
     <div key={entry._id} className={styles.reviewEntry}>
       <div onClick={() => handleEntryClick(entry._id)}>
-        <div className={styles.upHeader}>
-          <div className={styles.day1}>{dayDifference}일차 독서기록</div>
-          <div className={styles.page1}>
-            {entry.startPage}p~{entry.endPage}p
+        {showNickName ? null : (
+          <div className={styles.upHeader}>
+            <div className={styles.day1}>{dayDifference}일차 독서기록</div>
+            <div className={styles.page1}>
+              {entry.startPage}p~{entry.endPage}p
+            </div>
           </div>
-        </div>
+        )}
         <div className={styles.content}>
           <div className={styles.header}>
             {showNickName ? (
