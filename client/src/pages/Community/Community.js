@@ -12,15 +12,11 @@ const Community = () => {
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [userData, setUserData] = useState({
     reviews: [],
-    nickName: '',
-    comments: [],
-    isLiked: [],
-    likeCount: '',
     userId: '',
   })
   const navigate = useNavigate()
 
-  console.log(userData)
+  console.log('userData:', userData)
 
   const handleEntryClick = (id) => {
     setUserData((prevDatas) =>
@@ -136,8 +132,8 @@ const Community = () => {
         </div>
 
         <div className={styles.diaryContainer}>
-          {userData.length > 0 ? (
-            userData.map((entry) => {
+          {userData.reviews.length > 0 ? (
+            userData.reviews.map((entry) => {
               const reviewDate = moment(entry.createdAt)
               const dayDifference =
                 reviewDate.diff(challengeStartDate, 'days') + 1
@@ -145,7 +141,6 @@ const Community = () => {
                 <Review
                   key={entry._id}
                   entry={entry}
-                  userId={fakeAuth}
                   userData={userData}
                   setUserData={setUserData}
                   dayDifference={dayDifference}

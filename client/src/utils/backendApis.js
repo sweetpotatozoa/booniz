@@ -73,7 +73,7 @@ class BackendApis {
 
   async getCommunityReviews(date) {
     const result = await fetcher(`/api/review/community/${date}`, '', 'GET')
-    console.log(result)
+    // console.log(result)
     return result
   }
 
@@ -131,7 +131,6 @@ class BackendApis {
       this.token,
       'POST',
     )
-    console.log('댓글추가 오류:', result)
     return result
   }
 
