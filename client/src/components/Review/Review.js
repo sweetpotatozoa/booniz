@@ -1,21 +1,27 @@
 import React from 'react'
 import moment from 'moment'
+import { useState } from 'react'
 import truncateContent from '../../utils/truncateContent'
 import CommentForm from '../../components/CommentForm/CommentForm'
 import CommentDelete from '../../components/CommentDelete/CommentDelete'
 import styles from './Review.module.css'
+import BackendApis from '../../utils/backendApis'
 
 const Review = ({
   entry,
+  userId, //MyProfile.js랑 UserProfile.js랑 community.js에서 데이터 받을 때 userId가 추가되면 이거 필요없고 userData.userId하면 됨
   dayDifference,
+  userData,
+  setUserData,
   handleEntryClick,
   handleEditClick,
-  handleDeleteClick,
   handleDeleteComment,
   handleCommentSubmit,
   handleNicknameClick,
   showNickName = false,
+  myProfile = false,
 }) => {
+  const [likedBy, setLikedBy] = useState(entry.likedBy)
   const reviewDate = moment(entry.createdAt)
 
   //   console.log(entry)
@@ -23,34 +29,78 @@ const Review = ({
     e.stopPropagation()
   }
 
+  const handleLikeClick = async () => {
+    try {
+      const response = await BackendApis.likeReview(entry._id)
+      if (response && response.message) {
+        if (response.message === '좋아요 +1') {
+          setLikedBy([...likedBy, 'currentUserId']) // Replace 'currentUserId' with the actual user ID from your context or state
+        } else {
+          setLikedBy(likedBy.filter((id) => id !== 'currentUserId')) // Replace 'currentUserId' with the actual user ID
+        }
+      }
+    } catch (error) {
+      console.error('Error liking the review:', error)
+    }
+  }
+
+  const handleDeleteClick = async () => {
+    try {
+      const response = await BackendApis.deleteReview(entry._id)
+      if (response && response.message === '일지 삭제 성공') {
+        console.log('Review deleted successfully')
+        const updatedReviews = userData.reviews.filter(
+          (reviewEntry) => reviewEntry._id !== entry._id,
+        )
+
+        // setUserData를 사용하여 업데이트
+        setUserData({
+          ...userData,
+          reviews: updatedReviews,
+        })
+      }
+    } catch (error) {
+      console.error('Error deleting the review:', error)
+    }
+  }
+
   return (
     <div key={entry._id} className={styles.reviewEntry}>
       <div onClick={() => handleEntryClick(entry._id)}>
+        <div className={styles.upHeader}>
+          <div className={styles.day1}>{dayDifference}일차 독서기록</div>
+          <div className={styles.page1}>
+            {entry.startPage}p~{entry.endPage}p
+          </div>
+        </div>
         <div className={styles.content}>
           <div className={styles.header}>
             {showNickName ? (
-              <div
-                className={styles.nickName}
-                onClick={() => {
-                  handleNicknameClick(entry.userId)
-                }}
-              >
-                {entry.nickName}
-              </div>
+              <>
+                <div
+                  className={styles.nickName}
+                  onClick={(e) => {
+                    handleClick(e)
+                    handleNicknameClick(entry.userId)
+                  }}
+                >
+                  {entry.nickName}
+                </div>
+                <div className={styles.rightHeader}>
+                  <div className={styles.page}>
+                    {entry.startPage}p~{entry.endPage}p
+                  </div>
+                  <div className={styles.day}>{dayDifference}일차</div>
+                </div>
+              </>
             ) : null}
-            <div className={styles.rightHeader}>
-              <div className={styles.page}>
-                {entry.startPage}p~{entry.endPage}p
-              </div>
-              <div className={styles.day}>{dayDifference}일차</div>
-            </div>
           </div>
           <div className={styles.contentInfo}>
             <div className={styles.top}>
               <h3>{entry.title}</h3>
               <small>{reviewDate.format('YYYY.MM.DD')}</small>
             </div>
-            {showNickName ? null : (
+            {myProfile && (
               <button
                 onClick={(e) => {
                   handleClick(e)
@@ -67,14 +117,32 @@ const Review = ({
               : truncateContent(entry.content, 150)}
           </p>
           <div className={styles.bottom}>
-            <div>
-              <img src='/images/Heart_01.svg' alt='Heart Icon'></img>{' '}
-              {entry.likedBy.length}개
+            <div
+              onClick={(e) => {
+                handleClick(e)
+                handleLikeClick()
+              }}
+            >
+              <div>
+                <img src='/images/Heart_01.svg' alt='Heart Icon'></img>
+              </div>
+              {likedBy.length}개
             </div>
             <div>
-              <img src='/images/Chat.svg' alt='Chat Icon'></img>{' '}
+              <img src='/images/Chat.svg' alt='Chat Icon'></img>
               {entry.comments.length}개
             </div>
+            {userId === entry.userId && (
+              <button
+                className={styles.reviewDelete}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleDeleteClick()
+                }}
+              >
+                삭제하기
+              </button>
+            )}
           </div>
           {entry.expanded && (
             <div className={styles.commentsSection} onClick={handleClick}>
