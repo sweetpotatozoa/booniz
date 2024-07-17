@@ -129,7 +129,7 @@ class ReviewService {
       }
 
       const todayReviewCount = await ReviewsRepo.getTodayReviewCount(userId)
-      if (todayReviewCount > 0) {
+      if (todayReviewCount >= 1) {
         throw new Error('하루에 1개의 글만 작성하실 수 있습니다.')
       }
 

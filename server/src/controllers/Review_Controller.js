@@ -96,6 +96,11 @@ class ReviewController {
           status: 400,
           message: '시작 페이지는 끝 페이지 보다 더 클 수 없습니다.',
         }),
+        '하루에 1개의 글만 작성하실 수 있습니다.': () => ({
+          status: 400,
+          message:
+            '오늘 이미 일지를 작성하셨습니다. 다음 일지는 내일 작성해 주세요.',
+        }),
       })
       res.status(status).json({ message })
     }
