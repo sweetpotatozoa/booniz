@@ -227,7 +227,7 @@ class ReviewService {
         return acc
       }, {})
 
-      const result = reviews.map((review) => {
+      const reviewsWithComments = reviews.map((review) => {
         const reviewComments = comments
           .filter(
             (comment) => comment.reviewId.toString() === review._id.toString(),
@@ -244,11 +244,13 @@ class ReviewService {
           comments: reviewComments,
           isLiked: review.likedBy.some((id) => id.toString() === userId),
           likeCount: review.likedBy.length,
-          userId: new ObjectId(userId),
         }
       })
 
-      return result
+      return {
+        reviews: reviewsWithComments,
+        userId: new ObjectId(userId),
+      }
     } catch (error) {
       console.error('Error in getReviewsByDate', error)
       throw error
