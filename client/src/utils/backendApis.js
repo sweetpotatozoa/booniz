@@ -131,7 +131,7 @@ class BackendApis {
       this.token,
       'POST',
     )
-    console.log(result)
+    console.log('댓글추가 오류:', result)
     return result
   }
 

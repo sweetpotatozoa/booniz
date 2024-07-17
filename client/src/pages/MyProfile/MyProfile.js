@@ -10,6 +10,7 @@ import ProfileInfo from '../../components/ProfileInfo.js/ProfileInfo'
 const MyProfile = () => {
   const [userData, setUserData] = useState({
     nickName: '',
+    userId: '',
     readPages: 0, //읽은 쪽수
     completionRate: 0,
     reviews: [],
@@ -114,8 +115,6 @@ const MyProfile = () => {
 
   const challengeStartDate = moment('2024-07-07')
 
-  const fakeAuth = '6688390aa9bc9999444e1bb0'
-
   return (
     <>
       <NavBar />
@@ -144,7 +143,6 @@ const MyProfile = () => {
                   entry={entry}
                   userData={userData}
                   setUserData={setUserData}
-                  userId={fakeAuth} // userData에서 userId가 반환될 때는 이 props가 필요 없다.
                   dayDifference={dayDifference}
                   handleEntryClick={handleEntryClick}
                   handleEditClick={handleEditClick}

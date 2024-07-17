@@ -9,7 +9,6 @@ import BackendApis from '../../utils/backendApis'
 
 const Review = ({
   entry,
-  userId, //MyProfile.js랑 UserProfile.js랑 community.js에서 데이터 받을 때 userId가 추가되면 이거 필요없고 userData.userId하면 됨
   dayDifference,
   userData,
   setUserData,
@@ -24,7 +23,7 @@ const Review = ({
   const [likedBy, setLikedBy] = useState(entry.likedBy)
   const reviewDate = moment(entry.createdAt)
 
-  //   console.log(entry)
+  console.log(entry)
   const handleClick = (e) => {
     e.stopPropagation()
   }
@@ -34,9 +33,9 @@ const Review = ({
       const response = await BackendApis.likeReview(entry._id)
       if (response && response.message) {
         if (response.message === '좋아요 +1') {
-          setLikedBy([...likedBy, 'currentUserId']) // Replace 'currentUserId' with the actual user ID from your context or state
+          setLikedBy([...likedBy, entry.userId]) // Replace 'currentUserId' with the actual user ID from your context or state
         } else {
-          setLikedBy(likedBy.filter((id) => id !== 'currentUserId')) // Replace 'currentUserId' with the actual user ID
+          setLikedBy(likedBy.filter((id) => id !== entry.userId)) // Replace 'currentUserId' with the actual user ID
         }
       }
     } catch (error) {
@@ -134,7 +133,7 @@ const Review = ({
               <img src='/images/Chat.svg' alt='Chat Icon'></img>
               {entry.comments.length}개
             </div>
-            {userId === entry.userId && (
+            {userData.userId === entry.userId && (
               <button
                 className={styles.reviewDelete}
                 onClick={(e) => {

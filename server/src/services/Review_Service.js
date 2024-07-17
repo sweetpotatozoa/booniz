@@ -439,7 +439,7 @@ class ReviewService {
       const review = await ReviewsRepo.getReviewById(reviewId)
       let updatedReview
       let message
-
+      // console.log(review)
       if (review.likedBy.some((id) => id.toString() === userId)) {
         console.log('Removing like')
         updatedReview = await ReviewsRepo.removeLikeFromReview(reviewId, userId)
@@ -447,6 +447,7 @@ class ReviewService {
       } else {
         console.log('Adding like')
         updatedReview = await ReviewsRepo.addLikeToReview(reviewId, userId)
+        console.log('updatedReview', updatedReview)
         message = '좋아요 +1'
       }
 
