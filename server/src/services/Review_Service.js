@@ -454,11 +454,7 @@ class ReviewService {
 
       return {
         message,
-        review: {
-          ...updatedReview,
-          isLiked: updatedReview.likedBy.some((id) => id.toString() === userId),
-          likeCount: updatedReview.likedBy.length,
-        },
+        review: updatedReview,
       }
     } catch (error) {
       console.error('Error in likeReview service:', error)
