@@ -16,24 +16,28 @@ const Community = () => {
   })
   const navigate = useNavigate()
 
-  console.log('userData:', userData)
+  console.log('userData Reviews:', userData.reviews)
 
   const handleEntryClick = (id) => {
-    setUserData((prevDatas) =>
-      prevDatas.reviews.map((entry) =>
-        entry._id === id
-          ? { ...entry, expanded: !entry.expanded }
-          : { ...entry, expanded: false },
-      ),
-    )
+    setUserData((prevData) => ({
+      ...prevData,
+      reviews: prevData.reviews
+        ? prevData.reviews.map((entry) =>
+            entry._id === id
+              ? { ...entry, expanded: !entry.expanded }
+              : { ...entry, expanded: false },
+          )
+        : [],
+    }))
   }
 
   const handleCommentSubmit = async (reviewId, content) => {
     try {
       const newComment = await BackendApis.createComment(reviewId, { content })
       if (newComment && newComment.insertedId) {
-        setUserData((prevDatas) =>
-          prevDatas.map((entry) =>
+        setUserData((prevData) => ({
+          ...prevData,
+          reviews: prevData.reviews.map((entry) =>
             entry._id === reviewId
               ? {
                   ...entry,
@@ -48,7 +52,7 @@ const Community = () => {
                 }
               : entry,
           ),
-        )
+        }))
       }
     } catch (error) {
       console.error('댓글 제출 중 오류 발생:', error)
@@ -59,8 +63,9 @@ const Community = () => {
     try {
       const result = await BackendApis.deleteComment(commentId)
       if (result) {
-        setUserData((prevEntries) =>
-          prevEntries.map((entry) =>
+        setUserData((prevData) => ({
+          ...prevData,
+          reviews: prevData.reviews.map((entry) =>
             entry._id === reviewId
               ? {
                   ...entry,
@@ -70,7 +75,7 @@ const Community = () => {
                 }
               : entry,
           ),
-        )
+        }))
       }
     } catch (error) {
       console.error('댓글 삭제 중 오류 발생:', error)
@@ -96,8 +101,11 @@ const Community = () => {
         const formattedDate = selectedDate.toISOString().split('T')[0]
         const result = await BackendApis.getCommunityReviews(formattedDate)
         if (result) {
-          console.log('result:', result)
-          setUserData(result)
+          // Ensure result.reviews is an array
+          setUserData({
+            ...result,
+            reviews: result.reviews || [],
+          })
         }
       } catch (error) {
         console.error('Error fetching reviews:', error)
@@ -108,7 +116,7 @@ const Community = () => {
   }, [selectedDate])
 
   const challengeStartDate = moment('2024-07-07')
-  const fakeAuth = '6688390aa9bc9999444e1bb0'
+
   return (
     <>
       <NavBar />
@@ -132,7 +140,7 @@ const Community = () => {
         </div>
 
         <div className={styles.diaryContainer}>
-          {userData.reviews.length > 0 ? (
+          {userData.reviews && userData.reviews.length > 0 ? (
             userData.reviews.map((entry) => {
               const reviewDate = moment(entry.createdAt)
               const dayDifference =
