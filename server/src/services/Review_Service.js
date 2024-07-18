@@ -401,7 +401,7 @@ class ReviewService {
       const comments = await CommentsRepo.getCommentsByReviewIds(reviewIds)
       const userIds = [...new Set(reviews.map((review) => review.userId))]
       const users = await UsersRepo.getUsersByIds(userIds)
-
+      const currentUser = await UsersRepo.getUserById(userId)
       const userMap = users.reduce((acc, user) => {
         acc[user._id.toString()] = {
           nickName: user.nickName,
@@ -429,10 +429,16 @@ class ReviewService {
           authorUserId: author.userId,
         }
       })
-
-      return result.sort(
+      const sortedResult = result.sort(
         (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt),
       )
+
+      const response = {
+        nickName: currentUser ? currentUser.nickName : 'Unknown',
+        likedReviews: sortedResult,
+      }
+      console.log(response)
+      return response
     } catch (error) {
       throw error
     }
@@ -465,38 +471,37 @@ class ReviewService {
   async calculateStreak(userId) {
     try {
       const reviews = await ReviewsRepo.getReviewsByUserId(userId)
-      const reviewDates = reviews.map((review) =>
-        moment(review.createdAt).format('YYYY-MM-DD'),
+      const reviewDatesSet = new Set(
+        reviews.map((review) => moment(review.createdAt).format('YYYY-MM-DD')),
       )
 
       const today = moment().format('YYYY-MM-DD')
-      const yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD')
-      const attendanceArray = []
+      const hasReviewToday = reviewDatesSet.has(today)
       let streak = 0
-      let missedDay = false
 
       for (let i = 30; i >= 0; i--) {
         const date = moment().subtract(i, 'days').format('YYYY-MM-DD')
-        if (reviewDates.includes(date)) {
-          attendanceArray.push(1)
-          if (date <= yesterday) {
+        if (reviewDatesSet.has(date)) {
+          if (i === 0) {
+            // 오늘 글을 썼다면 streak를 1로 시작
+            streak = 1
+          } else if (streak > 0) {
+            // 이전 날짜에 글을 썼고, 연속성이 유지되면 streak 증가
             streak++
+          } else {
+            // 오늘 글을 쓰지 않았지만 어제 글을 썼다면 streak 시작
+            streak = 1
           }
-        } else {
-          attendanceArray.push(0)
-          if (date === moment().subtract(1, 'days').format('YYYY-MM-DD')) {
-            missedDay = true
-          }
-          if (date <= yesterday) {
-            streak = 0 // Reset if any day is missed before today
-          }
+        } else if (i > 0) {
+          // 오늘이 아닌 날짜에 글을 쓰지 않았다면 중단
+          break
         }
       }
 
-      const consecutiveAttendance = missedDay ? 1 : streak + 1
-
-      return consecutiveAttendance
+      // 오늘 글을 쓰지 않았다면 streak를 0으로 설정
+      return hasReviewToday ? streak : 0
     } catch (error) {
+      console.error('Error calculating streak:', error)
       return 0 // 오류 발생 시 기본값 반환
     }
   }

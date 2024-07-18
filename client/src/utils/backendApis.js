@@ -130,6 +130,7 @@ class BackendApis {
 
   async getLikedReviews() {
     const result = await fetcher('/api/review/liked', this.token, 'GET')
+    console.log('result:', result)
     return result
   }
 

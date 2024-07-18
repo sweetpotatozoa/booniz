@@ -5,7 +5,8 @@ import NavBar from '../../components/NavBar/NavBar'
 import 'react-datepicker/dist/react-datepicker.css'
 import styles from './Community.module.css'
 import BackendApis from '../../utils/backendApis'
-import moment from 'moment'
+import moment from 'moment-timezone' // Import moment-timezone
+import 'moment/locale/ko' // Import Korean locale
 import Review from '../../components/Review/Review'
 
 const Community = () => {
@@ -15,8 +16,6 @@ const Community = () => {
     userId: '',
   })
   const navigate = useNavigate()
-
-  // console.log('userData', userData)
 
   const handleEntryClick = (id) => {
     setUserData((prevData) => ({
@@ -34,7 +33,6 @@ const Community = () => {
   const handleCommentSubmit = async (reviewId, content) => {
     try {
       const newComment = await BackendApis.createComment(reviewId, { content })
-      // console.log(newComment)
       if (newComment && newComment.reviewId) {
         setUserData((prevData) => ({
           ...prevData,
@@ -97,10 +95,11 @@ const Community = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const formattedDate = selectedDate.toISOString().split('T')[0]
+        const formattedDate = moment(selectedDate)
+          .tz('Asia/Seoul')
+          .format('YYYY-MM-DD')
         const result = await BackendApis.getCommunityReviews(formattedDate)
         if (result) {
-          // Ensure result.reviews is an array
           setUserData({
             ...result,
             reviews: result.reviews || [],
@@ -114,58 +113,62 @@ const Community = () => {
     fetchReviews()
   }, [selectedDate])
 
-  const challengeStartDate = moment('2024-07-07')
+  const challengeStartDate = moment('2024-07-07').tz('Asia/Seoul')
 
   return (
     <>
-      <NavBar />
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h1>다른 사람들은 어떤 일지를 썼을까요?</h1>
-          <div className={styles.datePicker}>
-            <button onClick={handlePreviousDay}>
-              <img src='/images/left.svg' alt='Previous Day' />
-            </button>
-            <DatePicker
-              selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
-              dateFormat='yyyy.MM.dd'
-              className={styles.datePickerInput}
-            />
-            <button onClick={handleNextDay}>
-              <img src='/images/right.svg' alt='Next Day' />
-            </button>
-          </div>
-        </div>
-
-        <div className={styles.diaryContainer}>
-          {userData.reviews && userData.reviews.length > 0 ? (
-            userData.reviews.map((entry) => {
-              const reviewDate = moment(entry.createdAt)
-              const dayDifference =
-                reviewDate.diff(challengeStartDate, 'days') + 1
-              return (
-                <Review
-                  key={entry._id}
-                  entry={entry}
-                  userData={userData}
-                  setUserData={setUserData}
-                  dayDifference={dayDifference}
-                  handleEntryClick={handleEntryClick}
-                  handleEditClick={() => {}} // 필요 시 구현
-                  handleDeleteClick={() => {}} // 필요 시 구현
-                  handleDeleteComment={handleDeleteComment}
-                  handleCommentSubmit={handleCommentSubmit}
-                  handleNicknameClick={handleNicknameClick}
-                  showNickName={true} // 닉네임 표시 여부 추가
+      {userData.userId === '' ? null : (
+        <>
+          <NavBar />
+          <div className={styles.container}>
+            <div className={styles.header}>
+              <h1>다른 사람들은 어떤 일지를 썼을까요?</h1>
+              <div className={styles.datePicker}>
+                <button onClick={handlePreviousDay}>
+                  <img src='/images/left.svg' alt='Previous Day' />
+                </button>
+                <DatePicker
+                  selected={selectedDate}
+                  onChange={(date) => setSelectedDate(date)}
+                  dateFormat='yyyy.MM.dd'
+                  className={styles.datePickerInput}
                 />
-              )
-            })
-          ) : (
-            <p>선택된 날짜에 해당하는 독서 기록이 없습니다.</p>
-          )}
-        </div>
-      </div>
+                <button onClick={handleNextDay}>
+                  <img src='/images/right.svg' alt='Next Day' />
+                </button>
+              </div>
+            </div>
+
+            <div className={styles.diaryContainer}>
+              {userData.reviews && userData.reviews.length > 0 ? (
+                userData.reviews.map((entry) => {
+                  const reviewDate = moment(entry.createdAt).tz('Asia/Seoul')
+                  const dayDifference =
+                    reviewDate.diff(challengeStartDate, 'days') + 1
+                  return (
+                    <Review
+                      key={entry._id}
+                      entry={entry}
+                      userData={userData}
+                      setUserData={setUserData}
+                      dayDifference={dayDifference}
+                      handleEntryClick={handleEntryClick}
+                      handleEditClick={() => {}} // 필요 시 구현
+                      handleDeleteClick={() => {}} // 필요 시 구현
+                      handleDeleteComment={handleDeleteComment}
+                      handleCommentSubmit={handleCommentSubmit}
+                      handleNicknameClick={handleNicknameClick}
+                      showNickName={true} // 닉네임 표시 여부 추가
+                    />
+                  )
+                })
+              ) : (
+                <p>선택된 날짜에 해당하는 독서 기록이 없습니다.</p>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </>
   )
 }

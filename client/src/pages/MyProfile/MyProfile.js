@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router'
 import BackendApis from '../../utils/backendApis'
 import NavBar from '../../components/NavBar/NavBar'
 import styles from './MyProfile.module.css'
-import moment from 'moment'
+import moment from 'moment-timezone'
+
 import Review from '../../components/Review/Review'
 import ProfileInfo from '../../components/ProfileInfo.js/ProfileInfo'
 
@@ -110,55 +111,59 @@ const MyProfile = () => {
     fetchMyProfile()
   }, [])
 
-  const challengeStartDate = moment('2024-07-07')
+  const challengeStartDate = moment('2024-07-07').tz('Asia/Seoul')
 
   return (
     <>
-      <NavBar />
-      <div>{userData.dailyStatus}</div>
-      <div className={styles.container}>
-        <div className={styles.profileHeader}>
-          <h1 style={{ fontSize: '32px' }}>
-            {userData.nickName}님, 매일 독서기록을 쓰고 선물 받아가세요
-          </h1>
-          <ProfileInfo
-            nickName={userData.nickName}
-            consecutiveDays={userData.streak}
-            completionRate={userData.completionRate}
-            readPages={userData.readPages}
-          />
-        </div>
-        <div className={styles.reviewContainer}>
-          {userData.reviews.length > 0 ? (
-            userData.reviews.map((entry) => {
-              const reviewDate = moment(entry.createdAt)
-              const dayDifference =
-                reviewDate.diff(challengeStartDate, 'days') + 1
-              return (
-                <Review
-                  key={entry._id}
-                  entry={entry}
-                  userData={userData}
-                  setUserData={setUserData}
-                  dayDifference={dayDifference}
-                  handleEntryClick={handleEntryClick}
-                  handleEditClick={handleEditClick}
-                  handleDeleteClick={handleDeleteClick}
-                  handleDeleteComment={(reviewId, commentId) =>
-                    handleDeleteComment(reviewId, commentId)
-                  }
-                  handleCommentSubmit={(reviewId, content) =>
-                    handleCommentSubmit(reviewId, content)
-                  }
-                  myProfile={true}
-                />
-              )
-            })
-          ) : (
-            <p>독서 기록이 없습니다.</p>
-          )}
-        </div>
-      </div>
+      {userData.nickName === '' ? null : (
+        <>
+          <NavBar />
+          <div>{userData.dailyStatus}</div>
+          <div className={styles.container}>
+            <div className={styles.profileHeader}>
+              <h1 style={{ fontSize: '32px' }}>
+                {userData.nickName}님, 매일 독서기록을 쓰고 선물 받아가세요
+              </h1>
+              <ProfileInfo
+                nickName={userData.nickName}
+                consecutiveDays={userData.streak}
+                completionRate={userData.completionRate}
+                readPages={userData.readPages}
+              />
+            </div>
+            <div className={styles.reviewContainer}>
+              {userData.reviews.length > 0 ? (
+                userData.reviews.map((entry) => {
+                  const reviewDate = moment(entry.createdAt)
+                  const dayDifference =
+                    reviewDate.diff(challengeStartDate, 'days') + 1
+                  return (
+                    <Review
+                      key={entry._id}
+                      entry={entry}
+                      userData={userData}
+                      setUserData={setUserData}
+                      dayDifference={dayDifference}
+                      handleEntryClick={handleEntryClick}
+                      handleEditClick={handleEditClick}
+                      handleDeleteClick={handleDeleteClick}
+                      handleDeleteComment={(reviewId, commentId) =>
+                        handleDeleteComment(reviewId, commentId)
+                      }
+                      handleCommentSubmit={(reviewId, content) =>
+                        handleCommentSubmit(reviewId, content)
+                      }
+                      myProfile={true}
+                    />
+                  )
+                })
+              ) : (
+                <p>독서 기록이 없습니다.</p>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </>
   )
 }

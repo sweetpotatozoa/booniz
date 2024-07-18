@@ -6,8 +6,10 @@ import BackendApis from '../../utils/backendApis'
 import styles from './MyLikes.module.css'
 
 const MyLikes = () => {
-  const [nickname, setNickname] = useState('홍길동')
-  const [likedEntries, setLikedEntries] = useState([])
+  const [likedEntries, setLikedEntries] = useState({
+    nickName: '',
+    likedReviews: [],
+  })
 
   const navigate = useNavigate()
 
@@ -16,7 +18,7 @@ const MyLikes = () => {
       try {
         const result = await BackendApis.getLikedReviews()
         if (result) {
-          console.log('result:', result)
+          // console.log('result:', result)
           setLikedEntries(result)
         }
       } catch (error) {
@@ -36,10 +38,10 @@ const MyLikes = () => {
       <NavBar />
       <div className={styles.container}>
         <div className={styles.header}>
-          <h1>{nickname}님이 좋아요를 누른 독서일지예요!</h1>
+          <h1>{likedEntries.nickName}님이 좋아요를 누른 독서일지예요!</h1>
         </div>
         <div className={styles.likes}>
-          {likedEntries.map((entry) => (
+          {likedEntries.likedReviews.map((entry) => (
             <div
               key={entry._id}
               className={styles.like}

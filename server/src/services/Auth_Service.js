@@ -68,7 +68,7 @@ class AuthService {
       realName: realName,
       inflowChannel: inflowChannel,
       createdAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
-      allPages: 100, // 임시로 100페이지로 설정
+      allPages: 409, // 임시로 100페이지로 설정
       readPages: 0,
     }
     try {
