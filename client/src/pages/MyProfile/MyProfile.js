@@ -33,7 +33,7 @@ const MyProfile = () => {
     try {
       const newComment = await BackendApis.createComment(reviewId, { content })
       console.log('새 댓글:', newComment)
-      if (newComment && newComment.insertedId) {
+      if (newComment && newComment.reviewId) {
         setUserData((prevState) => ({
           ...prevState,
           reviews: prevState.reviews.map((entry) =>
@@ -44,10 +44,10 @@ const MyProfile = () => {
                     ...entry.comments,
                     {
                       ...newComment,
-                      _id: newComment.insertedId,
-                      content: content,
-                      userNickName: '사용자 닉네임',
-                      createdAt: new Date().toISOString(),
+                      // _id: newComment._id,
+                      // content: content,
+                      // nickName: newComment.nickName,
+                      // createdAt: newComment.createdAt,
                     },
                   ],
                 }

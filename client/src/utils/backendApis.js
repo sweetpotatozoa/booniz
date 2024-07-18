@@ -44,7 +44,7 @@ class BackendApis {
 
   async getMainInfo() {
     const result = await fetcher('/api/review/getMainInfo', this.token, 'GET')
-    console.log(result)
+    // console.log(result) //디버깅용
     return result
   }
 
@@ -84,7 +84,7 @@ class BackendApis {
       'POST',
       params,
     )
-    console.log('result:', result)
+    // console.log('newComment::', result)
     return result
   }
 
@@ -115,7 +115,7 @@ class BackendApis {
       method,
       params.reviewData,
     )
-    console.log(result)
+    // console.log(result)
     return result
   }
 

@@ -16,7 +16,7 @@ const Community = () => {
   })
   const navigate = useNavigate()
 
-  console.log('userData Reviews:', userData.reviews)
+  // console.log('userData', userData)
 
   const handleEntryClick = (id) => {
     setUserData((prevData) => ({
@@ -34,7 +34,8 @@ const Community = () => {
   const handleCommentSubmit = async (reviewId, content) => {
     try {
       const newComment = await BackendApis.createComment(reviewId, { content })
-      if (newComment && newComment.insertedId) {
+      // console.log(newComment)
+      if (newComment && newComment.reviewId) {
         setUserData((prevData) => ({
           ...prevData,
           reviews: prevData.reviews.map((entry) =>
@@ -45,8 +46,6 @@ const Community = () => {
                     ...entry.comments,
                     {
                       ...newComment,
-                      _id: newComment.insertedId,
-                      content: content, // 댓글 내용을 명시적으로 추가
                     },
                   ],
                 }

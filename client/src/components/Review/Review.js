@@ -31,11 +31,12 @@ const Review = ({
   const handleLikeClick = async () => {
     try {
       const response = await BackendApis.likeReview(entry._id)
+      // console.log(response.message) //디버깅용
       if (response && response.message) {
         if (response.message === '좋아요 +1') {
-          setLikedBy([...likedBy, entry.userId]) // Replace 'currentUserId' with the actual user ID from your context or state
+          setLikedBy([...likedBy, entry.userId])
         } else {
-          setLikedBy(likedBy.filter((id) => id !== entry.userId)) // Replace 'currentUserId' with the actual user ID
+          setLikedBy(likedBy.filter((id) => id !== entry.userId))
         }
       }
     } catch (error) {
@@ -160,12 +161,14 @@ const Review = ({
                         {moment(comment.createdAt).format('YYYY.MM.DD')}
                       </span>
                     </small>
-                    <CommentDelete
-                      userId={userData.userId}
-                      reviewId={entry._id}
-                      commentId={comment._id}
-                      handleDeleteComment={handleDeleteComment}
-                    />
+                    {userData.userId === comment.userId && (
+                      <CommentDelete
+                        userId={userData.userId}
+                        reviewId={entry._id}
+                        commentId={comment._id}
+                        handleDeleteComment={handleDeleteComment}
+                      />
+                    )}
                   </div>
                   <p className={styles.mainComment}>{comment.content}</p>
                 </div>
