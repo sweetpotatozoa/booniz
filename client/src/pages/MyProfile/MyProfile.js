@@ -46,7 +46,7 @@ const MyProfile = () => {
                       ...newComment,
                       _id: newComment.insertedId,
                       content: content,
-                      userNickName: '사용자 닉네임',
+                      nickName: newComment.nickName,
                       createdAt: new Date().toISOString(),
                     },
                   ],
