@@ -117,54 +117,58 @@ const Community = () => {
 
   return (
     <>
-      <NavBar />
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h1>다른 사람들은 어떤 일지를 썼을까요?</h1>
-          <div className={styles.datePicker}>
-            <button onClick={handlePreviousDay}>
-              <img src='/images/left.svg' alt='Previous Day' />
-            </button>
-            <DatePicker
-              selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
-              dateFormat='yyyy.MM.dd'
-              className={styles.datePickerInput}
-            />
-            <button onClick={handleNextDay}>
-              <img src='/images/right.svg' alt='Next Day' />
-            </button>
-          </div>
-        </div>
-
-        <div className={styles.diaryContainer}>
-          {userData.reviews && userData.reviews.length > 0 ? (
-            userData.reviews.map((entry) => {
-              const reviewDate = moment(entry.createdAt).tz('Asia/Seoul')
-              const dayDifference =
-                reviewDate.diff(challengeStartDate, 'days') + 1
-              return (
-                <Review
-                  key={entry._id}
-                  entry={entry}
-                  userData={userData}
-                  setUserData={setUserData}
-                  dayDifference={dayDifference}
-                  handleEntryClick={handleEntryClick}
-                  handleEditClick={() => {}} // 필요 시 구현
-                  handleDeleteClick={() => {}} // 필요 시 구현
-                  handleDeleteComment={handleDeleteComment}
-                  handleCommentSubmit={handleCommentSubmit}
-                  handleNicknameClick={handleNicknameClick}
-                  showNickName={true} // 닉네임 표시 여부 추가
+      {userData.userId === '' ? null : (
+        <>
+          <NavBar />
+          <div className={styles.container}>
+            <div className={styles.header}>
+              <h1>다른 사람들은 어떤 일지를 썼을까요?</h1>
+              <div className={styles.datePicker}>
+                <button onClick={handlePreviousDay}>
+                  <img src='/images/left.svg' alt='Previous Day' />
+                </button>
+                <DatePicker
+                  selected={selectedDate}
+                  onChange={(date) => setSelectedDate(date)}
+                  dateFormat='yyyy.MM.dd'
+                  className={styles.datePickerInput}
                 />
-              )
-            })
-          ) : (
-            <p>선택된 날짜에 해당하는 독서 기록이 없습니다.</p>
-          )}
-        </div>
-      </div>
+                <button onClick={handleNextDay}>
+                  <img src='/images/right.svg' alt='Next Day' />
+                </button>
+              </div>
+            </div>
+
+            <div className={styles.diaryContainer}>
+              {userData.reviews && userData.reviews.length > 0 ? (
+                userData.reviews.map((entry) => {
+                  const reviewDate = moment(entry.createdAt).tz('Asia/Seoul')
+                  const dayDifference =
+                    reviewDate.diff(challengeStartDate, 'days') + 1
+                  return (
+                    <Review
+                      key={entry._id}
+                      entry={entry}
+                      userData={userData}
+                      setUserData={setUserData}
+                      dayDifference={dayDifference}
+                      handleEntryClick={handleEntryClick}
+                      handleEditClick={() => {}} // 필요 시 구현
+                      handleDeleteClick={() => {}} // 필요 시 구현
+                      handleDeleteComment={handleDeleteComment}
+                      handleCommentSubmit={handleCommentSubmit}
+                      handleNicknameClick={handleNicknameClick}
+                      showNickName={true} // 닉네임 표시 여부 추가
+                    />
+                  )
+                })
+              ) : (
+                <p>선택된 날짜에 해당하는 독서 기록이 없습니다.</p>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </>
   )
 }

@@ -27,6 +27,11 @@ const Write = () => {
     setError('')
 
     const { title, content, startPage, endPage } = formData
+    const newFormdata = {
+      ...formData,
+      startPage: Number(startPage),
+      endPage: Number(endPage),
+    }
     if (title.length > 50) {
       setError('제목은 50자 이하여야 합니다.')
       return
@@ -45,7 +50,7 @@ const Write = () => {
     }
 
     try {
-      const result = await BackendApis.createReview('POST', formData)
+      const result = await BackendApis.createReview('POST', newFormdata)
       if (result && result.acknowledged) {
         navigate('/')
       } else {
