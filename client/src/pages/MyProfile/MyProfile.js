@@ -109,7 +109,7 @@ const MyProfile = () => {
     }
 
     fetchMyProfile()
-  }, [])
+  }, [userData])
 
   const challengeStartDate = moment('2024-07-07').tz('Asia/Seoul')
 
