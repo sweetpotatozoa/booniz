@@ -31,12 +31,12 @@ const Review = ({
   const handleLikeClick = async () => {
     try {
       const response = await BackendApis.likeReview(entry._id)
-      // console.log(response.message) //디버깅용
+      console.log(response.message) //디버깅용
       if (response && response.message) {
         if (response.message === '좋아요 +1') {
-          setLikedBy([...likedBy, entry.userId])
+          setLikedBy([...likedBy, userData.userId])
         } else {
-          setLikedBy(likedBy.filter((id) => id !== entry.userId))
+          setLikedBy(likedBy.filter((id) => id !== userData.userId))
         }
       }
     } catch (error) {
