@@ -45,10 +45,6 @@ const MyProfile = () => {
                     ...entry.comments,
                     {
                       ...newComment,
-                      // _id: newComment._id,
-                      // content: content,
-                      // nickName: newComment.nickName,
-                      // createdAt: newComment.createdAt,
                     },
                   ],
                 }
