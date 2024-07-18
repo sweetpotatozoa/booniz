@@ -55,8 +55,13 @@ class BackendApis {
   }
 
   async createReview(method = 'POST', params = {}) {
-    const result = await fetcher('/api/review/createReview', '', method, params)
-    // console.log(result)
+    const result = await fetcher(
+      '/api/review/createReview',
+      this.token,
+      method,
+      params,
+    )
+    console.log(result)
     return result
   }
 
@@ -72,8 +77,12 @@ class BackendApis {
   }
 
   async getCommunityReviews(date) {
-    const result = await fetcher(`/api/review/community/${date}`, '', 'GET')
-    console.log(result)
+    const result = await fetcher(
+      `/api/review/community/${date}`,
+      this.token,
+      'GET',
+    )
+    // console.log(result)
     return result
   }
 
@@ -120,7 +129,7 @@ class BackendApis {
   }
 
   async getLikedReviews() {
-    const result = await fetcher('/api/review/liked', '', 'GET')
+    const result = await fetcher('/api/review/liked', this.token, 'GET')
     return result
   }
 
