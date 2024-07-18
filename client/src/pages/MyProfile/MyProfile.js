@@ -18,6 +18,7 @@ const MyProfile = () => {
   })
   const navigate = useNavigate()
 
+  // console.log('userData.userId:', userData.userId)
   const handleEntryClick = (id) => {
     setUserData((prevState) => ({
       ...prevState,
@@ -32,7 +33,7 @@ const MyProfile = () => {
   const handleCommentSubmit = async (reviewId, content) => {
     try {
       const newComment = await BackendApis.createComment(reviewId, { content })
-      console.log('새 댓글:', newComment)
+      // console.log('새 댓글:', newComment)
       if (newComment && newComment.reviewId) {
         setUserData((prevState) => ({
           ...prevState,

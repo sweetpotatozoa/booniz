@@ -23,7 +23,7 @@ const Review = ({
   const [likedBy, setLikedBy] = useState(entry.likedBy)
   const reviewDate = moment(entry.createdAt)
 
-  console.log('entry:', entry)
+  // console.log('entry:', entry)
   const handleClick = (e) => {
     e.stopPropagation()
   }
