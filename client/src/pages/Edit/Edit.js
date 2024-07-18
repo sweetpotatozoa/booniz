@@ -74,7 +74,8 @@ const Edit = () => {
         reviewId,
         reviewData,
       })
-      if (result && result.acknowledged) {
+      console.log(result) //디버깅
+      if (result) {
         navigate('/')
       } else {
         setError('글 작성에 실패했습니다.')
@@ -95,7 +96,7 @@ const Edit = () => {
           formData={reviewData}
           handleChange={handleChange}
           handleSubmit={handleSubmit}
-          error
+          error={error}
         />
       </div>
     </>

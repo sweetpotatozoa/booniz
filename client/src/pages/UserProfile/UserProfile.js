@@ -11,6 +11,7 @@ const UserProfile = () => {
   const { userId } = useParams()
   const navigate = useNavigate()
   const [userData, setUserData] = useState({
+    userId: '',
     nickName: '',
     completionRate: 0,
     reviews: [],
@@ -26,7 +27,7 @@ const UserProfile = () => {
     try {
       const result = await BackendApis.getUserProfile(id)
       if (result) {
-        // console.log('result:', result)
+        console.log('result:', result)
         setUserData(result)
       }
     } catch (error) {
@@ -53,7 +54,7 @@ const UserProfile = () => {
     try {
       const newComment = await BackendApis.createComment(reviewId, { content })
       console.log('새 댓글:', newComment)
-      if (newComment && newComment.insertedId) {
+      if (newComment && newComment.reviewId) {
         setUserData((prevState) => ({
           ...prevState,
           reviews: prevState.reviews.map((entry) =>
@@ -64,10 +65,6 @@ const UserProfile = () => {
                     ...entry.comments,
                     {
                       ...newComment,
-                      _id: newComment.insertedId,
-                      content: content, // 댓글 내용을 명시적으로 추가
-                      userNickName: '사용자 닉네임', // 필요에 따라 추가
-                      createdAt: new Date().toISOString(), // 현재 시간으로 설정
                     },
                   ],
                 }
@@ -132,7 +129,6 @@ const UserProfile = () => {
                 <Review
                   key={entry._id}
                   entry={entry}
-                  userId={userId}
                   userData={userData}
                   setUserData={setUserData}
                   dayDifference={dayDifference}

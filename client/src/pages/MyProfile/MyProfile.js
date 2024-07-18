@@ -18,6 +18,7 @@ const MyProfile = () => {
   })
   const navigate = useNavigate()
 
+  // console.log('userData.userId:', userData.userId)
   const handleEntryClick = (id) => {
     setUserData((prevState) => ({
       ...prevState,
@@ -32,8 +33,8 @@ const MyProfile = () => {
   const handleCommentSubmit = async (reviewId, content) => {
     try {
       const newComment = await BackendApis.createComment(reviewId, { content })
-      console.log('새 댓글:', newComment)
-      if (newComment && newComment.insertedId) {
+      // console.log('새 댓글:', newComment)
+      if (newComment && newComment.reviewId) {
         setUserData((prevState) => ({
           ...prevState,
           reviews: prevState.reviews.map((entry) =>
@@ -44,10 +45,17 @@ const MyProfile = () => {
                     ...entry.comments,
                     {
                       ...newComment,
+<<<<<<< HEAD
                       _id: newComment.insertedId,
                       content: content,
                       nickName: newComment.nickName,
                       createdAt: new Date().toISOString(),
+=======
+                      // _id: newComment._id,
+                      // content: content,
+                      // nickName: newComment.nickName,
+                      // createdAt: newComment.createdAt,
+>>>>>>> 533bb2ea67eaee5dd245b843b18e50a364c6fa85
                     },
                   ],
                 }
