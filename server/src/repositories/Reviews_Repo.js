@@ -203,9 +203,7 @@ class ReviewsRepo {
         { $addToSet: { likedBy: new ObjectId(userId) } },
         { returnDocument: 'after', upsert: false },
       )
-      if (!result.value && !result.ok) {
-        throw new Error('리뷰를 찾을 수 없거나 업데이트에 실패했습니다.')
-      }
+
       return result.value || result
     } catch (error) {
       console.error('Error in addLikeToReview:', error)

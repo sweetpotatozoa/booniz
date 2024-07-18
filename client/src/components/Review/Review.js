@@ -23,7 +23,7 @@ const Review = ({
   const [likedBy, setLikedBy] = useState(entry.likedBy)
   const reviewDate = moment(entry.createdAt)
 
-  // console.log('entry:', entry)
+  console.log('entry:', entry)
   const handleClick = (e) => {
     e.stopPropagation()
   }
@@ -31,7 +31,7 @@ const Review = ({
   const handleLikeClick = async () => {
     try {
       const response = await BackendApis.likeReview(entry._id)
-      console.log(response) //디버깅용
+      // console.log(response.message) //디버깅용
       if (response && response.message) {
         if (response.message === '좋아요 +1') {
           setLikedBy([...likedBy, entry.userId])
@@ -161,12 +161,14 @@ const Review = ({
                         {moment(comment.createdAt).format('YYYY.MM.DD')}
                       </span>
                     </small>
-                    <CommentDelete
-                      userId={userData.userId}
-                      reviewId={entry._id}
-                      commentId={comment._id}
-                      handleDeleteComment={handleDeleteComment}
-                    />
+                    {userData.userId === comment.userId && (
+                      <CommentDelete
+                        userId={userData.userId}
+                        reviewId={entry._id}
+                        commentId={comment._id}
+                        handleDeleteComment={handleDeleteComment}
+                      />
+                    )}
                   </div>
                   <p className={styles.mainComment}>{comment.content}</p>
                 </div>
