@@ -5,7 +5,8 @@ import NavBar from '../../components/NavBar/NavBar'
 import 'react-datepicker/dist/react-datepicker.css'
 import styles from './Community.module.css'
 import BackendApis from '../../utils/backendApis'
-import moment from 'moment'
+import moment from 'moment-timezone' // Import moment-timezone
+import 'moment/locale/ko' // Import Korean locale
 import Review from '../../components/Review/Review'
 
 const Community = () => {
@@ -15,8 +16,6 @@ const Community = () => {
     userId: '',
   })
   const navigate = useNavigate()
-
-  // console.log('userData', userData)
 
   const handleEntryClick = (id) => {
     setUserData((prevData) => ({
@@ -34,7 +33,6 @@ const Community = () => {
   const handleCommentSubmit = async (reviewId, content) => {
     try {
       const newComment = await BackendApis.createComment(reviewId, { content })
-      // console.log(newComment)
       if (newComment && newComment.reviewId) {
         setUserData((prevData) => ({
           ...prevData,
@@ -97,10 +95,11 @@ const Community = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const formattedDate = selectedDate.toISOString().split('T')[0]
+        const formattedDate = moment(selectedDate)
+          .tz('Asia/Seoul')
+          .format('YYYY-MM-DD')
         const result = await BackendApis.getCommunityReviews(formattedDate)
         if (result) {
-          // Ensure result.reviews is an array
           setUserData({
             ...result,
             reviews: result.reviews || [],
@@ -114,7 +113,7 @@ const Community = () => {
     fetchReviews()
   }, [selectedDate])
 
-  const challengeStartDate = moment('2024-07-07')
+  const challengeStartDate = moment('2024-07-07').tz('Asia/Seoul')
 
   return (
     <>
@@ -141,7 +140,7 @@ const Community = () => {
         <div className={styles.diaryContainer}>
           {userData.reviews && userData.reviews.length > 0 ? (
             userData.reviews.map((entry) => {
-              const reviewDate = moment(entry.createdAt)
+              const reviewDate = moment(entry.createdAt).tz('Asia/Seoul')
               const dayDifference =
                 reviewDate.diff(challengeStartDate, 'days') + 1
               return (

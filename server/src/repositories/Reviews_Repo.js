@@ -199,7 +199,7 @@ class ReviewsRepo {
     try {
       const result = await this.collection.findOneAndUpdate(
         { _id: new ObjectId(reviewId) },
-        { $addToSet: { likedBy: new ObjectId(userId) } },
+        { $addToSet: { likedBy: userId } },
         { returnDocument: 'after', upsert: false },
       )
       return result.value || result
@@ -245,7 +245,7 @@ class ReviewsRepo {
   async removeLikeFromReview(reviewId, userId) {
     const result = await this.collection.findOneAndUpdate(
       { _id: new ObjectId(reviewId) },
-      { $pull: { likedBy: new ObjectId(userId) } },
+      { $pull: { likedBy: userId } },
       { returnDocument: 'after' },
     )
     return result.value

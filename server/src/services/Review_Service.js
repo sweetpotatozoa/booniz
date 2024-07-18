@@ -401,7 +401,7 @@ class ReviewService {
       const comments = await CommentsRepo.getCommentsByReviewIds(reviewIds)
       const userIds = [...new Set(reviews.map((review) => review.userId))]
       const users = await UsersRepo.getUsersByIds(userIds)
-
+      const me = await UsersRepo.getUserData(userId)
       const userMap = users.reduce((acc, user) => {
         acc[user._id.toString()] = {
           nickName: user.nickName,

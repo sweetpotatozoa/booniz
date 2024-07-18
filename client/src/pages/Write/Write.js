@@ -31,8 +31,8 @@ const Write = () => {
       setError('제목은 50자 이하여야 합니다.')
       return
     }
-    if (content.length < 100) {
-      setError('내용은 100자 이상이어야 합니다.')
+    if (content.length < 300) {
+      setError('내용은 300자 이상이어야 합니다.')
       return
     }
     if (isNaN(startPage) || isNaN(endPage)) {

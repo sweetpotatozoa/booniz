@@ -6,7 +6,7 @@ import BackendApis from '../../utils/backendApis'
 import styles from './MyLikes.module.css'
 
 const MyLikes = () => {
-  const [nickname, setNickname] = useState('홍길동')
+  const [nickname, setNickname] = useState('')
   const [likedEntries, setLikedEntries] = useState([])
 
   const navigate = useNavigate()
