@@ -56,7 +56,7 @@ class BackendApis {
 
   async createReview(method = 'POST', params = {}) {
     const result = await fetcher('/api/review/createReview', '', method, params)
-    console.log(result)
+    // console.log(result)
     return result
   }
 
@@ -73,7 +73,7 @@ class BackendApis {
 
   async getCommunityReviews(date) {
     const result = await fetcher(`/api/review/community/${date}`, '', 'GET')
-    // console.log(result)
+    console.log(result)
     return result
   }
 
