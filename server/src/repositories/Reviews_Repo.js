@@ -203,7 +203,6 @@ class ReviewsRepo {
         { $addToSet: { likedBy: new ObjectId(userId) } },
         { returnDocument: 'after', upsert: false },
       )
-
       return result.value || result
     } catch (error) {
       console.error('Error in addLikeToReview:', error)
