@@ -45,10 +45,17 @@ const MyProfile = () => {
                     ...entry.comments,
                     {
                       ...newComment,
+<<<<<<< HEAD
+                      _id: newComment.insertedId,
+                      content: content,
+                      nickName: newComment.nickName,
+                      createdAt: new Date().toISOString(),
+=======
                       // _id: newComment._id,
                       // content: content,
                       // nickName: newComment.nickName,
                       // createdAt: newComment.createdAt,
+>>>>>>> 533bb2ea67eaee5dd245b843b18e50a364c6fa85
                     },
                   ],
                 }
