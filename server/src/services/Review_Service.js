@@ -471,38 +471,38 @@ class ReviewService {
   async calculateStreak(userId) {
     try {
       const reviews = await ReviewsRepo.getReviewsByUserId(userId)
+
+      // 서울 시간대 기준으로 날짜 변환
       const reviewDatesSet = new Set(
-        reviews.map((review) => moment(review.createdAt).format('YYYY-MM-DD')),
+        reviews.map((review) =>
+          moment(review.createdAt).tz('Asia/Seoul').format('YYYY-MM-DD'),
+        ),
       )
 
-      const today = moment().format('YYYY-MM-DD')
+      const today = moment().tz('Asia/Seoul').format('YYYY-MM-DD')
       const hasReviewToday = reviewDatesSet.has(today)
+
       let streak = 0
 
-      for (let i = 30; i >= 0; i--) {
-        const date = moment().subtract(i, 'days').format('YYYY-MM-DD')
+      // 오늘부터 과거로 31일 동안 확인
+      for (let i = 0; i < 31; i++) {
+        const date = moment()
+          .tz('Asia/Seoul')
+          .subtract(i, 'days')
+          .format('YYYY-MM-DD')
         if (reviewDatesSet.has(date)) {
-          if (i === 0) {
-            // 오늘 글을 썼다면 streak를 1로 시작
-            streak = 1
-          } else if (streak > 0) {
-            // 이전 날짜에 글을 썼고, 연속성이 유지되면 streak 증가
-            streak++
-          } else {
-            // 오늘 글을 쓰지 않았지만 어제 글을 썼다면 streak 시작
-            streak = 1
-          }
+          streak++
         } else if (i > 0) {
-          // 오늘이 아닌 날짜에 글을 쓰지 않았다면 중단
+          // 첫 번째 누락된 날(오늘 제외)에서 중단
           break
         }
       }
 
-      // 오늘 글을 쓰지 않았다면 streak를 0으로 설정
-      return hasReviewToday ? streak : 0
+      // 오늘 글을 썼다면 최소 1, 아니면 0 반환
+      return hasReviewToday ? Math.max(1, streak) : 0
     } catch (error) {
       console.error('Error calculating streak:', error)
-      return 0 // 오류 발생 시 기본값 반환
+      return 0
     }
   }
 }
