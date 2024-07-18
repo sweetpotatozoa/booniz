@@ -84,7 +84,7 @@ class BackendApis {
       'POST',
       params,
     )
-    console.log('result:', result)
+    // console.log('newComment::', result)
     return result
   }
 

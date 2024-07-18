@@ -23,7 +23,7 @@ const Review = ({
   const [likedBy, setLikedBy] = useState(entry.likedBy)
   const reviewDate = moment(entry.createdAt)
 
-  console.log('entry:', entry)
+  // console.log('entry:', entry)
   const handleClick = (e) => {
     e.stopPropagation()
   }
@@ -31,11 +31,12 @@ const Review = ({
   const handleLikeClick = async () => {
     try {
       const response = await BackendApis.likeReview(entry._id)
+      console.log(response) //디버깅용
       if (response && response.message) {
         if (response.message === '좋아요 +1') {
-          setLikedBy([...likedBy, entry.userId]) // Replace 'currentUserId' with the actual user ID from your context or state
+          setLikedBy([...likedBy, entry.userId])
         } else {
-          setLikedBy(likedBy.filter((id) => id !== entry.userId)) // Replace 'currentUserId' with the actual user ID
+          setLikedBy(likedBy.filter((id) => id !== entry.userId))
         }
       }
     } catch (error) {

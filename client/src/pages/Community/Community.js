@@ -16,7 +16,7 @@ const Community = () => {
   })
   const navigate = useNavigate()
 
-  console.log('userData Reviews:', userData.reviews)
+  console.log('userData', userData)
 
   const handleEntryClick = (id) => {
     setUserData((prevData) => ({
@@ -46,7 +46,9 @@ const Community = () => {
                     {
                       ...newComment,
                       _id: newComment.insertedId,
+                      nickName: '새로운 닉네임',
                       content: content, // 댓글 내용을 명시적으로 추가
+                      createdAt: new Date().toISOString(),
                     },
                   ],
                 }

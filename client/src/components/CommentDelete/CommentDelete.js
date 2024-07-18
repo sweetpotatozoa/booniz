@@ -7,7 +7,7 @@ const CommentDelete = ({
   commentId,
   handleDeleteComment,
 }) => {
-  console.log(commentId)
+  // console.log(commentId)
   return (
     <button
       className={styles.button}
