@@ -34,7 +34,6 @@ class AuthService {
     const isValid = await this.validatePassword(password, result.password) // 비밀번호 일치 검사
     if (isValid) {
       const tokenResult = await this.getToken(result._id) // 토큰 부여
-      console.log('로그인 성공', tokenResult)
       return { token: tokenResult }
     } else {
       throw new Error('Invalid password')

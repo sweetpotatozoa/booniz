@@ -188,7 +188,6 @@ class ReviewController {
     try {
       const reviewId = req.params.reviewId
       const userId = req.user.id
-      console.log('userId', userId, 'reviewId', reviewId)
       if (!userId || !isObjectId(userId)) {
         res.status(400).json({ message: '유효하지 않은 아이디 입니다.' })
         return
@@ -224,7 +223,6 @@ class ReviewController {
       const likedReviews = await ReviewService.getMyLikedList(userId)
       res.status(200).json(likedReviews)
     } catch (error) {
-      console.error('Error in getMyLikedList controller:', error)
       res.status(500).json({
         message: 'An error occurred while fetching liked list',
         error:
@@ -242,7 +240,6 @@ class ReviewController {
       const result = await ReviewService.toggleLike(reviewId, userId)
       res.status(200).json(result)
     } catch (error) {
-      console.error('Error in likeReview controller:', error)
       res.status(500).json({
         message: 'An error occurred while liking the review',
         error:
