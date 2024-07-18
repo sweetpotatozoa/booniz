@@ -84,7 +84,6 @@ class ReviewsRepo {
       })
       return count
     } catch (error) {
-      console.error('Error in getTodayReviewCount:', error)
       throw error
     }
   }
@@ -205,7 +204,6 @@ class ReviewsRepo {
       )
       return result.value || result
     } catch (error) {
-      console.error('Error in addLikeToReview:', error)
       throw error
     }
   }

@@ -149,7 +149,6 @@ class ReviewService {
       const result = await ReviewsRepo.createReview(reviewData)
       return result
     } catch (error) {
-      console.error('Error in createReview:', error)
       throw error
     }
   }
@@ -185,7 +184,6 @@ class ReviewService {
     }
     try {
       const result = await ReviewsRepo.deleteMyReview(reviewId)
-      console.log(result)
       if (!result) {
         throw new Error('해당 기록을 찾을 수 없습니다.')
       }
@@ -254,7 +252,6 @@ class ReviewService {
         userId: new ObjectId(userId),
       }
     } catch (error) {
-      console.error('Error in getReviewsByDate', error)
       throw error
     }
   }
@@ -447,15 +444,11 @@ class ReviewService {
       const review = await ReviewsRepo.getReviewById(reviewId)
       let updatedReview
       let message
-      // console.log(review)
       if (review.likedBy.some((id) => id.toString() === userId)) {
-        console.log('Removing like')
         updatedReview = await ReviewsRepo.removeLikeFromReview(reviewId, userId)
         message = '좋아요 취소'
       } else {
-        console.log('Adding like')
         updatedReview = await ReviewsRepo.addLikeToReview(reviewId, userId)
-        console.log('updatedReview', updatedReview)
         message = '좋아요 +1'
       }
 
@@ -464,7 +457,6 @@ class ReviewService {
         review: updatedReview,
       }
     } catch (error) {
-      console.error('Error in likeReview service:', error)
       throw error
     }
   }
@@ -505,7 +497,6 @@ class ReviewService {
 
       return consecutiveAttendance
     } catch (error) {
-      console.error('Error calculating streak:', error)
       return 0 // 오류 발생 시 기본값 반환
     }
   }

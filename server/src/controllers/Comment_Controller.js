@@ -36,7 +36,6 @@ class commentController {
         userId,
         content,
       )
-      console.log(result)
       res.status(200).json(result)
     } catch (err) {
       const { status, message } = errorHandler(err, 'createComment', {
