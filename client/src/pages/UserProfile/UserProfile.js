@@ -11,6 +11,7 @@ const UserProfile = () => {
   const { userId } = useParams()
   const navigate = useNavigate()
   const [userData, setUserData] = useState({
+    userId: '',
     nickName: '',
     completionRate: 0,
     reviews: [],
@@ -26,7 +27,7 @@ const UserProfile = () => {
     try {
       const result = await BackendApis.getUserProfile(id)
       if (result) {
-        // console.log('result:', result)
+        console.log('result:', result)
         setUserData(result)
       }
     } catch (error) {
@@ -128,7 +129,6 @@ const UserProfile = () => {
                 <Review
                   key={entry._id}
                   entry={entry}
-                  userId={userId}
                   userData={userData}
                   setUserData={setUserData}
                   dayDifference={dayDifference}
