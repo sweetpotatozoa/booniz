@@ -96,6 +96,15 @@ const MyProfile = () => {
   }
 
   useEffect(() => {
+    const token = localStorage.getItem('token')
+    console.log(token)
+
+    if (!token || token === '') {
+      navigate('/login')
+    }
+  }, [])
+
+  useEffect(() => {
     const fetchMyProfile = async () => {
       try {
         const result = await BackendApis.getMyProfile()
