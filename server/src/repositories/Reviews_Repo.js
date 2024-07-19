@@ -95,7 +95,7 @@ class ReviewsRepo {
         { userId: new ObjectId(userId) },
         { projection: { _id: 1, title: 1, content: 1, createdAt: 1 } },
       )
-      .sort({ createdAt: 1 })
+      .sort({ createdAt: -1 })
       .toArray()
     return reviews
   }
@@ -156,7 +156,7 @@ class ReviewsRepo {
     try {
       const result = await this.collection
         .find({ userId: new ObjectId(userId) })
-        .sort({ updatedAt: -1 })
+        .sort({ createdAt: -1 })
         .toArray()
       return result
     } catch (error) {
@@ -189,7 +189,7 @@ class ReviewsRepo {
   async getLikedReviewsByUserId(userId) {
     const result = await this.collection
       .find({ likedBy: userId })
-      .sort({ updatedAt: -1 })
+      .sort({ createdAt: -1 })
       .toArray()
     return result
   }
