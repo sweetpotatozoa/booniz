@@ -65,7 +65,9 @@ const MyLikes = () => {
                 )}
                 <small>{entry.updatedAt}</small>
               </div>
-              <p>{truncateContent(entry.content, 150)}</p>
+              <p className={styles.content}>
+                {truncateContent(entry.content, 150)}
+              </p>
               <div className={styles.bottom}>
                 <div>
                   <img src='/images/Heart_01.svg'></img> {entry.likedBy.length}

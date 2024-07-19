@@ -140,3 +140,9 @@
   padding-left: 8px;
   border-left: 2px solid #7d7d7d;
 }
+
+.content {
+  word-wrap: break-word; /* 긴 단어가 줄을 넘지 않도록 합니다 */
+  overflow-wrap: break-word; /* 긴 단어가 줄을 넘지 않도록 합니다 */
+  white-space: normal; /* 기본 줄 바꿈을 허용합니다 */
+}
