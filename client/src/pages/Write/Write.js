@@ -52,6 +52,9 @@ const Write = () => {
     if (Number(startPage) <= 0 || Number(endPage) <= 0) {
       setError('페이지는 0보다 커야합니다.')
     }
+    if (Number(startPage).isInteger() || Number(endPage).isInteger()) {
+      setError('페이지는 자연수여야 합니다.')
+    }
 
     try {
       const result = await BackendApis.createReview('POST', newFormdata)
