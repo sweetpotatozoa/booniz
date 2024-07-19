@@ -307,13 +307,13 @@ class ReviewService {
       const streak = await this.calculateStreak(userId)
 
       return {
-        userId: new ObjectId(userId),
+        otherUserId: new ObjectId(userId),
         nickName: user.nickName,
         completionRate: (latestEndPage / user.allPages) * 100,
         reviews: reviewsWithComments,
         readPages: latestEndPage,
         streak: streak,
-        myUserId: currentUserId,
+        userId: currentUserId,
       }
     } catch (error) {
       throw error
