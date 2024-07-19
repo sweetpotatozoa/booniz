@@ -12,7 +12,6 @@ const Register = () => {
     phoneNumber: '',
     age: '',
     nickName: '',
-    inflowChannel: '',
   })
   const [error, setError] = useState('')
   const [passwordError, setPasswordError] = useState('')
@@ -35,15 +34,25 @@ const Register = () => {
       )
       return
     }
+    if (
+      !formData.realName?.trim() ||
+      !formData.phoneNumber?.trim() ||
+      !formData.age?.trim() ||
+      !formData.nickName?.trim()
+    ) {
+      setError('공백은 불가합니다.')
+      return
+    }
 
     try {
       const result = await BackendApis.register('POST', formData)
+      console.log(result)
 
       if (
         result &&
         result.message === '회원가입에 성공하였습니다. 로그인해주세요.'
       ) {
-        console.log(result)
+        // console.log(result)
         navigate('/login')
       } else {
         setError(result.message || '회원가입에 실패했습니다.')
@@ -154,24 +163,6 @@ const Register = () => {
                 placeholder='닉네임(나중에 변경이 불가능합니다)'
                 className={styles.input}
               />
-            </div>
-            <div className={styles.inputGroup}>
-              <select
-                id='inflowChannel'
-                name='inflowChannel'
-                value={formData.inflowChannel}
-                onChange={handleChange}
-                required
-                className={styles.input}
-              >
-                <option value='' disabled>
-                  가입 경로를 선택하세요
-                </option>
-                <option value='지인 추천'>지인 추천</option>
-                <option value='블라인드'>블라인드</option>
-                <option value='인스타그램'>인스타그램</option>
-                <option value='기타'>기타</option>
-              </select>
             </div>
           </div>
           {error && <p className={styles.error}>{error}</p>}
