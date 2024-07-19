@@ -76,6 +76,31 @@ const Review = ({
           </div>
         )}
         <div className={styles.content}>
+          {showNickName && (
+            <div>
+              {userData.userId === entry.userId && (
+                <button
+                  onClick={(e) => {
+                    handleClick(e)
+                    handleEditClick(entry._id)
+                  }}
+                >
+                  수정하기
+                </button>
+              )}
+              {userData.userId === entry.userId && (
+                <button
+                  className={styles.reviewDelete}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleDeleteClick()
+                  }}
+                >
+                  삭제하기
+                </button>
+              )}
+            </div>
+          )}
           <div className={styles.header}>
             {showNickName ? (
               <>
@@ -102,29 +127,31 @@ const Review = ({
               <h3>{entry.title}</h3>
               <small>{reviewDate.format('YYYY.MM.DD')}</small>
             </div>
-            <div>
-              {userData.userId === entry.userId && (
-                <button
-                  onClick={(e) => {
-                    handleClick(e)
-                    handleEditClick(entry._id)
-                  }}
-                >
-                  수정하기
-                </button>
-              )}
-              {userData.userId === entry.userId && (
-                <button
-                  className={styles.reviewDelete}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleDeleteClick()
-                  }}
-                >
-                  삭제하기
-                </button>
-              )}
-            </div>
+            {showNickName === false && (
+              <div>
+                {userData.userId === entry.userId && (
+                  <button
+                    onClick={(e) => {
+                      handleClick(e)
+                      handleEditClick(entry._id)
+                    }}
+                  >
+                    수정하기
+                  </button>
+                )}
+                {userData.userId === entry.userId && (
+                  <button
+                    className={styles.reviewDelete}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleDeleteClick()
+                    }}
+                  >
+                    삭제하기
+                  </button>
+                )}
+              </div>
+            )}
           </div>
           <p className={styles.main}>
             {entry.expanded
