@@ -6,6 +6,7 @@ import CommentForm from '../../components/CommentForm/CommentForm'
 import CommentDelete from '../../components/CommentDelete/CommentDelete'
 import styles from './Review.module.css'
 import BackendApis from '../../utils/backendApis'
+import { useNavigate } from 'react-router-dom'
 
 const Review = ({
   entry,
@@ -22,7 +23,7 @@ const Review = ({
 }) => {
   const [likedBy, setLikedBy] = useState(entry.likedBy)
   const reviewDate = moment(entry.createdAt)
-
+  const navigate = useNavigate()
   // console.log('entry:', entry)
   const handleClick = (e) => {
     e.stopPropagation()
@@ -45,22 +46,24 @@ const Review = ({
   }
 
   const handleDeleteClick = async () => {
-    try {
-      const response = await BackendApis.deleteReview(entry._id)
-      if (response && response.message === '일지 삭제 성공') {
-        console.log('Review deleted successfully')
-        const updatedReviews = userData.reviews.filter(
-          (reviewEntry) => reviewEntry._id !== entry._id,
-        )
+    if (confirm('삭제하시겠습니까?')) {
+      try {
+        const response = await BackendApis.deleteReview(entry._id)
+        if (response && response.message === '일지 삭제 성공') {
+          console.log('Review deleted successfully')
+          const updatedReviews = userData.reviews.filter(
+            (reviewEntry) => reviewEntry._id !== entry._id,
+          )
 
-        // setUserData를 사용하여 업데이트
-        setUserData({
-          ...userData,
-          reviews: updatedReviews,
-        })
+          // setUserData를 사용하여 업데이트
+          setUserData({
+            ...userData,
+            reviews: updatedReviews,
+          })
+        }
+      } catch (error) {
+        console.error('Error deleting the review:', error)
       }
-    } catch (error) {
-      console.error('Error deleting the review:', error)
     }
   }
 
@@ -182,7 +185,12 @@ const Review = ({
                 <div key={comment._id} className={styles.commentWrapper}>
                   <div className={styles.commentHeader}>
                     <small>
-                      <span className={styles.commentName}>
+                      <span
+                        className={styles.commentName}
+                        onClick={() => {
+                          navigate(`/userProfile/${comment.userId}`)
+                        }}
+                      >
                         {comment.nickName}
                       </span>
                       <span className={styles.commentDate}>

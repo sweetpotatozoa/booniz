@@ -83,6 +83,10 @@ const Community = () => {
     setSelectedDate(new Date(selectedDate.setDate(selectedDate.getDate() - 1)))
   }
 
+  const handleEditClick = (id) => {
+    navigate(`/edit/${userData.nickName}/${id}`)
+  }
+
   const handleNextDay = () => {
     setSelectedDate(new Date(selectedDate.setDate(selectedDate.getDate() + 1)))
   }
@@ -123,6 +127,9 @@ const Community = () => {
   }, [selectedDate])
 
   const challengeStartDate = moment('2024-07-07').tz('Asia/Seoul')
+  const isFutureDate = moment(selectedDate).isSameOrAfter(
+    moment().startOf('day'),
+  )
 
   return (
     <>
@@ -143,7 +150,7 @@ const Community = () => {
                   className={styles.datePickerInput}
                   disabled
                 />
-                <button onClick={handleNextDay}>
+                <button onClick={handleNextDay} disabled={isFutureDate}>
                   <img src='/images/right.svg' alt='Next Day' />
                 </button>
               </div>
@@ -163,7 +170,7 @@ const Community = () => {
                       setUserData={setUserData}
                       dayDifference={dayDifference}
                       handleEntryClick={handleEntryClick}
-                      handleEditClick={() => {}} // 필요 시 구현
+                      handleEditClick={handleEditClick} // 필요 시 구현
                       handleDeleteClick={() => {}} // 필요 시 구현
                       handleDeleteComment={handleDeleteComment}
                       handleCommentSubmit={handleCommentSubmit}
