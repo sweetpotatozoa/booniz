@@ -41,13 +41,16 @@ const Write = () => {
       setError('내용은 300자 이상이어야 합니다.')
       return
     }
-    if (isNaN(startPage) || isNaN(endPage)) {
+    if (!startPage || !endPage) {
       setError('시작 페이지와 끝 페이지는 숫자여야 합니다.')
       return
     }
     if (Number(startPage) > Number(endPage)) {
       setError('시작 페이지는 끝 페이지보다 더 클 수 없습니다.')
       return
+    }
+    if (Number(startPage) <= 0 || Number(endPage) <= 0) {
+      setError('페이지는 0보다 커야합니다.')
     }
 
     try {
