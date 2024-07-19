@@ -144,8 +144,6 @@ class ReviewService {
         likedBy: [],
       }
 
-      await UsersRepo.updateReadPages(userId, endPage)
-
       const result = await ReviewsRepo.createReview(reviewData)
       return result
     } catch (error) {
@@ -271,6 +269,7 @@ class ReviewService {
         ...new Set(allComments.map((comment) => comment.userId.toString())),
       ]
       const commentUsers = await UsersRepo.getUsersByIds(commentUserIds)
+      const latestEndPage = await ReviewsRepo.getLatestReviewEndPage(userId)
 
       const userMap = commentUsers.reduce((acc, user) => {
         acc[user._id.toString()] = user
@@ -299,9 +298,9 @@ class ReviewService {
       return {
         userId: new ObjectId(userId),
         nickName: user.nickName,
-        completionRate: (user.readPages / user.allPages) * 100,
+        completionRate: (latestEndPage / user.allPages) * 100,
         reviews: reviewsWithComments,
-        readPages: user.readPages,
+        readPages: latestEndPage,
         streak: streak,
       }
     } catch (error) {
@@ -320,7 +319,7 @@ class ReviewService {
       const reviews = await ReviewsRepo.getReviewsByUserId(userId)
       const reviewIds = reviews.map((review) => review._id)
       const allComments = await CommentsRepo.getCommentsByReviewIds(reviewIds)
-
+      const latestEndPage = await ReviewsRepo.getLatestReviewEndPage(userId)
       const commentUserIds = [
         ...new Set(allComments.map((comment) => comment.userId.toString())),
       ]
@@ -354,9 +353,9 @@ class ReviewService {
       return {
         userId: new ObjectId(userId),
         nickName: user.nickName,
-        completionRate: (user.readPages / user.allPages) * 100,
+        completionRate: (latestEndPage / user.allPages) * 100,
         reviews: reviewsWithComments,
-        readPages: user.readPages,
+        readPages: latestEndPage,
         streak: streak,
       }
     } catch (error) {
@@ -437,7 +436,6 @@ class ReviewService {
         nickName: currentUser ? currentUser.nickName : 'Unknown',
         likedReviews: sortedResult,
       }
-      console.log(response)
       return response
     } catch (error) {
       throw error
@@ -501,7 +499,6 @@ class ReviewService {
       // 오늘 글을 썼다면 최소 1, 아니면 0 반환
       return hasReviewToday ? Math.max(1, streak) : 0
     } catch (error) {
-      console.error('Error calculating streak:', error)
       return 0
     }
   }

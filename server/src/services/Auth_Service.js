@@ -68,8 +68,7 @@ class AuthService {
       realName: realName,
       inflowChannel: inflowChannel,
       createdAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
-      allPages: 409, // 임시로 100페이지로 설정
-      readPages: 0,
+      allPages: 409, // 책의 총 페이지 수
     }
     try {
       const result = await UsersRepo.createUser(uesrData)
