@@ -24,6 +24,15 @@ const Main = () => {
   }
 
   useEffect(() => {
+    const token = localStorage.getItem('token')
+    console.log(token)
+
+    if (!token || token === '') {
+      navigate('/login')
+    }
+  }, [])
+
+  useEffect(() => {
     const fetchMainInfo = async () => {
       try {
         const result = await BackendApis.getMainInfo()

@@ -4,6 +4,7 @@ import BackendApis from '../../utils/backendApis'
 import NavBar from '../../components/NavBar/NavBar'
 import WriteForm from '../../components/WriteForm.js/WriteForm'
 import styles from './Write.module.css'
+import { useEffect } from 'react'
 
 const Write = () => {
   const [formData, setFormData] = useState({
@@ -60,6 +61,15 @@ const Write = () => {
       setError('글 작성에 실패했습니다.')
     }
   }
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    console.log(token)
+
+    if (!token || token === '') {
+      navigate('/login')
+    }
+  }, [])
 
   return (
     <>

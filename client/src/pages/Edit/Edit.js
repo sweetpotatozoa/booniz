@@ -18,6 +18,15 @@ const Edit = () => {
   const [loading, setLoading] = useState(true) // 로딩 상태 추가
 
   useEffect(() => {
+    const token = localStorage.getItem('token')
+    console.log(token)
+
+    if (!token || token === '') {
+      navigate('/login')
+    }
+  }, [])
+
+  useEffect(() => {
     const fetchReview = async () => {
       try {
         const result = await BackendApis.getMyReview(reviewId)

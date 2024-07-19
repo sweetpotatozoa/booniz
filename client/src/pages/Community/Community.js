@@ -93,6 +93,15 @@ const Community = () => {
   }
 
   useEffect(() => {
+    const token = localStorage.getItem('token')
+    console.log(token)
+
+    if (!token || token === '') {
+      navigate('/login')
+    }
+  }, [])
+
+  useEffect(() => {
     const fetchReviews = async () => {
       try {
         const formattedDate = moment(selectedDate)
