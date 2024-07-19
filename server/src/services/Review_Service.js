@@ -78,42 +78,53 @@ class ReviewService {
   // 실제 함수
   // 메인 정보 가져오기
   async getMainInfo(userId) {
-    const user = await this.checkUserIdExist(userId)
-    if (!user) {
-      throw new Error('No user found')
+    try {
+      const user = await this.checkUserIdExist(userId)
+      if (!user) {
+        throw new Error('No user found')
+      }
+
+      const reviews = await ReviewsRepo.getMyReviews(userId)
+      const userData = await UsersRepo.getUserData(userId)
+
+      // 유저 리뷰들의 createdAt을 기준으로 출석체크
+      const writeDates = new Set(
+        reviews.map((review) => {
+          const date = moment(review.createdAt)
+            .tz('Asia/Seoul')
+            .format('YYYY-MM-DD')
+          return date
+        }),
+      )
+
+      // 챌린지 시작 날짜를 startDate로 설정 (임시로 2024-07-07로 설정)
+      const startDate = '2024-07-07'
+      // 오늘 날짜를 endDate로 설정
+      const endDate = moment().tz('Asia/Seoul').format('YYYY-MM-DD')
+
+      // 시작일부터 오늘까지의 날짜 배열 생성
+      const dateArray = this.createDateArray(startDate, endDate)
+
+      // 각 날짜가 writeDates에 포함되는지 확인하여 배열 생성
+      const dailyStatus = dateArray.map((date) =>
+        writeDates.has(date) ? 1 : 0,
+      )
+      const latestEndPage = await ReviewsRepo.getLatestReviewEndPage(userId)
+
+      const updatedUserData = {
+        ...userData,
+        readPages: latestEndPage,
+      }
+      const result = {
+        reviews: reviews,
+        userData: updatedUserData,
+        dailyStatus: dailyStatus,
+      }
+
+      return result
+    } catch (error) {
+      throw error
     }
-
-    const reviews = await ReviewsRepo.getMyReviews(userId)
-    const userData = await UsersRepo.getUserData(userId)
-
-    // 유저 리뷰들의 createdAt을 기준으로 출석체크
-    const writeDates = new Set(
-      reviews.map((review) => {
-        const date = moment(review.createdAt)
-          .tz('Asia/Seoul')
-          .format('YYYY-MM-DD')
-        return date
-      }),
-    )
-
-    // 챌린지 시작 날짜를 startDate로 설정 (임시로 2024-07-07로 설정)
-    const startDate = '2024-07-07'
-    // 오늘 날짜를 endDate로 설정
-    const endDate = moment().tz('Asia/Seoul').format('YYYY-MM-DD')
-
-    // 시작일부터 오늘까지의 날짜 배열 생성
-    const dateArray = this.createDateArray(startDate, endDate)
-
-    // 각 날짜가 writeDates에 포함되는지 확인하여 배열 생성
-    const dailyStatus = dateArray.map((date) => (writeDates.has(date) ? 1 : 0))
-
-    const result = {
-      reviews: reviews,
-      userData: userData,
-      dailyStatus: dailyStatus,
-    }
-
-    return result
   }
 
   // 리뷰 생성
