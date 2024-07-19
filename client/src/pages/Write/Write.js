@@ -42,7 +42,7 @@ const Write = () => {
       return
     }
     if (!startPage || !endPage) {
-      setError('시작 페이지와 끝 페이지는 숫자여야 합니다.')
+      setError('시작 페이지와 끝 페이지를 입력해주세요.')
       return
     }
     if (Number(startPage) > Number(endPage)) {
@@ -52,9 +52,9 @@ const Write = () => {
     if (Number(startPage) <= 0 || Number(endPage) <= 0) {
       setError('페이지는 0보다 커야합니다.')
     }
-    if (Number(startPage).isInteger() || Number(endPage).isInteger()) {
-      setError('페이지는 자연수여야 합니다.')
-    }
+    // if (Number(startPage).isInteger() || Number(endPage).isInteger()) {
+    //   setError('페이지는 자연수여야 합니다.')
+    // }
 
     try {
       const result = await BackendApis.createReview('POST', newFormdata)
