@@ -76,31 +76,6 @@ const Review = ({
           </div>
         )}
         <div className={styles.content}>
-          {showNickName && (
-            <div>
-              {userData.userId === entry.userId && (
-                <button
-                  onClick={(e) => {
-                    handleClick(e)
-                    handleEditClick(entry._id)
-                  }}
-                >
-                  수정하기
-                </button>
-              )}
-              {userData.userId === entry.userId && (
-                <button
-                  className={styles.reviewDelete}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleDeleteClick()
-                  }}
-                >
-                  삭제하기
-                </button>
-              )}
-            </div>
-          )}
           <div className={styles.header}>
             {showNickName ? (
               <>
@@ -165,6 +140,7 @@ const Review = ({
                   handleClick(e)
                   handleLikeClick()
                 }}
+                className={styles.like}
               >
                 <img src='/images/Heart_01.svg' alt='Heart Icon'></img>
                 {likedBy.length}개
@@ -174,6 +150,31 @@ const Review = ({
                 {entry.comments.length}개
               </div>
             </div>
+            {showNickName && (
+              <div className={styles.head}>
+                {userData.userId === entry.userId && (
+                  <button
+                    onClick={(e) => {
+                      handleClick(e)
+                      handleEditClick(entry._id)
+                    }}
+                  >
+                    수정하기
+                  </button>
+                )}
+                {userData.userId === entry.userId && (
+                  <button
+                    className={styles.reviewDelete}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleDeleteClick()
+                    }}
+                  >
+                    삭제하기
+                  </button>
+                )}
+              </div>
+            )}
           </div>
           {entry.expanded && (
             <div className={styles.commentsSection} onClick={handleClick}>
