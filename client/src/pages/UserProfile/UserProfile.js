@@ -117,42 +117,46 @@ const UserProfile = () => {
 
   return (
     <>
-      <NavBar />
-      <div className={styles.userProfileContainer}>
-        <div className={styles.profileHeader}>
-          <h1>{userData.nickName}님의 프로필</h1>
-          <ProfileInfo
-            nickName={userData.nickName}
-            consecutiveDays={userData.streak}
-            completionRate={userData.completionRate}
-            readPages={userData.readPages}
-          />
-        </div>
-        <div className={styles.reviewContainer}>
-          {userData.reviews && userData.reviews.length > 0 ? (
-            userData.reviews.map((entry) => {
-              const reviewDate = moment(entry.createdAt)
-              const dayDifference =
-                reviewDate.diff(challengeStartDate, 'days') + 1
-              return (
-                <Review
-                  key={entry._id}
-                  entry={entry}
-                  userData={userData}
-                  setUserData={setUserData}
-                  dayDifference={dayDifference}
-                  handleEntryClick={handleEntryClick}
-                  handleEditClick={handleEditClick}
-                  handleDeleteComment={handleDeleteComment}
-                  handleCommentSubmit={handleCommentSubmit}
-                />
-              )
-            })
-          ) : (
-            <p>독서 기록이 없습니다.</p>
-          )}
-        </div>
-      </div>
+      {userData.nickName === '' ? null : (
+        <>
+          <NavBar />
+          <div className={styles.userProfileContainer}>
+            <div className={styles.profileHeader}>
+              <h1>{userData.nickName}님의 프로필</h1>
+              <ProfileInfo
+                nickName={userData.nickName}
+                consecutiveDays={userData.streak}
+                completionRate={userData.completionRate}
+                readPages={userData.readPages}
+              />
+            </div>
+            <div className={styles.reviewContainer}>
+              {userData.reviews && userData.reviews.length > 0 ? (
+                userData.reviews.map((entry) => {
+                  const reviewDate = moment(entry.createdAt)
+                  const dayDifference =
+                    reviewDate.diff(challengeStartDate, 'days') + 1
+                  return (
+                    <Review
+                      key={entry._id}
+                      entry={entry}
+                      userData={userData}
+                      setUserData={setUserData}
+                      dayDifference={dayDifference}
+                      handleEntryClick={handleEntryClick}
+                      handleEditClick={handleEditClick}
+                      handleDeleteComment={handleDeleteComment}
+                      handleCommentSubmit={handleCommentSubmit}
+                    />
+                  )
+                })
+              ) : (
+                <p>독서 기록이 없습니다.</p>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </>
   )
 }

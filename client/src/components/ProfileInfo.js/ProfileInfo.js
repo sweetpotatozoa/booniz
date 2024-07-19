@@ -7,6 +7,7 @@ const ProfileInfo = ({
   consecutiveDays,
   completionRate,
   readPages,
+  myProfile = false,
 }) => {
   const navigate = useNavigate()
 
@@ -38,12 +39,14 @@ const ProfileInfo = ({
           </div>
         </div>
       </div>
-      <button
-        onClick={() => navigate('/myLikes')}
-        className={styles.likedReviews}
-      >
-        좋아요한 글
-      </button>
+      {myProfile && (
+        <button
+          onClick={() => navigate('/myLikes')}
+          className={styles.likedReviews}
+        >
+          좋아요한 글
+        </button>
+      )}
     </div>
   )
 }

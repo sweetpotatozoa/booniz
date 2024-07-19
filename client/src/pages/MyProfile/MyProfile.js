@@ -138,6 +138,7 @@ const MyProfile = () => {
                 consecutiveDays={userData.streak}
                 completionRate={userData.completionRate}
                 readPages={userData.readPages}
+                myProfile={true}
               />
             </div>
             <div className={styles.reviewContainer}>
