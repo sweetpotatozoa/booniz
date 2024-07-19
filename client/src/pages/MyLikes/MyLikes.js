@@ -58,7 +58,11 @@ const MyLikes = () => {
             >
               <h3>{entry.authorNickName}</h3>
               <div className={styles.top}>
-                <h4>{entry.title}</h4>
+                {entry.title.length <= 7 ? (
+                  <h4>{entry.title}</h4>
+                ) : (
+                  <h4>{truncateContent(entry.title, 7)}</h4>
+                )}
                 <small>{entry.updatedAt}</small>
               </div>
               <p>{truncateContent(entry.content, 150)}</p>

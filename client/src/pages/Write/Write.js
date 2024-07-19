@@ -37,7 +37,7 @@ const Write = () => {
       setError('제목은 50자 이하여야 합니다.')
       return
     }
-    if (title.length === 0) {
+    if (!title?.trim()) {
       setError('제목을 입력하세요')
       return
     }
@@ -45,7 +45,7 @@ const Write = () => {
       setError('내용은 300자 이상이어야 합니다.')
       return
     }
-    if (!startPage || !endPage) {
+    if (!startPage?.trim() || !endPage?.trim()) {
       setError('시작 페이지와 끝 페이지를 입력해주세요.')
       return
     }
