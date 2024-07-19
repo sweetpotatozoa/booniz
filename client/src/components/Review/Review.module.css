@@ -92,7 +92,6 @@
 }
 
 .bottom div {
-  margin-right: 30px;
   display: flex;
   align-items: center;
 }
@@ -175,4 +174,20 @@
   text-decoration: underline;
   background-color: #fdfcf7;
   margin-left: 20px;
+}
+
+.head {
+  display: flex;
+  flex-direction: row;
+}
+
+.head button {
+  font-size: 16px;
+  text-decoration: underline;
+  background-color: #fdfcf7;
+  cursor: pointer;
+}
+
+.like {
+  margin-right: 30px;
 }
