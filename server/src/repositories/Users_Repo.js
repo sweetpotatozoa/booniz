@@ -64,19 +64,6 @@ class UsersRepo {
     }
   }
 
-  //읽은 쪽수 업데이트 하기
-  async updateReadPages(userId, pages) {
-    try {
-      const result = await this.collection.updateOne(
-        { _id: new ObjectId(userId) },
-        { $set: { readPages: pages } },
-      )
-      return result
-    } catch (error) {
-      throw error
-    }
-  }
-
   async getUsersByIds(userIds) {
     try {
       const objectIds = userIds.map((id) => new ObjectId(id))

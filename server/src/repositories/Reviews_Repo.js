@@ -250,5 +250,14 @@ class ReviewsRepo {
     )
     return result.value
   }
+
+  async getLatestReviewEndPage(userId) {
+    const latestReview = await this.collection
+      .find({ userId: new ObjectId(userId) })
+      .sort({ createdAt: -1 })
+      .limit(1)
+      .toArray()
+    return latestReview.length > 0 ? latestReview[0].endPage : 0
+  }
 }
 module.exports = new ReviewsRepo()
