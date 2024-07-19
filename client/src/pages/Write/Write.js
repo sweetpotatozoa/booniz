@@ -55,7 +55,17 @@ const Write = () => {
       if (result && result.acknowledged) {
         navigate('/')
       } else {
-        setError('글 작성에 실패했습니다.')
+        console.log('result.message:', result.message)
+        if (
+          result.message ===
+          '오늘 이미 일지를 작성하셨습니다. 다음 일지는 내일 작성해 주세요.'
+        ) {
+          setError(
+            '하루에 하나의 일지만 작성할 수 있습니다. 자정 이후에 다시 시도해주세요.',
+          )
+        } else {
+          setError('글 작성에 실패했습니다.')
+        }
       }
     } catch (error) {
       setError('글 작성에 실패했습니다.')
@@ -64,7 +74,7 @@ const Write = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token')
-    console.log(token)
+    // console.log(token)
 
     if (!token || token === '') {
       navigate('/login')
