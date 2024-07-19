@@ -85,7 +85,7 @@ const Edit = () => {
       })
       console.log(result) //디버깅
       if (result) {
-        navigate('/')
+        navigate('/myProfile')
       } else {
         setError('글 작성에 실패했습니다.')
       }
@@ -94,20 +94,24 @@ const Edit = () => {
     }
   }
 
-  if (loading) return <p>Loading...</p> // 로딩 상태 표시
+  // if (loading) return <p>Loading...</p> // 로딩 상태 표시
 
   return (
     <>
-      <NavBar />
-      <div className={styles.container}>
-        <h1>리뷰 수정하기</h1>
-        <WriteForm
-          formData={reviewData}
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-          error={error}
-        />
-      </div>
+      {reviewData.title === '' ? null : (
+        <>
+          <NavBar />
+          <div className={styles.container}>
+            <h1>리뷰 수정하기</h1>
+            <WriteForm
+              formData={reviewData}
+              handleChange={handleChange}
+              handleSubmit={handleSubmit}
+              error={error}
+            />
+          </div>
+        </>
+      )}
     </>
   )
 }
