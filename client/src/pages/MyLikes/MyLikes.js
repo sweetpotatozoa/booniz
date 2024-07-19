@@ -14,6 +14,15 @@ const MyLikes = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
+    const token = localStorage.getItem('token')
+    console.log(token)
+
+    if (!token || token === '') {
+      navigate('/login')
+    }
+  }, [])
+
+  useEffect(() => {
     const fetchLikedEntries = async () => {
       try {
         const result = await BackendApis.getLikedReviews()

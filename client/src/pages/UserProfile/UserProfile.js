@@ -36,6 +36,15 @@ const UserProfile = () => {
   }
 
   useEffect(() => {
+    const token = localStorage.getItem('token')
+    console.log(token)
+
+    if (!token || token === '') {
+      navigate('/login')
+    }
+  }, [])
+
+  useEffect(() => {
     fetchUserProfile(userId)
   }, [userId])
 
