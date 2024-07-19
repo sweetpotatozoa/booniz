@@ -266,7 +266,7 @@ class ReviewService {
   }
 
   //다른 유저 프로필 조회
-  async getUserProfile(userId) {
+  async getUserProfile(userId, currentUserId) {
     try {
       const user = await UsersRepo.getUserData(userId)
       if (!user) {
@@ -313,6 +313,7 @@ class ReviewService {
         reviews: reviewsWithComments,
         readPages: latestEndPage,
         streak: streak,
+        myUserId: currentUserId,
       }
     } catch (error) {
       throw error
@@ -489,26 +490,53 @@ class ReviewService {
       )
 
       const today = moment().tz('Asia/Seoul').format('YYYY-MM-DD')
+      const yesterday = moment()
+        .tz('Asia/Seoul')
+        .subtract(1, 'days')
+        .format('YYYY-MM-DD')
+
       const hasReviewToday = reviewDatesSet.has(today)
+      const hasReviewYesterday = reviewDatesSet.has(yesterday)
 
       let streak = 0
 
-      // 오늘부터 과거로 31일 동안 확인
-      for (let i = 0; i < 31; i++) {
-        const date = moment()
-          .tz('Asia/Seoul')
-          .subtract(i, 'days')
-          .format('YYYY-MM-DD')
-        if (reviewDatesSet.has(date)) {
-          streak++
-        } else if (i > 0) {
-          // 첫 번째 누락된 날(오늘 제외)에서 중단
-          break
+      if (hasReviewToday) {
+        streak = 1
+
+        // 어제부터 과거로 연속된 날짜 확인
+        let i = 1
+        while (true) {
+          const date = moment()
+            .tz('Asia/Seoul')
+            .subtract(i, 'days')
+            .format('YYYY-MM-DD')
+          if (reviewDatesSet.has(date)) {
+            streak++
+          } else {
+            break
+          }
+          i++
+        }
+      } else if (hasReviewYesterday) {
+        streak = 1
+
+        // 어제부터 과거로 연속된 날짜 확인
+        let i = 2
+        while (true) {
+          const date = moment()
+            .tz('Asia/Seoul')
+            .subtract(i, 'days')
+            .format('YYYY-MM-DD')
+          if (reviewDatesSet.has(date)) {
+            streak++
+          } else {
+            break
+          }
+          i++
         }
       }
 
-      // 오늘 글을 썼다면 최소 1, 아니면 0 반환
-      return hasReviewToday ? Math.max(1, streak) : 0
+      return streak
     } catch (error) {
       return 0
     }

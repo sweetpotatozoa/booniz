@@ -51,7 +51,7 @@ class CommentsRepo {
       const result = await this.collection
         .find({ reviewId: { $in: reviewIds } })
         .project({ reviewId: 1, content: 1, createdAt: 1, userId: 1 })
-        .sort({ createdAt: -1 })
+        .sort({ createdAt: 1 })
         .toArray()
       return result
     } catch (error) {

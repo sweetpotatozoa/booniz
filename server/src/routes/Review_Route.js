@@ -4,10 +4,10 @@ const wrapAsync = require('../utils/wrapAsync')
 const ReviewController = require('../controllers/Review_Controller')
 const CommentController = require('../controllers/Comment_Controller')
 const auth = require('../middleware/auth')
-// const fakeAuth = (req, res, next) => {
-//   req.user = { id: '6688390aa9bc9999444e1bb0' }
-//   next()
-// }
+const fakeAuth = (req, res, next) => {
+  req.user = { id: '6688390aa9bc9999444e1bb0' }
+  next()
+}
 
 //로그인 (참고용)
 // router.post('/login', wrapAsync(AuthController.login))
