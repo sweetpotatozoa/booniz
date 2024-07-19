@@ -97,7 +97,7 @@ const MyProfile = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token')
-    console.log(token)
+    // console.log(token)
 
     if (!token || token === '') {
       navigate('/login')
@@ -118,7 +118,7 @@ const MyProfile = () => {
     }
 
     fetchMyProfile()
-  }, [userData])
+  }, [])
 
   const challengeStartDate = moment('2024-07-07').tz('Asia/Seoul')
 
