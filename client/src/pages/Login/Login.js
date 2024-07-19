@@ -71,7 +71,7 @@ const Login = () => {
               * 영어와 숫자로 조합된 8자리 이상의 비밀번호
             </small>
           </div>
-          {error && <p className='error'>{error}</p>}
+          {error && <p className={styles.error}>{error}</p>}
           <button type='submit' className={styles.button}>
             로그인
           </button>
