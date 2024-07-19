@@ -41,15 +41,7 @@ class AuthService {
   }
 
   //회원가입 하기
-  async register(
-    userName,
-    password,
-    realName,
-    phoneNumber,
-    age,
-    nickName,
-    inflowChannel,
-  ) {
+  async register(userName, password, realName, phoneNumber, age, nickName) {
     const user = await UsersRepo.getUserInfo(userName)
     const doesNickNameExist = await UsersRepo.getNickName(nickName)
 
@@ -66,7 +58,6 @@ class AuthService {
       phoneNumber: phoneNumber,
       age: age,
       realName: realName,
-      inflowChannel: inflowChannel,
       createdAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
       allPages: 409, // 책의 총 페이지 수
     }
