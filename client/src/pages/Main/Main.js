@@ -137,7 +137,9 @@ const Main = () => {
                             </h3>
                             <small>{reviewDate.format('YYYY.MM.DD')}</small>
                           </div>
-                          <p>{truncateContent(entry.content, 150)}</p>
+                          <p className={styles.content}>
+                            {truncateContent(entry.content, 150)}
+                          </p>
                         </div>
                       </div>
                     </div>
