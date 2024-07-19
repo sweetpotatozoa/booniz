@@ -35,10 +35,10 @@ const Register = () => {
       return
     }
     if (
-      !formData.realName ||
-      !formData.phoneNumber ||
-      !formData.age ||
-      !formData.nickName
+      !formData.realName?.trim() ||
+      !formData.phoneNumber?.trim() ||
+      !formData.age?.trim() ||
+      !formData.nickName?.trim()
     ) {
       setError('공백은 불가합니다.')
       return
