@@ -40,15 +40,8 @@ class AuthController {
 
   // 회원가입
   async register(req, res) {
-    const {
-      userName,
-      password,
-      realName,
-      phoneNumber,
-      age,
-      nickName,
-      inflowChannel,
-    } = req.body
+    const { userName, password, realName, phoneNumber, age, nickName } =
+      req.body
 
     if (
       !userName ||
@@ -56,8 +49,7 @@ class AuthController {
       !nickName ||
       !age ||
       !phoneNumber ||
-      !realName ||
-      !inflowChannel
+      !realName
     ) {
       res.status(400).json({ message: '모든 필드를 채워주세요!' })
       return
@@ -83,7 +75,6 @@ class AuthController {
         phoneNumber,
         age,
         nickName,
-        inflowChannel,
       )
       res
         .status(201)

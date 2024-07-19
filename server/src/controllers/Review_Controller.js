@@ -71,8 +71,8 @@ class ReviewController {
       res.status(400).json({ message: '제목은 50자 이하여야 합니다.' })
       return
     }
-    if (content.length < 100) {
-      res.status(400).json({ message: '내용은 100자 이상이어야 합니다.' })
+    if (content.length < 300) {
+      res.status(400).json({ message: '내용은 300자 이상이어야 합니다.' })
       return
     }
     if (!isInteger(startPage) || !isInteger(endPage)) {
@@ -144,12 +144,16 @@ class ReviewController {
   //유저 프로필 조회하기
   async getUserProfile(req, res) {
     const userId = req.params.userId
+    const currentUserId = req.user.id
     if (userId && !isObjectId(userId)) {
       res.status(400).json({ message: '유효하지 않은 유저 아이디 입니다.' })
       return
     }
     try {
-      const userProfile = await ReviewService.getUserProfile(userId)
+      const userProfile = await ReviewService.getUserProfile(
+        userId,
+        currentUserId,
+      )
       res.status(200).json(userProfile)
     } catch (error) {
       res
