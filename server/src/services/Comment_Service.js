@@ -47,19 +47,31 @@ class CommentService {
   // 헬퍼 함수
   // 댓글 작성하기
   async createComment(reviewId, userId, content) {
-    const user = await UsersRepo.getUserById(userId)
-    if (!user) {
-      throw new Error('사용자를 찾을 수 없습니다.')
-    }
-    if (typeof content === 'object') {
-      content = JSON.stringify(content)
-    }
     try {
+      const user = await UsersRepo.getUserById(userId)
+      if (!user) {
+        throw new Error('사용자를 찾을 수 없습니다.')
+      }
+
+      // content 처리
+      let processedContent = content
+      if (typeof content === 'object' && content !== null) {
+        processedContent = JSON.stringify(content)
+      }
+
+      if (typeof processedContent === 'string') {
+        // 이스케이프된 따옴표를 일반 따옴표로 변경
+        processedContent = processedContent.replace(/\\"/g, '"')
+
+        // 문자열 시작과 끝의 불필요한 따옴표 제거 (이중 따옴표 방지)
+        processedContent = processedContent.replace(/^"|"$/g, '')
+      }
+
       const commentData = {
         reviewId: new ObjectId(reviewId),
         userId: new ObjectId(userId),
         nickName: user.nickName,
-        content,
+        content: processedContent,
         createdAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
       }
 
