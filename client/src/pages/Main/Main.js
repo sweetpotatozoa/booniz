@@ -131,7 +131,10 @@ const Main = () => {
                         >
                           <div className={styles.reviewHeader}>
                             <div>{dayDifference}일차</div>
-                            <h3>{entry.title}</h3>
+                            <h3>
+                              {entry.title <= 7 === false &&
+                                truncateContent(entry.title, 7)}
+                            </h3>
                             <small>{reviewDate.format('YYYY.MM.DD')}</small>
                           </div>
                           <p>{truncateContent(entry.content, 150)}</p>
