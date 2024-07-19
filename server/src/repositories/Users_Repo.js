@@ -46,7 +46,7 @@ class UsersRepo {
     const user = await this.collection.findOne(
       { _id: new ObjectId(userId) },
       {
-        projection: { _id: 0, nickName: 1, allPages: 1, readPages: 1 },
+        projection: { _id: 0, nickName: 1, allPages: 1 },
       },
     )
     return user
