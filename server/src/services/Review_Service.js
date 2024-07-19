@@ -98,7 +98,7 @@ class ReviewService {
       )
 
       // 챌린지 시작 날짜를 startDate로 설정 (임시로 2024-07-07로 설정)
-      const startDate = '2024-07-07'
+      const startDate = '2024-07-19'
       // 오늘 날짜를 endDate로 설정
       const endDate = moment().tz('Asia/Seoul').format('YYYY-MM-DD')
 
