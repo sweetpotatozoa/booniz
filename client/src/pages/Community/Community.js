@@ -141,6 +141,7 @@ const Community = () => {
                   onChange={(date) => setSelectedDate(date)}
                   dateFormat='yyyy.MM.dd'
                   className={styles.datePickerInput}
+                  disabled
                 />
                 <button onClick={handleNextDay}>
                   <img src='/images/right.svg' alt='Next Day' />
