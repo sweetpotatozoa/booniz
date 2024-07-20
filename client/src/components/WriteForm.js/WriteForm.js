@@ -4,7 +4,7 @@ import styles from './WriteForm.module.css'
 const WriteForm = ({ formData, handleChange, handleSubmit, error }) => {
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
-      <h1>오늘은 독서 일지를 작성해볼까요?</h1>
+      <h1>오늘의 독서 일지를 작성해볼까요?</h1>
       <div className={styles.pages}>
         읽은 쪽수
         <div className={styles.page}>
