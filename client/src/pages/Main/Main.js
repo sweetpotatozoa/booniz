@@ -104,13 +104,19 @@ const Main = () => {
                 매일 독서일지를 쓰면, 선물을 받을 수 있어요
               </div>
               <div className={styles.attendanceDots}>
-                {fullDailyStatus.map((day) => (
-                  <div
+                {fullDailyStatus.map((day, idx) => (
+                  <img
                     key={day.id}
                     className={`${styles.dot} ${
                       day.status ? styles.active : ''
                     }`}
-                  ></div>
+                    style={{
+                      backgroundImage: `url(images/${
+                        day.status ? 'attendence' : `day${idx + 1}`
+                      }.svg)`,
+                      backgroundSize: 'cover', // 배경 이미지를 꽉 채우기 위해 추가
+                    }}
+                  ></img>
                 ))}
               </div>
             </div>
