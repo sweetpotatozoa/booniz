@@ -4,7 +4,7 @@ import truncateContent from '../../utils/truncateContent'
 import BackendApis from '../../utils/backendApis'
 import NavBar from '../../components/NavBar/NavBar'
 import styles from './Main.module.css'
-import moment from 'moment'
+import moment from 'moment-timezone'
 
 const Main = () => {
   const [userData, setUserData] = useState({
@@ -55,7 +55,7 @@ const Main = () => {
     fetchMainInfo()
   }, [])
 
-  const challengeStartDate = moment('2024-07-07')
+  const challengeStartDate = moment('2024-07-23').tz('Asia/Seoul')
 
   // Create an array of length 10, filling with existing dailyStatus or inactive dots
   const fullDailyStatus = Array.from({ length: 10 }, (_, idx) => ({

@@ -120,7 +120,7 @@ const MyProfile = () => {
     fetchMyProfile()
   }, [])
 
-  const challengeStartDate = moment('2024-07-07').tz('Asia/Seoul')
+  const challengeStartDate = moment('2024-07-23').tz('Asia/Seoul')
 
   return (
     <>

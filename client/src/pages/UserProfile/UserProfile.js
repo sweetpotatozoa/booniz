@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import BackendApis from '../../utils/backendApis'
 import NavBar from '../../components/NavBar/NavBar'
 import styles from './UserProfile.module.css'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import Review from '../../components/Review/Review'
 import ProfileInfo from '../../components/ProfileInfo.js/ProfileInfo'
 
@@ -113,7 +113,7 @@ const UserProfile = () => {
     navigate(`/edit/${userId}/${reviewId}`)
   }
 
-  const challengeStartDate = moment('2024-07-07')
+  const challengeStartDate = moment('2024-07-23').tz('Asia/Seoul')
 
   return (
     <>
