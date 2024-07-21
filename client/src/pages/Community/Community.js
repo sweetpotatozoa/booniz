@@ -126,7 +126,7 @@ const Community = () => {
     fetchReviews()
   }, [selectedDate])
 
-  const challengeStartDate = moment('2024-07-07').tz('Asia/Seoul')
+  const challengeStartDate = moment('2024-07-23').tz('Asia/Seoul')
   const isFutureDate = moment(selectedDate).isSameOrAfter(
     moment().startOf('day'),
   )
