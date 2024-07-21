@@ -114,7 +114,7 @@ const Main = () => {
                       backgroundImage: `url(images/${
                         day.status ? 'attendence' : `day${idx + 1}`
                       }.svg)`,
-                      backgroundSize: 'cover', // 배경 이미지를 꽉 채우기 위해 추가
+                      backgroundSize: 'cover',
                     }}
                   ></img>
                 ))}
