@@ -25,7 +25,6 @@ const Main = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token')
-    console.log(token)
 
     if (!token || token === '') {
       navigate('/login')
