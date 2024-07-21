@@ -1,0 +1,70 @@
+.container {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+}
+
+.likes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 466px);
+  gap: 20px;
+  margin-top: 20px;
+  width: 1440px;
+}
+
+.like {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  background-color: #fdfcf7;
+  padding: 24px 30px;
+  border: 1px solid #282828;
+  border-radius: 15px;
+  flex-direction: column;
+}
+
+.like h3 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.top h4 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.top small {
+  font-size: 16px;
+  padding-left: 8px;
+  border-left: 2px solid #282828;
+}
+
+.bottom {
+  display: flex;
+  align-items: center;
+  margin-top: 18px;
+}
+
+.bottom div {
+  display: flex;
+  align-items: center;
+  margin-right: 30px;
+}
+
+.bottom div img {
+  margin-right: 8px;
+}
+
+.content {
+  word-wrap: break-word; /* 긴 단어가 줄을 넘지 않도록 합니다 */
+  overflow-wrap: break-word; /* 긴 단어가 줄을 넘지 않도록 합니다 */
+  white-space: normal; /* 기본 줄 바꿈을 허용합니다 */
+}

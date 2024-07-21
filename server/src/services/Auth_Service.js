@@ -2,6 +2,7 @@ const UsersRepo = require('../repositories/Users_Repo')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const configs = require('../utils/configs')
+const moment = require('moment-timezone')
 
 class AuthService {
   //헬퍼 함수
@@ -9,7 +10,7 @@ class AuthService {
   async getUserInfo(userName) {
     const user = await UsersRepo.getUserInfo(userName)
     if (!user) {
-      throw new Error('No user found')
+      throw new Error('No user found - login')
     }
     return user
   }
@@ -33,7 +34,6 @@ class AuthService {
     const isValid = await this.validatePassword(password, result.password) // 비밀번호 일치 검사
     if (isValid) {
       const tokenResult = await this.getToken(result._id) // 토큰 부여
-      console.log('로그인 성공', tokenResult)
       return { token: tokenResult }
     } else {
       throw new Error('Invalid password')
@@ -41,21 +41,36 @@ class AuthService {
   }
 
   //회원가입 하기
-  async signUp(userName, password, job, career) {
+  async register(userName, password, realName, phoneNumber, age, nickName) {
     const user = await UsersRepo.getUserInfo(userName)
+    const doesNickNameExist = await UsersRepo.getNickName(nickName)
+
     if (user) {
       throw new Error('User already exists')
+    } else if (doesNickNameExist) {
+      throw new Error('NickName already exists')
     }
     const hash = bcrypt.hashSync(password, 10)
     const uesrData = {
       userName: userName,
       password: hash,
-      job: job,
-      career: career,
-      lastRead: new Date(new Date().getTime() - 2 * 60 * 60 * 1000),
+      nickName: nickName,
+      phoneNumber: phoneNumber,
+      age: age,
+      realName: realName,
+      createdAt: moment().tz('Asia/Seoul').format('YYYY-MM-DD HH:mm:ss'),
+      allPages: 409, // 책의 총 페이지 수
     }
-    const result = await UsersRepo.createUser(uesrData)
-    return { message: 'User created', result }
+    try {
+      const result = await UsersRepo.createUser(uesrData)
+      // 특정 예외 처리: 특정 예외를 포착하고 처리
+      if (!result.acknowledged) {
+        throw new Error('User registration failed')
+      }
+    } catch (error) {
+      // 일반 예외 처리: 그 외의 모든 예외를 포착하고 처리
+      throw new Error(`User registration failed: ${error.message}`)
+    }
   }
 }
 

@@ -1,0 +1,144 @@
+.container {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 36px;
+}
+
+.progressContainer {
+  display: flex;
+  align-items: center;
+  padding: 20px 32px;
+  justify-content: space-between;
+  background-color: #fdfcf7;
+  margin-top: 20px;
+  border-radius: 15px;
+  border: 1px solid #282828;
+}
+
+.readingProgress {
+  font-size: 20px;
+}
+
+.progressBar {
+  width: 954px;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 1px solid #282828;
+  height: 28px;
+}
+
+.progress {
+  height: 100%;
+  background-color: #ff7342;
+  border-radius: 50px;
+}
+
+.pages {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.pages div {
+  margin-left: 60px;
+}
+
+.page {
+  margin-top: 4px;
+}
+
+.attendanceContainer {
+  display: flex;
+  padding: 20px 32px;
+  background-color: #fdfcf7;
+  margin-top: 20px;
+  border-radius: 15px;
+  border: 1px solid #282828;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.subTitle {
+  font-size: 16px;
+  margin-top: 4px;
+}
+
+.dot {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 1px solid #282828;
+}
+
+.attendanceDots {
+  display: flex;
+  margin-top: 18px;
+  gap: 20px;
+}
+
+.review {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3개의 열로 설정 */
+  gap: 20px; /* 각 항목 간의 간격 */
+  border-radius: 15px;
+  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.reviewData {
+  display: flex;
+  flex-direction: column;
+  max-width: 467px;
+  min-width: 467px;
+  padding: 24px 30px;
+  background-color: #fdfcf7;
+  border-radius: 15px;
+  border: 1px solid #282828;
+  cursor: pointer;
+  min-height: 226.4px;
+}
+
+.sub {
+  margin-top: 4px;
+  font-size: 16px;
+}
+
+.reviewHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.reviewHeader div {
+  display: flex;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 8px 20px;
+  background-color: #ff7342;
+  border-radius: 100px;
+  border: 1px solid #282828;
+}
+
+.reviewHeader h3 {
+  margin-left: 8px;
+  padding-right: 8px;
+}
+
+.reviewHeader small {
+  font-size: 16px;
+  color: #282828;
+  padding-left: 8px;
+  border-left: 2px solid #7d7d7d;
+}
+
+.content {
+  word-wrap: break-word; /* 긴 단어가 줄을 넘지 않도록 합니다 */
+  overflow-wrap: break-word; /* 긴 단어가 줄을 넘지 않도록 합니다 */
+  white-space: normal; /* 기본 줄 바꿈을 허용합니다 */
+}

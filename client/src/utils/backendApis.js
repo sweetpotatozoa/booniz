@@ -28,13 +28,130 @@ class BackendApis {
     this.token = localStorage.getItem('token') || null
   }
 
-  //로그인 하기(예시)
   async login(method = 'POST', params = {}) {
     const result = await fetcher('/api/auth/login', '', method, params)
     if (result.token) {
       this.token = result.token
       localStorage.setItem('token', this.token)
     }
+    return result
+  }
+
+  async register(method = 'POST', params = {}) {
+    const result = await fetcher('/api/auth/register', '', method, params)
+    return result
+  }
+
+  async getMainInfo() {
+    const result = await fetcher('/api/review/getMainInfo', this.token, 'GET')
+    // console.log(result) //디버깅용
+    return result
+  }
+
+  async getMyProfile() {
+    const result = await fetcher('/api/review/myProfile', this.token, 'GET')
+    // console.log(result)
+    return result
+  }
+
+  async createReview(method = 'POST', params = {}) {
+    const result = await fetcher(
+      '/api/review/createReview',
+      this.token,
+      method,
+      params,
+    )
+    console.log(result)
+    return result
+  }
+
+  async getUserProfile(userId) {
+    // console.log('Fetching profile for userId:', userId) // Debugging
+    const result = await fetcher(
+      `/api/review/userProfile/${userId}`,
+      this.token,
+      'GET',
+    )
+    // console.log('Profile fetch result:', result) // Debugging
+    return result
+  }
+
+  async getCommunityReviews(date) {
+    const result = await fetcher(
+      `/api/review/community/${date}`,
+      this.token,
+      'GET',
+    )
+    // console.log(result)
+    return result
+  }
+
+  async createComment(reviewId, params = {}) {
+    const result = await fetcher(
+      `/api/comment/createComment/${reviewId}`,
+      this.token,
+      'POST',
+      params,
+    )
+    // console.log('newComment::', result)
+    return result
+  }
+
+  async deleteComment(commentId) {
+    const result = await fetcher(
+      `/api/comment/delete/${commentId}`,
+      this.token,
+      'DELETE',
+    )
+    return result
+  }
+
+  async getMyReview(reviewId) {
+    //수정하기 1단계. 내가 쓴 글 가져오기
+    const result = await fetcher(
+      `/api/review/getMyReview/${reviewId}`,
+      this.token,
+      'GET',
+    )
+    console.log(result)
+    return result
+  }
+
+  async updateMyReview(method = 'PUT', params = {}) {
+    const result = await fetcher(
+      `/api/review/edit/${params.reviewId}`,
+      this.token,
+      method,
+      params.reviewData,
+    )
+    // console.log(result)
+    return result
+  }
+
+  async getLikedReviews() {
+    const result = await fetcher('/api/review/liked', this.token, 'GET')
+    console.log('result:', result)
+    return result
+  }
+
+  //좋아요
+  async likeReview(reviewId) {
+    const result = await fetcher(
+      `/api/review/like/${reviewId}`,
+      this.token,
+      'POST',
+    )
+    return result
+  }
+
+  //글삭제
+  async deleteReview(reviewId) {
+    const result = await fetcher(
+      `/api/review/delete/${reviewId}`,
+      this.token,
+      'DELETE',
+    )
+    console.log(result)
     return result
   }
 }

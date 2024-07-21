@@ -1,0 +1,196 @@
+.reviewEntry {
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+  width: 1440px;
+  cursor: pointer;
+}
+
+.nickName {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.day {
+  font-size: 13px;
+  font-weight: bold;
+  color: #282828;
+  margin-left: 20px;
+  padding: 8px 20px;
+  background-color: #ff7342;
+  border: 1px solid #282828;
+  border-radius: 100px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  padding: 24px 30px;
+  background-color: #fdfcf7;
+  border: 1px solid #282828;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  word-wrap: break-word; /* 긴 단어가 줄을 넘지 않도록 합니다 */
+  overflow-wrap: break-word; /* 긴 단어가 줄을 넘지 않도록 합니다 */
+  white-space: normal; /* 기본 줄 바꿈을 허용합니다 */
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.page {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 13px;
+  padding: 8px 16px;
+  border: 1px solid #282828;
+  border-radius: 30px;
+}
+
+.contentInfo {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.top {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.top h3 {
+  font-size: 20px;
+  font-weight: bold;
+  padding-right: 8px;
+}
+
+.top small {
+  font-size: 16px;
+  padding-left: 8px;
+  border-left: 2px solid #282828;
+}
+
+.contentInfo button {
+  font-size: 16px;
+  text-decoration: underline;
+  background-color: #fdfcf7;
+  cursor: pointer;
+}
+
+.main {
+  margin-top: 12px;
+  margin-bottom: 18px;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.bottom div {
+  display: flex;
+  align-items: center;
+}
+
+.bottom div img {
+  margin-right: 8px;
+}
+
+.commentsSection {
+  margin-top: 20px;
+}
+
+.commentHeader {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 12px;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.commentName {
+  font-size: 20px;
+  font-weight: bold;
+  padding-right: 8px;
+  border-right: 2px solid #7d7d7d;
+}
+
+.commentDate {
+  font-size: 16px;
+  color: #282828;
+  padding-left: 8px;
+  align-self: center;
+}
+
+.mainComment {
+  font-size: 16px;
+  padding-bottom: 20px;
+}
+
+.commentWrapper {
+  border-bottom: 1px solid #282828;
+  margin-bottom: 8px;
+}
+
+.commentWrapper:last-of-type {
+  border-bottom: none;
+}
+
+.smallHeader {
+  display: flex;
+  flex-direction: row;
+}
+.rightHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.upHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.day1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.page1 {
+  font-size: 13px;
+  padding: 8px 16px;
+  border: 1px solid #282828;
+  border-radius: 30px;
+}
+
+.reviewDelete {
+  font-size: 16px;
+  text-decoration: underline;
+  background-color: #fdfcf7;
+  margin-left: 20px;
+}
+
+.head {
+  display: flex;
+  flex-direction: row;
+}
+
+.head button {
+  font-size: 16px;
+  text-decoration: underline;
+  background-color: #fdfcf7;
+  cursor: pointer;
+}
+
+.like {
+  margin-right: 30px;
+}
