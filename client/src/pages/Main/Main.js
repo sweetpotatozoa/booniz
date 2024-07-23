@@ -56,7 +56,7 @@ const Main = () => {
   }, [])
 
   // UTC 시간으로 날짜를 설정
-  const challengeStartDate = moment.utc('2024-07-23').startOf('day')
+  const challengeStartDate = moment('2024-07-03').format('YYYY-MM-DD')
 
   // Create an array of length 10, filling with existing dailyStatus or inactive dots
   const fullDailyStatus = Array.from({ length: 10 }, (_, idx) => ({
@@ -127,7 +127,9 @@ const Main = () => {
               <h2 style={{ margin: '20px 0' }}>내가 쓴 독서일지</h2>
               <div className={styles.review}>
                 {userData.reviews.map((entry) => {
-                  const reviewDate = moment(entry.createdAt)
+                  const reviewDate = moment(entry.createdAt).format(
+                    'YYYY-MM-DD',
+                  )
                   const dayDifference =
                     reviewDate.diff(challengeStartDate, 'days') + 1
                   return (
