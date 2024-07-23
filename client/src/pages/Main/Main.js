@@ -65,6 +65,8 @@ const Main = () => {
     status: userData.dailyStatus[idx] ? userData.dailyStatus[idx].status : 0,
   }))
 
+  console.log(fullDailyStatus)
+
   return (
     <>
       {userData.nickName === '' ? null : (
