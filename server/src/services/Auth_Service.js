@@ -9,6 +9,7 @@ class AuthService {
   //유저 아이디 존재 검사, 비밀번호 뱉기
   async getUserInfo(userName) {
     const user = await UsersRepo.getUserInfo(userName)
+    console.log(user)
     if (!user) {
       throw new Error('No user found - login')
     }

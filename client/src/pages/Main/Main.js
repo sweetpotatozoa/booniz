@@ -55,7 +55,9 @@ const Main = () => {
     fetchMainInfo()
   }, [])
 
-  const challengeStartDate = moment('2024-07-23').tz('Asia/Seoul')
+  const challengeStartDate = moment('2024-07-23')
+    .tz('Asia/Seoul')
+    .startOf('day')
 
   // Create an array of length 10, filling with existing dailyStatus or inactive dots
   const fullDailyStatus = Array.from({ length: 10 }, (_, idx) => ({
