@@ -92,10 +92,13 @@ class ReviewService {
         reviews.map((review) => {
           const date = moment(review.createdAt)
             .tz('Asia/Seoul')
+            .startOf('day')
             .format('YYYY-MM-DD')
           return date
         }),
       )
+
+      console.log('writeDates', writeDates)
 
       // 챌린지 시작 날짜를 startDate로 설정 (임시로 2024-07-07로 설정)
       const startDate = '2024-07-23'
