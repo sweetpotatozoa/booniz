@@ -90,10 +90,7 @@ class ReviewService {
       // 유저 리뷰들의 createdAt을 기준으로 출석체크
       const writeDates = new Set(
         reviews.map((review) => {
-          const date = moment
-            .utc(review.createdAt) // UTC 시간으로 변환
-            .tz('Asia/Seoul') // 'Asia/Seoul' 시간대로 변환
-            .startOf('day') // 하루의 시작으로 설정
+          const date = moment(review.createdAt) // UTC 시간으로 변환
             .format('YYYY-MM-DD')
           return date
         }),
