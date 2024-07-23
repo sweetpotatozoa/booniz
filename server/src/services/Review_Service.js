@@ -490,14 +490,19 @@ class ReviewService {
 
       // 서울 시간대 기준으로 날짜 변환
       const reviewDatesSet = new Set(
-        reviews.map((review) => moment(review.createdAt).startOf('day')),
+        reviews.map((review) => moment(review.createdAt).format('YYYY-MM-DD')),
       )
+
+      console.log('reviewDatesSet', reviewDatesSet)
 
       const today = moment().tz('Asia/Seoul').format('YYYY-MM-DD')
       const yesterday = moment()
         .tz('Asia/Seoul')
         .subtract(1, 'days')
         .format('YYYY-MM-DD')
+
+      console.log('today', today)
+      console.log('yesterday', yesterday)
 
       const hasReviewToday = reviewDatesSet.has(today)
       const hasReviewYesterday = reviewDatesSet.has(yesterday)
