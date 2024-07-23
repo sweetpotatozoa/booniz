@@ -100,7 +100,10 @@ class ReviewService {
       // 챌린지 시작 날짜를 startDate로 설정 (임시로 2024-07-07로 설정)
       const startDate = '2024-07-23'
       // 오늘 날짜를 endDate로 설정
-      const endDate = moment().tz('Asia/Seoul').format('YYYY-MM-DD')
+      const endDate = moment()
+        .tz('Asia/Seoul')
+        .startOf('day')
+        .format('YYYY-MM-DD')
 
       // 시작일부터 오늘까지의 날짜 배열 생성
       const dateArray = this.createDateArray(startDate, endDate)
