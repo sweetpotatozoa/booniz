@@ -104,6 +104,7 @@ class ReviewService {
         .tz('Asia/Seoul')
         .startOf('day')
         .format('YYYY-MM-DD')
+      console.log('endDate', endDate)
 
       // 시작일부터 오늘까지의 날짜 배열 생성
       const dateArray = this.createDateArray(startDate, endDate)
@@ -112,6 +113,7 @@ class ReviewService {
       const dailyStatus = dateArray.map((date) =>
         writeDates.has(date) ? 1 : 0,
       )
+      console.log('dailyStatus', dailyStatus)
       const latestEndPage = await ReviewsRepo.getLatestReviewEndPage(userId)
 
       const updatedUserData = {
