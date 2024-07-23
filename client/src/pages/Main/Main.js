@@ -55,9 +55,8 @@ const Main = () => {
     fetchMainInfo()
   }, [])
 
-  const challengeStartDate = moment('2024-07-23')
-    .tz('Asia/Seoul')
-    .startOf('day')
+  // UTC 시간으로 날짜를 설정
+  const challengeStartDate = moment.utc('2024-07-23').startOf('day')
 
   // Create an array of length 10, filling with existing dailyStatus or inactive dots
   const fullDailyStatus = Array.from({ length: 10 }, (_, idx) => ({
