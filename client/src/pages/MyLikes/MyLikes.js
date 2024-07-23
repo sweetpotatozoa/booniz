@@ -74,7 +74,7 @@ const MyLikes = () => {
                   개
                 </div>
                 <div>
-                  <img src='/images/chat.svg'></img> {entry.comments.length}개
+                  <img src='/images/Chat.svg'></img> {entry.comments.length}개
                 </div>
               </div>
             </div>
