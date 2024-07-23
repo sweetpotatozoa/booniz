@@ -120,7 +120,7 @@ const MyProfile = () => {
     fetchMyProfile()
   }, [])
 
-  const challengeStartDate = moment('2024-07-23').tz('Asia/Seoul')
+  const challengeStartDate = moment('2024-07-23').startOf('day')
 
   return (
     <>
@@ -144,7 +144,7 @@ const MyProfile = () => {
             <div className={styles.reviewContainer}>
               {userData.reviews.length > 0 ? (
                 userData.reviews.map((entry) => {
-                  const reviewDate = moment(entry.createdAt)
+                  const reviewDate = moment(entry.createdAt).startOf('day')
                   const dayDifference =
                     reviewDate.diff(challengeStartDate, 'days') + 1
                   return (
